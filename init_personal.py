@@ -39,122 +39,46 @@ def create(name, parent=None):
         '__pycache__/\n*.pyc\n.venv/\ncontributions/\n*.brain\n*.brain.lock\n*.npz\n*.patch.json\n*.stack.json\n*.manifest.json\n',
         encoding='utf-8',
     )
-    readme = '''# NAME: one portable brain
+    readme = '''# NAME: a portable brain
 
-Start blank. No utility, veto, evidence, or Yossi preferences are inherited.
-Use the unified CLI with one .brain file as the active model and history.
-Run these commands from inside this generated folder:
+A blank decision brain with its own runtime. Nothing is inherited; it abstains
+until you state a preference. Run these from inside this folder:
 
 ```bash
 uv run --locked brain.py init NAME.brain --name NAME
+uv run --locked brain.py decide NAME.brain decision.json
+uv run --locked brain.py set NAME.brain --tensor w2 --index 0 --values 3 0 1 --reason "I prefer lower cost" --harness manual
+uv run --locked brain.py set NAME.brain --tensor w2 --index 1 --values -3 0 1 --reason "I prefer lower cost" --harness manual
+uv run --locked brain.py decide NAME.brain decision.json
 uv run --locked brain.py inspect NAME.brain
-uv run --locked brain.py decide NAME.brain decision.json
 ```
 
-The initial decision abstains. Inspect the ordered attribute/context names and
-actual tensor values with:
+The first decision abstains and the last selects A. Only make the two edits if
+you actually prefer lower cost. w2 rows are [utility, veto, evidence] for the
+attribute of the same index; inspect shows the names, contexts, and history.
 
-```bash
-uv run --locked brain.py inspect NAME.brain --json
-uv run --locked brain.py inspect NAME.brain --tensor w2 --index 0
-```
-
-## Edit the actual weights
-
-The w2 columns are utility, veto activation, and evidence activation. The blank
-network wires neuron 0 to low_cost and neuron 1 to high_cost in the general
-context. Only if you explicitly prefer lower cost, directly set these tensor rows:
-
-```bash
-uv run --locked brain.py set NAME.brain --tensor w2 --index 0 --values 3 0 1 --reason "Reference to my explicit lower-cost preference" --harness manual
-uv run --locked brain.py set NAME.brain --tensor w2 --index 1 --values -3 0 1 --reason "Reference to my explicit lower-cost preference" --harness manual
-uv run --locked brain.py decide NAME.brain decision.json
-```
-
-The sample then selects A. Each set command directly assigns the numeric values;
-there is no preference compiler or training. Edit individual entries with two
-indices, for example --tensor w2 --index 0 0 --values 3. Utilities are authored
-hypotheses, not learned estimates or probabilities. Evidence 1 means you supplied
-a preference; changing only utility on a blank profile leaves evidence at zero.
-Do not guess personal preferences to make the model answer.
-
-A positive veto output excludes an option. Hard constraints also need their input
-name in the embedded binary_attributes metadata; explicitly_disallowed is already
-listed, with its veto initially zero. Coordinate feature-schema changes explicitly.
-A forced decision never overrides a veto. The input has 32 attributes and 16
-contexts; w1 and b1 wire inputs to hidden neurons. All 2,499 entries can be edited.
-
-set atomically updates the input file and preserves its contribution history.
-Use --output other.brain to keep the original. Updates check the loaded revision
-under a write lock; concurrent stale writes fail. A .brain.lock sidecar is only
-local write coordination and is not required when moving the brain.
-
-## Use it from any agent
+## With an agent
 
 ```bash
 uv run --locked brain.py prompt NAME.brain
-uv run --locked brain.py serve NAME.brain
 ```
 
-The first command prints a task with this brain's exact path, state fingerprints,
-and direct tensor-edit command. Give that task to Codex, Claude Code, or another
-shell-capable agent. Use only context you authorize, explicit preferences, and
-short evidence references. The second command accepts one structured JSON object
-per stdin line and returns one JSON response per line. Restart a running process
-after editing the brain. For a single machine-readable decision, add --json to
-decide. The supplied decision.json is a request example.
+Paste the output and your statements into Codex, Claude Code, or any agent with a
+shell. It edits the file in place and keeps the history. Run prompt again for the
+next agent. For agents working at the same time, give each a copy (set ...
+--output COPY.brain), then combine with brain.py diff and merge. Conflicts fail.
+For programs, `brain.py serve NAME.brain` answers one JSON request per line.
 
-The .brain file embeds the ordered feature layout, four tensors, and verified
-contribution history. It is data only: inspecting, editing, deciding, serving,
-diffing, and merging do not execute an embedded weights.py. Copy just this file
-to another compatible runtime to continue. This generated folder also includes
-its own runtime, pyproject.toml, uv.lock, and MIT notice, so you can move the whole
-folder elsewhere. With uv installed, the same commands work there. Dependencies
-require internet once unless cached; decisions run locally afterward.
+## Moving it
 
-For parallel contributions, give each agent the same unchanged base file. After
-they directly edit their own copies, capture and combine explicit JSON patches:
+NAME.brain is data only: copy it to any zozoBrain runtime. To move everything,
+copy this folder; with uv installed the same commands work anywhere. weights.py
+holds the source form (`uv run --locked weights.py --output source.npz`, then
+`brain.py pack --weights source.npz --output from-source.brain`).
 
-```bash
-uv run --locked brain.py diff base.brain codex.brain --harness codex --reason "Reference to my explicit preference" --output codex.patch.json
-uv run --locked brain.py diff base.brain claude.brain --harness claude --reason "Reference to my next explicit preference" --output claude.patch.json
-uv run --locked brain.py merge base.brain codex.patch.json claude.patch.json --output combined.brain
-```
-
-These commands assume those agent-edited files exist. Compatible changes combine;
-conflicting values or schemas fail. Sequential set edits accumulate directly in
-one file; use patches for independent parallel copies. Preserve abstentions and
-verify behavior using your own structured held-out decisions. Yossi's root
-benchmark does not evaluate your profile. Question text is metadata; supply the
-option attributes and contexts yourself.
-
-## Source and NPZ compatibility
-
-weights.py remains directly editable for the original source/NPZ workflow. Its
-commented w2 row examples start disabled. The old model.py command reads those
-source assignments, whereas brain.py decide reads the selected .brain file.
-Source edits never silently overwrite an accumulated .brain model. To explicitly
-pack a source snapshot and this trusted local source layout into a new brain:
-
-```bash
-uv run --locked weights.py --output source.npz
-uv run --locked brain.py pack --weights source.npz --output from-source.brain
-```
-
-pack is the explicit bridge that reads trusted local weights.py for its layout.
-The original model.py, harness.py, edit_weights.py, and weight_patches.py commands
-remain available. See the upstream [weight guide](https://github.com/zozo123/zozoBrain/blob/main/WEIGHTS.md),
-[portable formats](https://github.com/zozo123/zozoBrain/blob/main/FORMATS.md), and
-[harness guide](https://github.com/zozo123/zozoBrain/blob/main/HARNESS.md).
-
-## Private defaults
-
-The parent repository gitignores personal/. This folder's .gitignore excludes
-*.brain, *.brain.lock, NPZ snapshots, contribution patch/manifest JSON, and the
-contributions/ directory. Store private evidence there. Bundles and patches can
-contain personal preferences and evidence; publish them only deliberately.
-Gitignore is a commit default, not access control. Existing profiles and initial
-brain files are never overwritten by init.
+.gitignore keeps brains, snapshots, patches, and contributions/ out of git. They
+can contain personal preferences and evidence, so publish them only deliberately.
+Guides: https://github.com/zozo123/zozoBrain#readme
 '''
     (target / 'README.md').write_text(readme.replace('NAME', name), encoding='utf-8')
     return target

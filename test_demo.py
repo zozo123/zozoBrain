@@ -6,14 +6,16 @@ from model import DecisionModel
 from stack_demo import run as run_stack_demo
 
 class DemoTests(unittest.TestCase):
-    def test_sequential_harness_demo_preserves_both_weight_edits(self):
+    def test_two_agent_demo_changes_decisions_and_refuses_conflicts(self):
         with contextlib.redirect_stdout(io.StringIO()) as output:
             result = run_stack_demo()
-        self.assertEqual(result['contributing_harnesses'], ['codex', 'claude'])
-        self.assertEqual({row['id']: row['utility'] for row in result['ranking']},
-                         {'concise': 6, 'verified': 8})
-        self.assertIn('After Codex: concise', output.getvalue())
-        self.assertIn('Codex + Claude: verified', output.getvalue())
+        self.assertEqual(result['brain'].contributing_harnesses, ['codex', 'claude'])
+        self.assertEqual(len(result['brain'].manifest['patches']), 4)
+        self.assertEqual([row['decision'] for row in result['decisions']],
+                         ['cheap', 'pricey', 'cheap_offline', None])
+        self.assertEqual([row['id'] for row in result['decisions'][1]['vetoed']], ['banned_cheap'])
+        self.assertIn('Conflicting edit', result['conflict'])
+        self.assertIn('merge refused', output.getvalue())
 
     def test_documented_outputs(self):
         expected=['no','yossieliaz.netlify.app','one page','concise and verified',None]

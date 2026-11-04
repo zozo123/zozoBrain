@@ -1,56 +1,78 @@
-"""Run a synthetic Codex-then-Claude weight-editing walkthrough in a temp folder."""
-import json
+"""Two agents edit one .brain file directly; decisions change and history stays verified."""
+import os
 from pathlib import Path
+import sys
 import tempfile
 
+from brain_bundle import apply_patches, create_blank, diff_bundles, edit_bundle, load_bundle, save_bundle
 from model import DecisionModel
-from network import save_weights
-from weight_patches import diff, stack
-from weights import authored_weights
+
+REQUESTS = [
+    ('cheap vs pricey', [('cheap', {'low_cost': 1}), ('pricey', {'high_cost': 1})]),
+    ('banned_cheap vs pricey', [('banned_cheap', {'low_cost': 1, 'explicitly_disallowed': 1}),
+                                ('pricey', {'high_cost': 1})]),
+    ('cheap_cloud vs cheap_offline', [('cheap_cloud', {'low_cost': 1}),
+                                      ('cheap_offline', {'low_cost': 1, 'offline': 1})]),
+    ('X vs Y, nothing stated', [('X', {'attribute_5': 1}), ('Y', {'attribute_6': 1})]),
+]
+# Synthetic statements for the demo, not anyone's real preferences.
+EDITS = [
+    ('codex', 0, [3, 0, 1], 'I prefer lower cost'),
+    ('codex', 1, [-3, 0, 1], 'I prefer lower cost'),
+    ('claude', 3, [0, 1, 0], 'Never pick disallowed options'),
+    ('claude', 2, [2, 0, 1], 'I prefer offline options'),
+]
+COLOR = sys.stdout.isatty() or bool(os.environ.get('FORCE_COLOR'))
+
+
+def paint(text, code):
+    return f'\033[{code}m{text}\033[0m' if COLOR else text
+
+
+def decide(bundle, options):
+    model = DecisionModel.from_bundle(bundle) if isinstance(bundle, Path) else DecisionModel(
+        bundle.weights, bundle.manifest, layout=bundle.layout)
+    result = model.decide('Which option?', ['general'],
+                          [{'id': name, 'attributes': attributes} for name, attributes in options])
+    vetoed = ', '.join(row['id'] for row in result['vetoed'])
+    text = paint(result['decision'], '1;32') if result['decision'] else paint('abstain', '33')
+    return text + (paint(f' ({vetoed} vetoed)', '31') if vetoed else ''), result
 
 
 def run():
-    options = [{'id': 'concise', 'attributes': {'concise': 1}},
-               {'id': 'verified', 'attributes': {'verified': 1}}]
+    blank = create_blank('demo')
+    print(paint('zozoBrain: two agents, one 2,499-parameter brain', '1') + '\n')
+    print(f'blank brain: cheap vs pricey -> {decide(blank, REQUESTS[0][1])[0]}')
+    brain = blank
+    for harness, row, values, evidence in EDITS:
+        brain = edit_bundle(brain, tensor='w2', index=[row], values=values, harness=harness, evidence=evidence)
+        name = brain.layout['attributes'][row]
+        print(f'{paint(f"{harness:7}", "36" if harness == "codex" else "35")} w2[{row}] = {str(values):11} '
+              f'{name:22} "{evidence}"')
 
-    def decision(weights, manifest=None):
-        return DecisionModel(weights, manifest).decide('Which style?', ['communication'], options)
+    with tempfile.TemporaryDirectory() as folder:
+        path = Path(folder) / 'me.brain'
+        save_bundle(path, brain)
+        size = path.stat().st_size
+        print(f'\nsaved me.brain ({size:,} bytes), reloaded and verified:')
+        for title, options in REQUESTS:
+            print(f'  {title:28} -> {decide(path, options)[0]}')
+        reloaded = load_bundle(path)
+    contributors = ', '.join(reloaded.contributing_harnesses)
+    print(f'history: {len(reloaded.manifest["patches"])} verified edits by {contributors}')
 
-    with tempfile.TemporaryDirectory() as temporary:
-        folder = Path(temporary)
-        base = folder / 'base.npz'
-        source = authored_weights()
-        save_weights(base, source)
-
-        # Synthetic instructions demonstrate mechanics, not new personal claims.
-        codex = tuple(tensor.copy() for tensor in source)
-        codex[2][0, 0] = 6  # Directly assign the actual concise utility weight.
-        codex_snapshot = folder / 'codex.npz'
-        save_weights(codex_snapshot, codex)
-        codex_patch = diff(base, codex_snapshot, harness='codex', patch_id='demo-codex-001',
-                           evidence='Synthetic demo instruction: set concise utility to 6.')
-        after_codex, first_manifest = stack(base, [codex_patch])
-        accumulated = folder / 'after-codex.npz'
-        manifest_path = folder / 'after-codex.manifest.json'
-        save_weights(accumulated, after_codex)
-        manifest_path.write_text(json.dumps(first_manifest), encoding='utf-8')
-
-        claude = tuple(tensor.copy() for tensor in after_codex)
-        claude[2][1, 0] = 8  # A second direct edit, preserving the Codex entry.
-        claude_snapshot = folder / 'claude.npz'
-        save_weights(claude_snapshot, claude)
-        claude_patch = diff(accumulated, claude_snapshot, harness='claude', patch_id='demo-claude-001',
-                            evidence='Synthetic demo instruction: set verified utility to 8.')
-        combined, manifest = stack(accumulated, [claude_patch], previous_manifest=manifest_path)
-        result = decision(combined, manifest)
-        print('Synthetic weight-editing demo; these edits are not new Yossi preferences.')
-        print('Base: ' + decision(source)['decision'])
-        print('After Codex: ' + decision(after_codex, first_manifest)['decision'])
-        print('Codex + Claude: ' + result['decision'])
-        print('Contributors: ' + ', '.join(result['contributing_harnesses']))
-        print('Direct weights: concise=6, verified=8 | total parameters: 2499')
-        print('weights_sha256: ' + result['weights_sha256'])
-        return result
+    codex = edit_bundle(blank, tensor='w2', index=[0, 0], values=[3], harness='codex', evidence='lower cost: 3')
+    claude = edit_bundle(blank, tensor='w2', index=[0, 0], values=[5], harness='claude', evidence='lower cost: 5')
+    patches = [diff_bundles(blank, edited, harness=edited.contributing_harnesses[0], evidence='parallel copy')
+               for edited in (codex, claude)]
+    try:
+        apply_patches(blank, patches)
+        conflict = None
+    except ValueError as exc:
+        conflict = str(exc)
+        print(f'parallel copies: codex sets w2[0,0] = 3, claude sets 5 -> {paint("merge refused", "31")}')
+    return {'brain': reloaded, 'decisions': [decide(reloaded, options)[1] for _, options in REQUESTS],
+            'conflict': conflict, 'bytes': size}
 
 
 if __name__ == '__main__':
