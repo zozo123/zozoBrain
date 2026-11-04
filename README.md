@@ -1,10 +1,34 @@
 # zozoBrain
 
-**A personal decision policy compiled directly into neural weights.**
+### Your preferences. A tiny neural decision policy.
+
+**Yossi Eliaz’s decision-policy experiment: directly written weights, local execution, transparent evaluation.**
+
+[Run the demo](#try-yossis-decisions) · [Codex / Claude Code / harness guide](HARNESS.md) · [100 questions about Yossi](QUESTION_BANK.md) · [Evaluation](EVALUATION.md)
 
 2,499 total parameters, 150 nonzero entries. No gradient descent, optimizer, training loop, pretrained backbone, external model, or network call in the main implementation. The network scores options using a small set of documented qualitative preferences attributed to Yossi Eliaz. Unknown preferences remain unknown.
 
 This is **weight-space programming**, not a tiny conversational clone. The weights are explicit NumPy assignments in [weights.py](weights.py). The code, actual weight artifact, examples, tests, and evaluation are included.
+
+## Try Yossi’s decisions
+
+After installing the single dependency (`python -m pip install -r requirements.txt`), run:
+
+```bash
+python demo.py
+```
+
+| Decision | Demo output |
+|---|---|
+| Fly on Shabbat to attend every conference day? | No; take the feasible alternative |
+| Which personal website domain? | yossieliaz.netlify.app |
+| Which CV length? | One page |
+| Which answer style? | Concise and verified |
+| Sushi, pizza, or falafel? | Abstain—no known preference |
+
+These outputs are tested. All supplied attributes are visible in `demo.py`. The numerical weights express a small authored policy, not a measured replica of Yossi’s mind. **Clone it, run it, inspect it, then adapt the explicit rules to your own preferences.**
+
+For broader questions, start with [the 100-question bank about Yossi Eliaz](QUESTION_BANK.md). It separates reference answers from unknown tastes rather than manufacturing labels.
 
 ## What it does
 
@@ -18,6 +42,10 @@ Given a context and structured candidate options, return:
 Yes/no decisions are simply two options named `yes` and `no`. Lists of food, companies, countries, music, or people use the same interface. Names alone do not reveal preferences. For example, it can apply the no-flying-on-Shabbat constraint; it cannot know whether Yossi prefers sushi to pizza or OpenAI to Anthropic without evidence.
 
 **Input contract:** a question of up to 100 regex word/punctuation tokens, explicit context tags, and structured option attributes. The question is validated and retained as metadata; the network does **not** parse arbitrary natural language. Attribute extraction is a separate caller responsibility and is not hidden in the parameter budget. This narrower contract makes the weight-space implementation honest and reproducible. The raw-text experiment is retained separately as a baseline.
+
+## Run from an agent or harness
+
+See [HARNESS.md](HARNESS.md) for a copy-paste Codex / Claude Code task, shell setup, and the tested JSON Lines subprocess interface (`python harness.py`). No API key or special integration is needed.
 
 ## Run
 
