@@ -16,7 +16,7 @@ import tempfile
 
 import numpy as np
 
-from network import TENSOR_SHAPES, layout_digest, load_weight_source, load_weights, save_weights, validate_weights, weights_digest
+from network import TENSOR_SHAPES, check_label, layout_digest, load_weight_source, load_weights, save_weights, validate_weights, weights_digest
 
 
 PATCH_FORMAT='zozobrain.weight-patch.v1'
@@ -78,9 +78,9 @@ def validate_patch(patch,*,schema_sha256=None):
     _keys(patch,['format','id','source','schema_sha256','base_weights_sha256','edits'],'Patch')
     if patch['format']!=PATCH_FORMAT:
         raise ValueError(f'Unsupported patch format; expected {PATCH_FORMAT}')
-    _text(patch['id'],'Patch id')
+    check_label(patch['id'],'Patch id')
     _keys(patch['source'],['harness','evidence'],'Patch source')
-    _text(patch['source']['harness'],'Source harness')
+    check_label(patch['source']['harness'],'Source harness')
     _text(patch['source']['evidence'],'Source evidence')
     _digest(patch['schema_sha256'],'schema_sha256')
     if patch['schema_sha256']!=expected_schema:
@@ -116,9 +116,9 @@ def validate_patch(patch,*,schema_sha256=None):
 def diff(base_path,edited_path,*,harness,evidence,patch_id,schema_sha256=None):
     """Return every changed tensor entry as an explicit, attributable patch."""
     expected_schema=_expected_schema(schema_sha256)
-    _text(harness,'Source harness')
+    check_label(harness,'Source harness')
     _text(evidence,'Source evidence')
-    _text(patch_id,'Patch id')
+    check_label(patch_id,'Patch id')
     base=_weights(base_path)
     edited=_weights(edited_path)
     edits=[]

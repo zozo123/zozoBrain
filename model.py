@@ -87,6 +87,10 @@ class DecisionModel:
             ids.append(option_id)
             if 'label' in option and not isinstance(option['label'], str):
                 raise ValueError('Option labels must be strings')
+            extra = set(option) - {'id', 'label', 'attributes'}
+            if extra:
+                raise ValueError('Unknown option fields: ' + ', '.join(sorted(map(str, extra)))
+                                 + '; put option features under "attributes"')
         tensors = validate_weights(self.weights)
         fingerprint = digest_validated_weights(tensors)
         if self._manifest_weights_sha256 is not None and fingerprint != self._manifest_weights_sha256:

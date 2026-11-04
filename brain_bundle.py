@@ -7,6 +7,7 @@ import json
 from numbers import Real
 import os
 from pathlib import Path
+import stat
 import tempfile
 import uuid
 import zipfile
@@ -14,7 +15,7 @@ from zlib import error as ZlibError
 
 import numpy as np
 
-from network import TENSOR_SHAPES, layout_digest, validate_layout, validate_weights, weights_digest
+from network import TENSOR_SHAPES, check_label, layout_digest, validate_layout, validate_weights, weights_digest
 from weight_patches import STACK_FORMAT, diff, stack, validate_manifest
 
 FORMAT = 'zozobrain.brain.v1'
@@ -58,8 +59,7 @@ class BrainBundle:
 
 
 def pack_bundle(weights, layout, manifest=None, name='brain'):
-    if not isinstance(name, str) or not name.strip() or len(name) > 128:
-        raise ValueError('Brain name must be a nonempty string of at most 128 characters')
+    check_label(name, 'Brain name')
     layout = validate_layout(layout)
     tensors = validate_weights(weights)
     fingerprint = weights_digest(tensors)
@@ -103,12 +103,26 @@ def _reject_constant(value):
     raise ValueError(f'Nonfinite JSON number is not allowed: {value}')
 
 
+def _read_member(archive, name):
+    # Declared sizes were checked against the limits; never inflate past them,
+    # whatever the compressed stream holds.
+    size = archive.getinfo(name).file_size
+    with archive.open(name) as handle:
+        data = handle.read(size + 1)
+    if len(data) != size:
+        raise ValueError(f'Invalid brain member size: {name}')
+    return data
+
+
 def _read_tensor(raw, name):
     # Validate the standard NPY header before any allocation based on its shape.
     stream = io.BytesIO(raw)
     if np.lib.format.read_magic(stream) != (1, 0):
         raise ValueError(f'{name} requires NPY format 1.0')
-    shape, fortran, dtype = np.lib.format.read_array_header_1_0(stream, max_header_size=1024)
+    try:
+        shape, fortran, dtype = np.lib.format.read_array_header_1_0(stream, max_header_size=1024)
+    except Exception as exc:  # crafted headers can raise tokenizer or syntax errors
+        raise ValueError(f'{name} has an invalid NPY header') from exc
     expected = TENSOR_SHAPES[name]
     if shape != expected or fortran or dtype != np.dtype('<f4'):
         raise ValueError(f'{name} requires C-order little-endian float32 with shape {expected}')
@@ -133,7 +147,7 @@ def load_bundle(path):
                     raise ValueError(f'Invalid or oversized brain member: {member.filename}')
                 if member.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
                     raise ValueError('Brain archives support only stored or DEFLATE members')
-            metadata = json.loads(archive.read('brain.json').decode('utf-8'),
+            metadata = json.loads(_read_member(archive, 'brain.json').decode('utf-8'),
                                   object_pairs_hook=_unique_object, parse_constant=_reject_constant)
             if not isinstance(metadata, dict) or set(metadata) != {
                 'format', 'name', 'layout', 'weights_sha256', 'schema_sha256', 'manifest'
@@ -141,7 +155,8 @@ def load_bundle(path):
                 raise ValueError('Invalid brain metadata fields')
             if metadata['format'] != FORMAT:
                 raise ValueError(f'Unsupported brain format; expected {FORMAT}')
-            tensors = tuple(_read_tensor(archive.read(name + '.npy'), name) for name in TENSOR_SHAPES)
+            tensors = tuple(_read_tensor(_read_member(archive, name + '.npy'), name)
+                            for name in TENSOR_SHAPES)
         bundle = pack_bundle(tensors, metadata['layout'], metadata['manifest'], metadata['name'])
         if bundle.weights_sha256 != metadata['weights_sha256'] or bundle.schema_sha256 != metadata['schema_sha256']:
             raise ValueError('Brain tensor or schema fingerprint does not match metadata')
@@ -216,6 +231,8 @@ def save_bundle(path, bundle, overwrite=False, expected_revision=None):
                         archive.writestr(info, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
                 handle.flush()
                 os.fsync(handle.fileno())
+            if path.exists():
+                os.chmod(temporary, stat.S_IMODE(path.stat().st_mode))
             temporary.replace(path)
         finally:
             if temporary is not None:
@@ -225,6 +242,12 @@ def save_bundle(path, bundle, overwrite=False, expected_revision=None):
 def diff_bundles(base, edited, *, harness, evidence, patch_id=None):
     if base.schema_sha256 != edited.schema_sha256:
         raise ValueError('Cannot diff brains with different feature layouts')
+    # Without a shared history, the diff would attribute reverts of another
+    # agent's edits to this harness.
+    history = base.manifest['patches']
+    if (edited.manifest['original_weights_sha256'] != base.manifest['original_weights_sha256']
+            or edited.manifest['patches'][:len(history)] != history):
+        raise ValueError('The edited brain is not a copy of this base; diff against the brain it was copied from')
     return diff(base.weights, edited.weights, harness=harness, evidence=evidence,
                 patch_id=patch_id or f'{harness}-{uuid.uuid4().hex}', schema_sha256=base.schema_sha256)
 

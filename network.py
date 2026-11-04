@@ -3,13 +3,23 @@ import hashlib
 import json
 from pathlib import Path
 import tempfile
+import tokenize
 from types import ModuleType
+import unicodedata
 from zipfile import BadZipFile
 from zlib import error as ZlibError
 
 import numpy as np
 
 TENSOR_SHAPES = {'w1': (48, 48), 'b1': (48,), 'w2': (48, 3), 'b2': (3,)}
+
+
+def check_label(value, label, limit=128):
+    """Names are printed into terminals and agent handoffs: one printable line only."""
+    if (not isinstance(value, str) or not value.strip() or len(value) > limit
+            or any(unicodedata.category(char) in ('Cc', 'Cf', 'Cs', 'Zl', 'Zp') for char in value)):
+        raise ValueError(f'{label} must be one printable line of at most {limit} characters')
+    return value
 
 
 def validate_layout(layout):
@@ -21,8 +31,8 @@ def validate_layout(layout):
         names = layout[key]
         if not isinstance(names, (list, tuple)) or len(names) != count:
             raise ValueError(f'Exactly {count} unique {key} required')
-        if any(not isinstance(name, str) or not name.strip() or len(name) > 128 for name in names):
-            raise ValueError(f'{key} must contain nonempty names of at most 128 characters')
+        for name in names:
+            check_label(name, f'Each of the {key}')
         if len(set(names)) != count:
             raise ValueError(f'{key} must be unique')
         result[key] = list(names)
@@ -85,7 +95,7 @@ def load_weights(path):
                 if len(archive.files) != 4 or set(archive.files) != set(TENSOR_SHAPES):
                     raise ValueError('Weight archive must contain exactly w1, b1, w2, b2')
                 return validate_weights(tuple(archive[name] for name in TENSOR_SHAPES))
-    except (OSError, TypeError, ValueError, EOFError, BadZipFile, ZlibError, RuntimeError) as exc:
+    except (OSError, TypeError, ValueError, EOFError, BadZipFile, ZlibError, RuntimeError, tokenize.TokenError) as exc:
         raise ValueError(f'Cannot load weights from {path}: {exc}') from exc
 
 

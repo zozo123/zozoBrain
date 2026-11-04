@@ -16,11 +16,14 @@ def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None, layout=N
         model = DecisionModel(weights, manifest, layout=layout)
     elif weights is not None or manifest is not None or layout is not None:
         raise ValueError('Supply a prepared model or weights/layout, not both')
-    for line in source:
+    # Decode per line so one undecodable or deeply nested request fails alone.
+    for line in getattr(source, 'buffer', source):
         if not line.strip():
             continue
         request_id = None
         try:
+            if isinstance(line, bytes):
+                line = line.decode('utf-8')
             request = json.loads(line, parse_constant=reject_nonfinite)
             if not isinstance(request, dict):
                 raise ValueError('Request must be an object')
@@ -31,7 +34,7 @@ def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None, layout=N
             result = model.decide(request['question'], request['contexts'], request['options'], request.get('force', False))
             response = {'id': request_id, 'ok': True, 'result': result}
             encoded = json.dumps(response, allow_nan=False)
-        except (ValueError, TypeError, KeyError, AttributeError, IndexError, OverflowError) as exc:
+        except (ValueError, TypeError, KeyError, AttributeError, IndexError, OverflowError, RecursionError) as exc:
             encoded = json.dumps({'id': request_id, 'ok': False, 'error': str(exc)}, allow_nan=False)
         sink.write(encoded + '\n')
         sink.flush()
