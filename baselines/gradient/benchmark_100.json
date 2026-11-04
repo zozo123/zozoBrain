@@ -1,0 +1,1052 @@
+[
+  {
+    "id": "q001",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating sushi?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q002",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating hummus?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q003",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating pizza?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q004",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating falafel?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q005",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating steak?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q006",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating spicy food?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q007",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating chocolate?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q008",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating olives?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q009",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating seafood?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q010",
+    "domain": "food",
+    "mode": "yes_no",
+    "question": "Do I enjoy eating vegan meals?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q011",
+    "domain": "food",
+    "mode": "choice",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Coffee",
+      "Tea"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q012",
+    "domain": "food",
+    "mode": "choice",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Sweet breakfast",
+      "Savory breakfast"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q013",
+    "domain": "food",
+    "mode": "choice",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Sushi",
+      "Pizza"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q014",
+    "domain": "food",
+    "mode": "choice",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Hummus",
+      "Falafel"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q015",
+    "domain": "food",
+    "mode": "choice",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Spicy food",
+      "Mild food"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q016",
+    "domain": "food",
+    "mode": "rank",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Italian food",
+      "Japanese food",
+      "Israeli food"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q017",
+    "domain": "food",
+    "mode": "rank",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Apples",
+      "Bananas",
+      "Oranges"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q018",
+    "domain": "food",
+    "mode": "rank",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Ice cream",
+      "Cake",
+      "Fruit"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q019",
+    "domain": "food",
+    "mode": "rank",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Pasta",
+      "Rice",
+      "Potatoes"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q020",
+    "domain": "food",
+    "mode": "rank",
+    "question": "Which food or drink would I prefer?",
+    "options": [
+      "Breakfast",
+      "Lunch",
+      "Dinner"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q021",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Would I take a Saturday flight to Australia?",
+    "expected": false,
+    "evidence": "Explicit no flying on Shabbat; daytime Saturday is included."
+  },
+  {
+    "id": "q022",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Is departing from San Francisco an option for my Australia trip?",
+    "expected": true,
+    "evidence": "Explicit SF on the table statement."
+  },
+  {
+    "id": "q023",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Would I shorten conference attendance to fit my travel constraints?",
+    "expected": true,
+    "evidence": "Explicit willingness to miss one or two conference days."
+  },
+  {
+    "id": "q024",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Must an Australia conference trip last exactly ten days?",
+    "expected": false,
+    "evidence": "User challenged unexplained ten day assumption."
+  },
+  {
+    "id": "q025",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Am I open to a career move to San Francisco in the United States?",
+    "expected": true,
+    "evidence": "Historical explicit relocation willingness; not a prediction of current acceptance."
+  },
+  {
+    "id": "q026",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Do I prefer Australia over the United States?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q027",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Is Japan my favorite country to visit?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q028",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Would I rather live in Canada than Israel?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q029",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Do I dislike traveling to the United Kingdom?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q030",
+    "domain": "countries",
+    "mode": "yes_no",
+    "question": "Is Italy my favorite holiday destination?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q031",
+    "domain": "countries",
+    "mode": "choice",
+    "question": "Which flight would I take to another country?",
+    "options": [
+      "Sunday flight",
+      "Saturday daytime flight"
+    ],
+    "expected": [
+      "Sunday flight",
+      "Saturday daytime flight"
+    ],
+    "evidence": "Explicit no flying on Shabbat."
+  },
+  {
+    "id": "q032",
+    "domain": "countries",
+    "mode": "choice",
+    "question": "Which conference travel plan fits me?",
+    "options": [
+      "Miss one day and avoid Shabbat flights",
+      "Attend every day by flying on Shabbat"
+    ],
+    "expected": [
+      "Miss one day and avoid Shabbat flights",
+      "Attend every day by flying on Shabbat"
+    ],
+    "evidence": "Explicit travel constraint and attendance flexibility."
+  },
+  {
+    "id": "q033",
+    "domain": "countries",
+    "mode": "choice",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Israel",
+      "United States"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q034",
+    "domain": "countries",
+    "mode": "choice",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Australia",
+      "New Zealand"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q035",
+    "domain": "countries",
+    "mode": "choice",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "France",
+      "Italy"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q036",
+    "domain": "countries",
+    "mode": "rank",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Japan",
+      "South Korea",
+      "Thailand"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q037",
+    "domain": "countries",
+    "mode": "rank",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Canada",
+      "Germany",
+      "United Kingdom"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q038",
+    "domain": "countries",
+    "mode": "rank",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Spain",
+      "Portugal",
+      "Greece"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q039",
+    "domain": "countries",
+    "mode": "rank",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Norway",
+      "Sweden",
+      "Denmark"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q040",
+    "domain": "countries",
+    "mode": "rank",
+    "question": "Which country would I personally prefer to visit?",
+    "options": [
+      "Israel",
+      "Australia",
+      "United States"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q041",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to jazz?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q042",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to classical music?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q043",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to heavy metal?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q044",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to hip hop?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q045",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to Israeli pop?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q046",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to country music?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q047",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to electronic music?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q048",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to opera?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q049",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to reggae?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q050",
+    "domain": "music",
+    "mode": "yes_no",
+    "question": "Do I enjoy listening to musical theater?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q051",
+    "domain": "music",
+    "mode": "choice",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Jazz",
+      "Rock"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q052",
+    "domain": "music",
+    "mode": "choice",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Bach",
+      "Mozart"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q053",
+    "domain": "music",
+    "mode": "choice",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Taylor Swift",
+      "Beyonce"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q054",
+    "domain": "music",
+    "mode": "choice",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Live concert",
+      "Studio recording"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q055",
+    "domain": "music",
+    "mode": "choice",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Instrumental music",
+      "Vocal music"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q056",
+    "domain": "music",
+    "mode": "rank",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Jazz",
+      "Classical",
+      "Pop"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q057",
+    "domain": "music",
+    "mode": "rank",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Beatles",
+      "Rolling Stones",
+      "Queen"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q058",
+    "domain": "music",
+    "mode": "rank",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Piano",
+      "Violin",
+      "Guitar"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q059",
+    "domain": "music",
+    "mode": "rank",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Hebrew songs",
+      "English songs",
+      "Spanish songs"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q060",
+    "domain": "music",
+    "mode": "rank",
+    "question": "Which music option would I enjoy more?",
+    "options": [
+      "Opera",
+      "Hip hop",
+      "Electronic music"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q061",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I support the Democratic Party?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q062",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I support the Republican Party?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q063",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I support Likud?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q064",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I favor a two state solution?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q065",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I support higher income taxes?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q066",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I favor mandatory voting?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q067",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I support proportional representation?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q068",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I favor lower immigration levels?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q069",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I support a carbon tax?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q070",
+    "domain": "politics",
+    "mode": "yes_no",
+    "question": "Do I favor term limits for elected leaders?",
+    "expected": null,
+    "evidence": "No explicit preference found; user label required."
+  },
+  {
+    "id": "q071",
+    "domain": "politics",
+    "mode": "choice",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Democrats",
+      "Republicans"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q072",
+    "domain": "politics",
+    "mode": "choice",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Likud",
+      "Yesh Atid"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q073",
+    "domain": "politics",
+    "mode": "choice",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Higher taxes and more public services",
+      "Lower taxes and fewer public services"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q074",
+    "domain": "politics",
+    "mode": "choice",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Mandatory voting",
+      "Voluntary voting"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q075",
+    "domain": "politics",
+    "mode": "choice",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Proportional representation",
+      "Single member districts"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q076",
+    "domain": "politics",
+    "mode": "rank",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Left",
+      "Center",
+      "Right"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q077",
+    "domain": "politics",
+    "mode": "rank",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Climate policy",
+      "Housing policy",
+      "Defense policy"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q078",
+    "domain": "politics",
+    "mode": "rank",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Parliamentary system",
+      "Presidential system",
+      "Mixed system"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q079",
+    "domain": "politics",
+    "mode": "rank",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "Public healthcare",
+      "Private healthcare",
+      "Mixed healthcare"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q080",
+    "domain": "politics",
+    "mode": "rank",
+    "question": "Which political position would I personally prefer?",
+    "options": [
+      "More immigration",
+      "Current immigration levels",
+      "Less immigration"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q081",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Would I rather receive a short direct response?",
+    "expected": true,
+    "evidence": "Repeated concise answer requests."
+  },
+  {
+    "id": "q082",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Should an assistant confidently make up a missing fact?",
+    "expected": false,
+    "evidence": "Repeated verification requests."
+  },
+  {
+    "id": "q083",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Would I want a resume that fits on one page?",
+    "expected": true,
+    "evidence": "Explicit CV format."
+  },
+  {
+    "id": "q084",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Can my course students satisfy the contribution rule with pending PRs?",
+    "expected": false,
+    "evidence": "Merged contributions required."
+  },
+  {
+    "id": "q085",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Is a frontend alone enough for my EASS project?",
+    "expected": false,
+    "evidence": "Backend and third service required."
+  },
+  {
+    "id": "q086",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Do I want real visitors distinguished from automated website tests?",
+    "expected": true,
+    "evidence": "Explicit PostHog requirement."
+  },
+  {
+    "id": "q087",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Should my website move to a new Netlify subdomain?",
+    "expected": false,
+    "evidence": "Explicit preserve subdomain instruction."
+  },
+  {
+    "id": "q088",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Is secure execution for AI agents relevant to my research?",
+    "expected": true,
+    "evidence": "Stated technical work."
+  },
+  {
+    "id": "q089",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Would I like to compare measured build durations?",
+    "expected": true,
+    "evidence": "Explicit CI comparison request."
+  },
+  {
+    "id": "q090",
+    "domain": "work",
+    "mode": "yes_no",
+    "question": "Should I only showcase repositories with no stars?",
+    "expected": false,
+    "evidence": "Explicit pinned repository request."
+  },
+  {
+    "id": "q091",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which company role fits my stated AI career goals?",
+    "options": [
+      "OpenAI reinforcement learning researcher",
+      "Unrelated retail cashier"
+    ],
+    "expected": [
+      "OpenAI reinforcement learning researcher",
+      "Unrelated retail cashier"
+    ],
+    "evidence": "Role relevance from career targets; not a company-wide preference."
+  },
+  {
+    "id": "q092",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which company role fits my sandbox work?",
+    "options": [
+      "Daytona sandbox engineer",
+      "Fashion shop sales assistant"
+    ],
+    "expected": [
+      "Daytona sandbox engineer",
+      "Fashion shop sales assistant"
+    ],
+    "evidence": "Role relevance from technical interests."
+  },
+  {
+    "id": "q093",
+    "domain": "work",
+    "mode": "rank",
+    "question": "Which companies would I prefer as employers?",
+    "options": [
+      "OpenAI",
+      "Anthropic",
+      "NVIDIA"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q094",
+    "domain": "work",
+    "mode": "rank",
+    "question": "Which companies would I prefer for compute?",
+    "options": [
+      "Modal",
+      "Daytona",
+      "AWS"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q095",
+    "domain": "work",
+    "mode": "rank",
+    "question": "Which people would I most enjoy spending time with?",
+    "options": [
+      "Taylor Swift",
+      "Elon Musk",
+      "Albert Einstein"
+    ],
+    "expected": null,
+    "evidence": "No explicit preference order found; user label required."
+  },
+  {
+    "id": "q096",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which person fits a secure execution collaboration?",
+    "options": [
+      "Engineer with sandbox isolation expertise",
+      "Salesperson with no relevant systems experience"
+    ],
+    "expected": [
+      "Engineer with sandbox isolation expertise",
+      "Salesperson with no relevant systems experience"
+    ],
+    "evidence": "Inferred professional relevance only."
+  },
+  {
+    "id": "q097",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which biography link did I request?",
+    "options": [
+      "incredibuild.com",
+      "islo.dev"
+    ],
+    "expected": [
+      "incredibuild.com",
+      "islo.dev"
+    ],
+    "evidence": "Explicit bio revision."
+  },
+  {
+    "id": "q098",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which production domain did I choose?",
+    "options": [
+      "yossieliaz.netlify.app",
+      "www.yossieliaz.com"
+    ],
+    "expected": [
+      "yossieliaz.netlify.app",
+      "www.yossieliaz.com"
+    ],
+    "evidence": "Explicit production domain."
+  },
+  {
+    "id": "q099",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which project implementation matches my course?",
+    "options": [
+      "Backend frontend and third microservice",
+      "Frontend without a backend"
+    ],
+    "expected": [
+      "Backend frontend and third microservice",
+      "Frontend without a backend"
+    ],
+    "evidence": "Explicit course requirements."
+  },
+  {
+    "id": "q100",
+    "domain": "work",
+    "mode": "choice",
+    "question": "Which response would I prefer?",
+    "options": [
+      "Concise verified answer",
+      "Long speculative answer"
+    ],
+    "expected": [
+      "Concise verified answer",
+      "Long speculative answer"
+    ],
+    "evidence": "Repeated communication preferences."
+  }
+]

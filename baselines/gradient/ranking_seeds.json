@@ -1,0 +1,134 @@
+[
+  {
+    "context": "Which answer style would I prefer?",
+    "better": "Concise direct answers with verified facts",
+    "worse": "Long padded answers with unsupported claims",
+    "evidence": "Repeated concise wording and verification requests"
+  },
+  {
+    "context": "Which assistant behavior would I prefer?",
+    "better": "Finish authorized work and provide final links",
+    "worse": "Stop after proposing a plan and ask permission repeatedly",
+    "evidence": "Repeated requests to complete work"
+  },
+  {
+    "context": "Which flight would I prefer?",
+    "better": "A flight outside Shabbat",
+    "worse": "A flight during Shabbat",
+    "evidence": "Explicit no flying on Shabbat constraint"
+  },
+  {
+    "context": "Which itinerary would I prefer?",
+    "better": "Avoid Shabbat even if I miss one conference day",
+    "worse": "Fly on Shabbat to attend every conference day",
+    "evidence": "Explicit travel constraint and conference flexibility"
+  },
+  {
+    "context": "Which personal website domain would I choose?",
+    "better": "yossieliaz.netlify.app",
+    "worse": "www.yossieliaz.com",
+    "evidence": "Explicit sole production domain"
+  },
+  {
+    "context": "Which link belongs in my GitHub bio?",
+    "better": "incredibuild.com",
+    "worse": "islo.dev",
+    "evidence": "Explicit bio change request"
+  },
+  {
+    "context": "Which CV would I prefer?",
+    "better": "A concise single page CV",
+    "worse": "A long multi page CV",
+    "evidence": "Repeated CV format requests"
+  },
+  {
+    "context": "Which portrait would I prefer?",
+    "better": "Pastel colors with a coarse abstract beard",
+    "worse": "Many fine beard lines with my name printed over the portrait",
+    "evidence": "Explicit portrait revisions"
+  },
+  {
+    "context": "Which research topic fits me better?",
+    "better": "AI systems for computational science",
+    "worse": "Celebrity gossip marketing",
+    "evidence": "Stated career focus; alternative is a synthetic contrast"
+  },
+  {
+    "context": "Which engineering work fits me better?",
+    "better": "Secure agent sandboxes and forkable snapshots",
+    "worse": "Unrelated advertising copywriting",
+    "evidence": "Engineering work; alternative is a synthetic contrast"
+  },
+  {
+    "context": "Which project should I pin?",
+    "better": "Airflow software factory with meaningful contributions",
+    "worse": "Only empty zero star repositories",
+    "evidence": "Explicit pinning request"
+  },
+  {
+    "context": "Which CI result matters more to me?",
+    "better": "Measured compile time improvement with warm cache",
+    "worse": "An unverified promise of faster builds",
+    "evidence": "CI measurements and comparison requests"
+  },
+  {
+    "context": "Which analytics report would I prefer?",
+    "better": "Real visitors separated from automated CI traffic",
+    "worse": "CI traffic counted as real visitors",
+    "evidence": "Explicit PostHog request"
+  },
+  {
+    "context": "Which student contribution satisfies my course?",
+    "better": "Three pull requests merged to main in major open source repositories",
+    "worse": "Three unmerged pull requests",
+    "evidence": "Explicit course requirements"
+  },
+  {
+    "context": "Which course project fits my requirements?",
+    "better": "FastAPI backend frontend and third microservice using Docker",
+    "worse": "Frontend only without a backend",
+    "evidence": "Explicit course requirements"
+  },
+  {
+    "context": "Which companies fit my AI systems career interests?",
+    "better": "OpenAI research engineering and reinforcement learning",
+    "worse": "An unrelated company offering only retail sales",
+    "evidence": "OpenAI application target; fit inference, not employer preference"
+  },
+  {
+    "context": "Which companies fit my AI systems career interests?",
+    "better": "Anthropic AI research and agent infrastructure",
+    "worse": "An unrelated company offering only retail sales",
+    "evidence": "Anthropic application target; fit inference, not employer preference"
+  },
+  {
+    "context": "Which companies fit my AI infrastructure interests?",
+    "better": "Modal compute infrastructure",
+    "worse": "An unrelated fashion retailer",
+    "evidence": "Meeting targets and technical interest; fit inference"
+  },
+  {
+    "context": "Which companies fit my sandbox engineering interests?",
+    "better": "Daytona agent sandboxes",
+    "worse": "An unrelated fashion retailer",
+    "evidence": "Meeting targets and technical interest; fit inference"
+  },
+  {
+    "context": "Which companies fit my scientific AI interests?",
+    "better": "NVIDIA deep learning systems",
+    "worse": "An unrelated fashion retailer",
+    "evidence": "NVIDIA role target; fit inference"
+  },
+  {
+    "context": "Which person would I prioritize for a research meeting?",
+    "better": "A scientist working on computational genomics and AI infrastructure",
+    "worse": "A salesperson with no connection to my work",
+    "evidence": "Career and meeting goals; inferred professional relevance, not interpersonal worth"
+  },
+  {
+    "context": "Which collaborator fits this sandbox research project?",
+    "better": "An engineer experienced in reproducible secure execution",
+    "worse": "Someone without relevant systems experience",
+    "evidence": "Project requirements; inferred professional fit only"
+  }
+]

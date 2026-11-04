@@ -1,0 +1,9 @@
+{
+  "question": "Which food would I prefer?",
+  "contexts": ["food"],
+  "options": [
+    {"id":"sushi","attributes":{}},
+    {"id":"pizza","attributes":{}},
+    {"id":"falafel","attributes":{}}
+  ]
+}

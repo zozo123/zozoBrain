@@ -1,0 +1,8 @@
+{
+  "question": "Should I fly on Shabbat to avoid missing a conference day?",
+  "contexts": ["travel"],
+  "options": [
+    {"id":"yes","label":"Fly on Shabbat","attributes":{"shabbat_flight":1}},
+    {"id":"no","label":"Fly Sunday and miss one day","attributes":{"avoids_shabbat":1,"misses_one_or_two_days":1}}
+  ]
+}

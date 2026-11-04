@@ -1,0 +1,23 @@
+{
+  "context": "Which conference itinerary would I prefer?",
+  "options": [
+    {
+      "id": "sunday",
+      "label": "Avoid Shabbat even if I miss one conference day",
+      "description": "Flight on Sunday",
+      "eligible": true
+    },
+    {
+      "id": "saturday",
+      "label": "Fly on Shabbat to attend every conference day",
+      "eligible": false,
+      "exclusion_reason": "Caller explicitly applied the no flying on Shabbat constraint"
+    },
+    {
+      "id": "weekday",
+      "label": "A flight outside Shabbat",
+      "description": "Weekday flight with a longer stay",
+      "eligible": true
+    }
+  ]
+}

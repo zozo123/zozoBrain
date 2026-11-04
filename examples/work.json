@@ -1,0 +1,8 @@
+{
+  "question":"Which company role fits my stated career interests?",
+  "contexts":["career","security"],
+  "options":[
+    {"id":"sandbox_role","label":"Secure agent sandbox research engineer","attributes":{"secure_sandbox":1,"scientific_ai":0.5,"open_source":1}},
+    {"id":"science_role","label":"Scientific AI research engineer","attributes":{"scientific_ai":1,"open_source":1}}
+  ]
+}

@@ -1,0 +1,2313 @@
+{
+  "total": 100,
+  "labeled": 24,
+  "correct": 15,
+  "accuracy_on_labeled": 0.625,
+  "unlabeled": 76,
+  "domains": {
+    "food": {
+      "total": 20,
+      "labeled": 0,
+      "correct": 0,
+      "unlabeled": 20,
+      "accuracy": null
+    },
+    "countries": {
+      "total": 20,
+      "labeled": 7,
+      "correct": 4,
+      "unlabeled": 13,
+      "accuracy": 0.5714285714285714
+    },
+    "music": {
+      "total": 20,
+      "labeled": 0,
+      "correct": 0,
+      "unlabeled": 20,
+      "accuracy": null
+    },
+    "politics": {
+      "total": 20,
+      "labeled": 0,
+      "correct": 0,
+      "unlabeled": 20,
+      "accuracy": null
+    },
+    "work": {
+      "total": 20,
+      "labeled": 17,
+      "correct": 11,
+      "unlabeled": 3,
+      "accuracy": 0.6470588235294118
+    }
+  },
+  "weights_sha256": "99330e945bf28405fa1220212392b7da0e5aff56c928abf62123dd04ff77739c",
+  "evaluation_kind": "Single fixed benchmark written after initial training design; not independent, not user-confirmed, not used in gradients or checkpoint selection.",
+  "results": [
+    {
+      "id": "q001",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating sushi?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.99314377537364
+      },
+      "correct": null
+    },
+    {
+      "id": "q002",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating hummus?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.882295961238754
+      },
+      "correct": null
+    },
+    {
+      "id": "q003",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating pizza?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9964905300575287
+      },
+      "correct": null
+    },
+    {
+      "id": "q004",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating falafel?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9924736990780393
+      },
+      "correct": null
+    },
+    {
+      "id": "q005",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating steak?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9926956559404221
+      },
+      "correct": null
+    },
+    {
+      "id": "q006",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating spicy food?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.8674198736148708
+      },
+      "correct": null
+    },
+    {
+      "id": "q007",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating chocolate?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9994766844188914
+      },
+      "correct": null
+    },
+    {
+      "id": "q008",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating olives?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9998571509929616
+      },
+      "correct": null
+    },
+    {
+      "id": "q009",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating seafood?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9999687656084263
+      },
+      "correct": null
+    },
+    {
+      "id": "q010",
+      "domain": "food",
+      "mode": "yes_no",
+      "question": "Do I enjoy eating vegan meals?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9995911356759313
+      },
+      "correct": null
+    },
+    {
+      "id": "q011",
+      "domain": "food",
+      "mode": "choice",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Coffee",
+        "Tea"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Coffee",
+        "ranking": [
+          {
+            "option": "Coffee",
+            "score": 4.818166255950928,
+            "input_index": 0
+          },
+          {
+            "option": "Tea",
+            "score": 1.530322551727295,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q012",
+      "domain": "food",
+      "mode": "choice",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Sweet breakfast",
+        "Savory breakfast"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Savory breakfast",
+        "ranking": [
+          {
+            "option": "Savory breakfast",
+            "score": 2.509063243865967,
+            "input_index": 1
+          },
+          {
+            "option": "Sweet breakfast",
+            "score": 0.7208962440490723,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q013",
+      "domain": "food",
+      "mode": "choice",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Sushi",
+        "Pizza"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Sushi",
+        "ranking": [
+          {
+            "option": "Sushi",
+            "score": 3.2860937118530273,
+            "input_index": 0
+          },
+          {
+            "option": "Pizza",
+            "score": 1.3603334426879883,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q014",
+      "domain": "food",
+      "mode": "choice",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Hummus",
+        "Falafel"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Falafel",
+        "ranking": [
+          {
+            "option": "Falafel",
+            "score": 0.16689945757389069,
+            "input_index": 1
+          },
+          {
+            "option": "Hummus",
+            "score": -2.114455461502075,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q015",
+      "domain": "food",
+      "mode": "choice",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Spicy food",
+        "Mild food"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Mild food",
+        "ranking": [
+          {
+            "option": "Mild food",
+            "score": 3.3190200328826904,
+            "input_index": 1
+          },
+          {
+            "option": "Spicy food",
+            "score": 0.06613370776176453,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q016",
+      "domain": "food",
+      "mode": "rank",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Italian food",
+        "Japanese food",
+        "Israeli food"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Israeli food",
+        "ranking": [
+          {
+            "option": "Israeli food",
+            "score": 1.5159226655960083,
+            "input_index": 2
+          },
+          {
+            "option": "Italian food",
+            "score": 0.8660422563552856,
+            "input_index": 0
+          },
+          {
+            "option": "Japanese food",
+            "score": 0.11074334383010864,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q017",
+      "domain": "food",
+      "mode": "rank",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Apples",
+        "Bananas",
+        "Oranges"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Apples",
+        "ranking": [
+          {
+            "option": "Apples",
+            "score": 2.786877393722534,
+            "input_index": 0
+          },
+          {
+            "option": "Oranges",
+            "score": -0.627638578414917,
+            "input_index": 2
+          },
+          {
+            "option": "Bananas",
+            "score": -1.082750916481018,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q018",
+      "domain": "food",
+      "mode": "rank",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Ice cream",
+        "Cake",
+        "Fruit"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Ice cream",
+        "ranking": [
+          {
+            "option": "Ice cream",
+            "score": 4.910409927368164,
+            "input_index": 0
+          },
+          {
+            "option": "Fruit",
+            "score": 1.109343409538269,
+            "input_index": 2
+          },
+          {
+            "option": "Cake",
+            "score": 0.8100886344909668,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q019",
+      "domain": "food",
+      "mode": "rank",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Pasta",
+        "Rice",
+        "Potatoes"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Pasta",
+        "ranking": [
+          {
+            "option": "Pasta",
+            "score": 1.9024609327316284,
+            "input_index": 0
+          },
+          {
+            "option": "Rice",
+            "score": 1.2073029279708862,
+            "input_index": 1
+          },
+          {
+            "option": "Potatoes",
+            "score": -1.0083671808242798,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q020",
+      "domain": "food",
+      "mode": "rank",
+      "question": "Which food or drink would I prefer?",
+      "options": [
+        "Breakfast",
+        "Lunch",
+        "Dinner"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Breakfast",
+        "ranking": [
+          {
+            "option": "Breakfast",
+            "score": 4.104130744934082,
+            "input_index": 0
+          },
+          {
+            "option": "Lunch",
+            "score": 1.6134964227676392,
+            "input_index": 1
+          },
+          {
+            "option": "Dinner",
+            "score": 0.7291349768638611,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q021",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Would I take a Saturday flight to Australia?",
+      "expected": false,
+      "evidence": "Explicit no flying on Shabbat; daytime Saturday is included.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.04091087899054986
+      },
+      "correct": true
+    },
+    {
+      "id": "q022",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Is departing from San Francisco an option for my Australia trip?",
+      "expected": true,
+      "evidence": "Explicit SF on the table statement.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.2546507188893403
+      },
+      "correct": false
+    },
+    {
+      "id": "q023",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Would I shorten conference attendance to fit my travel constraints?",
+      "expected": true,
+      "evidence": "Explicit willingness to miss one or two conference days.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.0012188525575360099
+      },
+      "correct": false
+    },
+    {
+      "id": "q024",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Must an Australia conference trip last exactly ten days?",
+      "expected": false,
+      "evidence": "User challenged unexplained ten day assumption.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.024388932563187707
+      },
+      "correct": true
+    },
+    {
+      "id": "q025",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Am I open to a career move to San Francisco in the United States?",
+      "expected": true,
+      "evidence": "Historical explicit relocation willingness; not a prediction of current acceptance.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9990564872865846
+      },
+      "correct": true
+    },
+    {
+      "id": "q026",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Do I prefer Australia over the United States?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.4927644267589056
+      },
+      "correct": null
+    },
+    {
+      "id": "q027",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Is Japan my favorite country to visit?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.000601887847745738
+      },
+      "correct": null
+    },
+    {
+      "id": "q028",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Would I rather live in Canada than Israel?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.6552360742366065
+      },
+      "correct": null
+    },
+    {
+      "id": "q029",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Do I dislike traveling to the United Kingdom?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.00744865832111985
+      },
+      "correct": null
+    },
+    {
+      "id": "q030",
+      "domain": "countries",
+      "mode": "yes_no",
+      "question": "Is Italy my favorite holiday destination?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.00043146427455165534
+      },
+      "correct": null
+    },
+    {
+      "id": "q031",
+      "domain": "countries",
+      "mode": "choice",
+      "question": "Which flight would I take to another country?",
+      "options": [
+        "Sunday flight",
+        "Saturday daytime flight"
+      ],
+      "expected": [
+        "Sunday flight",
+        "Saturday daytime flight"
+      ],
+      "evidence": "Explicit no flying on Shabbat.",
+      "output": {
+        "selected": "Saturday daytime flight",
+        "ranking": [
+          {
+            "option": "Saturday daytime flight",
+            "score": 4.548826217651367,
+            "input_index": 1
+          },
+          {
+            "option": "Sunday flight",
+            "score": -0.8448066711425781,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": false
+    },
+    {
+      "id": "q032",
+      "domain": "countries",
+      "mode": "choice",
+      "question": "Which conference travel plan fits me?",
+      "options": [
+        "Miss one day and avoid Shabbat flights",
+        "Attend every day by flying on Shabbat"
+      ],
+      "expected": [
+        "Miss one day and avoid Shabbat flights",
+        "Attend every day by flying on Shabbat"
+      ],
+      "evidence": "Explicit travel constraint and attendance flexibility.",
+      "output": {
+        "selected": "Miss one day and avoid Shabbat flights",
+        "ranking": [
+          {
+            "option": "Miss one day and avoid Shabbat flights",
+            "score": 3.9327399730682373,
+            "input_index": 0
+          },
+          {
+            "option": "Attend every day by flying on Shabbat",
+            "score": -5.131598949432373,
+            "input_index": 1
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": true
+    },
+    {
+      "id": "q033",
+      "domain": "countries",
+      "mode": "choice",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Israel",
+        "United States"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Israel",
+        "ranking": [
+          {
+            "option": "Israel",
+            "score": -0.6046128273010254,
+            "input_index": 0
+          },
+          {
+            "option": "United States",
+            "score": -1.5570834875106812,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q034",
+      "domain": "countries",
+      "mode": "choice",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Australia",
+        "New Zealand"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "New Zealand",
+        "ranking": [
+          {
+            "option": "New Zealand",
+            "score": -1.064098596572876,
+            "input_index": 1
+          },
+          {
+            "option": "Australia",
+            "score": -2.225098133087158,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q035",
+      "domain": "countries",
+      "mode": "choice",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "France",
+        "Italy"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "France",
+        "ranking": [
+          {
+            "option": "France",
+            "score": -0.6726243495941162,
+            "input_index": 0
+          },
+          {
+            "option": "Italy",
+            "score": -3.312105417251587,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q036",
+      "domain": "countries",
+      "mode": "rank",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Japan",
+        "South Korea",
+        "Thailand"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "South Korea",
+        "ranking": [
+          {
+            "option": "South Korea",
+            "score": 4.1131696701049805,
+            "input_index": 1
+          },
+          {
+            "option": "Japan",
+            "score": -1.372518539428711,
+            "input_index": 0
+          },
+          {
+            "option": "Thailand",
+            "score": -1.3930103778839111,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q037",
+      "domain": "countries",
+      "mode": "rank",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Canada",
+        "Germany",
+        "United Kingdom"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "United Kingdom",
+        "ranking": [
+          {
+            "option": "United Kingdom",
+            "score": 0.8342289924621582,
+            "input_index": 2
+          },
+          {
+            "option": "Germany",
+            "score": -0.5092393159866333,
+            "input_index": 1
+          },
+          {
+            "option": "Canada",
+            "score": -1.288469910621643,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q038",
+      "domain": "countries",
+      "mode": "rank",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Spain",
+        "Portugal",
+        "Greece"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Spain",
+        "ranking": [
+          {
+            "option": "Spain",
+            "score": -0.8329919576644897,
+            "input_index": 0
+          },
+          {
+            "option": "Greece",
+            "score": -1.5128225088119507,
+            "input_index": 2
+          },
+          {
+            "option": "Portugal",
+            "score": -2.7613589763641357,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q039",
+      "domain": "countries",
+      "mode": "rank",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Norway",
+        "Sweden",
+        "Denmark"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Sweden",
+        "ranking": [
+          {
+            "option": "Sweden",
+            "score": 0.913273811340332,
+            "input_index": 1
+          },
+          {
+            "option": "Norway",
+            "score": -2.657148599624634,
+            "input_index": 0
+          },
+          {
+            "option": "Denmark",
+            "score": -3.1078734397888184,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q040",
+      "domain": "countries",
+      "mode": "rank",
+      "question": "Which country would I personally prefer to visit?",
+      "options": [
+        "Israel",
+        "Australia",
+        "United States"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Israel",
+        "ranking": [
+          {
+            "option": "Israel",
+            "score": -0.6046128273010254,
+            "input_index": 0
+          },
+          {
+            "option": "United States",
+            "score": -1.5570834875106812,
+            "input_index": 2
+          },
+          {
+            "option": "Australia",
+            "score": -2.225098133087158,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q041",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to jazz?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.4886315038219693
+      },
+      "correct": null
+    },
+    {
+      "id": "q042",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to classical music?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.8451638412244624
+      },
+      "correct": null
+    },
+    {
+      "id": "q043",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to heavy metal?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9645326363420749
+      },
+      "correct": null
+    },
+    {
+      "id": "q044",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to hip hop?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.3827197089441092
+      },
+      "correct": null
+    },
+    {
+      "id": "q045",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to Israeli pop?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.31816108116533515
+      },
+      "correct": null
+    },
+    {
+      "id": "q046",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to country music?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.059318556736845995
+      },
+      "correct": null
+    },
+    {
+      "id": "q047",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to electronic music?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.7218457809864689
+      },
+      "correct": null
+    },
+    {
+      "id": "q048",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to opera?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.40027920676290346
+      },
+      "correct": null
+    },
+    {
+      "id": "q049",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to reggae?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.807927474046894
+      },
+      "correct": null
+    },
+    {
+      "id": "q050",
+      "domain": "music",
+      "mode": "yes_no",
+      "question": "Do I enjoy listening to musical theater?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.032052391683917006
+      },
+      "correct": null
+    },
+    {
+      "id": "q051",
+      "domain": "music",
+      "mode": "choice",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Jazz",
+        "Rock"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Jazz",
+        "ranking": [
+          {
+            "option": "Jazz",
+            "score": 0.5449367761611938,
+            "input_index": 0
+          },
+          {
+            "option": "Rock",
+            "score": -2.2588248252868652,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q052",
+      "domain": "music",
+      "mode": "choice",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Bach",
+        "Mozart"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Mozart",
+        "ranking": [
+          {
+            "option": "Mozart",
+            "score": -0.9293581247329712,
+            "input_index": 1
+          },
+          {
+            "option": "Bach",
+            "score": -1.9495352506637573,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q053",
+      "domain": "music",
+      "mode": "choice",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Taylor Swift",
+        "Beyonce"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Taylor Swift",
+        "ranking": [
+          {
+            "option": "Taylor Swift",
+            "score": -1.2657337188720703,
+            "input_index": 0
+          },
+          {
+            "option": "Beyonce",
+            "score": -1.2989565134048462,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q054",
+      "domain": "music",
+      "mode": "choice",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Live concert",
+        "Studio recording"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Studio recording",
+        "ranking": [
+          {
+            "option": "Studio recording",
+            "score": -1.9393495321273804,
+            "input_index": 1
+          },
+          {
+            "option": "Live concert",
+            "score": -2.0981619358062744,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q055",
+      "domain": "music",
+      "mode": "choice",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Instrumental music",
+        "Vocal music"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Vocal music",
+        "ranking": [
+          {
+            "option": "Vocal music",
+            "score": 1.0698210000991821,
+            "input_index": 1
+          },
+          {
+            "option": "Instrumental music",
+            "score": 0.04344379901885986,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q056",
+      "domain": "music",
+      "mode": "rank",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Jazz",
+        "Classical",
+        "Pop"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Jazz",
+        "ranking": [
+          {
+            "option": "Jazz",
+            "score": 0.5449367761611938,
+            "input_index": 0
+          },
+          {
+            "option": "Pop",
+            "score": -0.2799370586872101,
+            "input_index": 2
+          },
+          {
+            "option": "Classical",
+            "score": -1.9269872903823853,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q057",
+      "domain": "music",
+      "mode": "rank",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Beatles",
+        "Rolling Stones",
+        "Queen"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Rolling Stones",
+        "ranking": [
+          {
+            "option": "Rolling Stones",
+            "score": 0.4863312542438507,
+            "input_index": 1
+          },
+          {
+            "option": "Queen",
+            "score": -1.2090977430343628,
+            "input_index": 2
+          },
+          {
+            "option": "Beatles",
+            "score": -3.0688157081604004,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q058",
+      "domain": "music",
+      "mode": "rank",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Piano",
+        "Violin",
+        "Guitar"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Piano",
+        "ranking": [
+          {
+            "option": "Piano",
+            "score": 0.6069876551628113,
+            "input_index": 0
+          },
+          {
+            "option": "Guitar",
+            "score": -1.059512972831726,
+            "input_index": 2
+          },
+          {
+            "option": "Violin",
+            "score": -2.0132057666778564,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q059",
+      "domain": "music",
+      "mode": "rank",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Hebrew songs",
+        "English songs",
+        "Spanish songs"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "English songs",
+        "ranking": [
+          {
+            "option": "English songs",
+            "score": 1.7866276502609253,
+            "input_index": 1
+          },
+          {
+            "option": "Hebrew songs",
+            "score": 0.6881603002548218,
+            "input_index": 0
+          },
+          {
+            "option": "Spanish songs",
+            "score": -0.9876796007156372,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q060",
+      "domain": "music",
+      "mode": "rank",
+      "question": "Which music option would I enjoy more?",
+      "options": [
+        "Opera",
+        "Hip hop",
+        "Electronic music"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Electronic music",
+        "ranking": [
+          {
+            "option": "Electronic music",
+            "score": 1.9953279495239258,
+            "input_index": 2
+          },
+          {
+            "option": "Hip hop",
+            "score": -0.17228856682777405,
+            "input_index": 1
+          },
+          {
+            "option": "Opera",
+            "score": -1.012129783630371,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q061",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I support the Democratic Party?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9002310367536445
+      },
+      "correct": null
+    },
+    {
+      "id": "q062",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I support the Republican Party?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9136400357285889
+      },
+      "correct": null
+    },
+    {
+      "id": "q063",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I support Likud?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9955137390605675
+      },
+      "correct": null
+    },
+    {
+      "id": "q064",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I favor a two state solution?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.998199499972498
+      },
+      "correct": null
+    },
+    {
+      "id": "q065",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I support higher income taxes?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.019468655066343356
+      },
+      "correct": null
+    },
+    {
+      "id": "q066",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I favor mandatory voting?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9990336255766235
+      },
+      "correct": null
+    },
+    {
+      "id": "q067",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I support proportional representation?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9726415792495897
+      },
+      "correct": null
+    },
+    {
+      "id": "q068",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I favor lower immigration levels?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.998541599402193
+      },
+      "correct": null
+    },
+    {
+      "id": "q069",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I support a carbon tax?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.030519782470947415
+      },
+      "correct": null
+    },
+    {
+      "id": "q070",
+      "domain": "politics",
+      "mode": "yes_no",
+      "question": "Do I favor term limits for elected leaders?",
+      "expected": null,
+      "evidence": "No explicit preference found; user label required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9970427131123275
+      },
+      "correct": null
+    },
+    {
+      "id": "q071",
+      "domain": "politics",
+      "mode": "choice",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Democrats",
+        "Republicans"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Republicans",
+        "ranking": [
+          {
+            "option": "Republicans",
+            "score": 0.7869546413421631,
+            "input_index": 1
+          },
+          {
+            "option": "Democrats",
+            "score": -0.5532301664352417,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q072",
+      "domain": "politics",
+      "mode": "choice",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Likud",
+        "Yesh Atid"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Yesh Atid",
+        "ranking": [
+          {
+            "option": "Yesh Atid",
+            "score": 1.4923807382583618,
+            "input_index": 1
+          },
+          {
+            "option": "Likud",
+            "score": -1.0298303365707397,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q073",
+      "domain": "politics",
+      "mode": "choice",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Higher taxes and more public services",
+        "Lower taxes and fewer public services"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Lower taxes and fewer public services",
+        "ranking": [
+          {
+            "option": "Lower taxes and fewer public services",
+            "score": 5.739773273468018,
+            "input_index": 1
+          },
+          {
+            "option": "Higher taxes and more public services",
+            "score": 3.959991693496704,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q074",
+      "domain": "politics",
+      "mode": "choice",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Mandatory voting",
+        "Voluntary voting"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Mandatory voting",
+        "ranking": [
+          {
+            "option": "Mandatory voting",
+            "score": -3.122501850128174,
+            "input_index": 0
+          },
+          {
+            "option": "Voluntary voting",
+            "score": -3.2151095867156982,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q075",
+      "domain": "politics",
+      "mode": "choice",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Proportional representation",
+        "Single member districts"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Proportional representation",
+        "ranking": [
+          {
+            "option": "Proportional representation",
+            "score": -1.5664666891098022,
+            "input_index": 0
+          },
+          {
+            "option": "Single member districts",
+            "score": -1.5941836833953857,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q076",
+      "domain": "politics",
+      "mode": "rank",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Left",
+        "Center",
+        "Right"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Right",
+        "ranking": [
+          {
+            "option": "Right",
+            "score": 1.6515270471572876,
+            "input_index": 2
+          },
+          {
+            "option": "Center",
+            "score": -2.605637788772583,
+            "input_index": 1
+          },
+          {
+            "option": "Left",
+            "score": -3.765289545059204,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q077",
+      "domain": "politics",
+      "mode": "rank",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Climate policy",
+        "Housing policy",
+        "Defense policy"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Climate policy",
+        "ranking": [
+          {
+            "option": "Climate policy",
+            "score": 0.3301427662372589,
+            "input_index": 0
+          },
+          {
+            "option": "Defense policy",
+            "score": -1.7976547479629517,
+            "input_index": 2
+          },
+          {
+            "option": "Housing policy",
+            "score": -1.9746454954147339,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q078",
+      "domain": "politics",
+      "mode": "rank",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Parliamentary system",
+        "Presidential system",
+        "Mixed system"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Parliamentary system",
+        "ranking": [
+          {
+            "option": "Parliamentary system",
+            "score": 1.2313313484191895,
+            "input_index": 0
+          },
+          {
+            "option": "Presidential system",
+            "score": -0.0990900993347168,
+            "input_index": 1
+          },
+          {
+            "option": "Mixed system",
+            "score": -1.0206059217453003,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q079",
+      "domain": "politics",
+      "mode": "rank",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "Public healthcare",
+        "Private healthcare",
+        "Mixed healthcare"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Public healthcare",
+        "ranking": [
+          {
+            "option": "Public healthcare",
+            "score": -0.17916813492774963,
+            "input_index": 0
+          },
+          {
+            "option": "Mixed healthcare",
+            "score": -1.8293112516403198,
+            "input_index": 2
+          },
+          {
+            "option": "Private healthcare",
+            "score": -2.5704028606414795,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q080",
+      "domain": "politics",
+      "mode": "rank",
+      "question": "Which political position would I personally prefer?",
+      "options": [
+        "More immigration",
+        "Current immigration levels",
+        "Less immigration"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Current immigration levels",
+        "ranking": [
+          {
+            "option": "Current immigration levels",
+            "score": 2.0368616580963135,
+            "input_index": 1
+          },
+          {
+            "option": "Less immigration",
+            "score": 0.9050426483154297,
+            "input_index": 2
+          },
+          {
+            "option": "More immigration",
+            "score": 0.038537800312042236,
+            "input_index": 0
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q081",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Would I rather receive a short direct response?",
+      "expected": true,
+      "evidence": "Repeated concise answer requests.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.5469292554284739
+      },
+      "correct": true
+    },
+    {
+      "id": "q082",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Should an assistant confidently make up a missing fact?",
+      "expected": false,
+      "evidence": "Repeated verification requests.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.8495735706524039
+      },
+      "correct": false
+    },
+    {
+      "id": "q083",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Would I want a resume that fits on one page?",
+      "expected": true,
+      "evidence": "Explicit CV format.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.06893898831934306
+      },
+      "correct": false
+    },
+    {
+      "id": "q084",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Can my course students satisfy the contribution rule with pending PRs?",
+      "expected": false,
+      "evidence": "Merged contributions required.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.0018259734193033894
+      },
+      "correct": true
+    },
+    {
+      "id": "q085",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Is a frontend alone enough for my EASS project?",
+      "expected": false,
+      "evidence": "Backend and third service required.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9861481529066696
+      },
+      "correct": false
+    },
+    {
+      "id": "q086",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Do I want real visitors distinguished from automated website tests?",
+      "expected": true,
+      "evidence": "Explicit PostHog requirement.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9921578577189725
+      },
+      "correct": true
+    },
+    {
+      "id": "q087",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Should my website move to a new Netlify subdomain?",
+      "expected": false,
+      "evidence": "Explicit preserve subdomain instruction.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.5833901889658796
+      },
+      "correct": false
+    },
+    {
+      "id": "q088",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Is secure execution for AI agents relevant to my research?",
+      "expected": true,
+      "evidence": "Stated technical work.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.16143683273969164
+      },
+      "correct": false
+    },
+    {
+      "id": "q089",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Would I like to compare measured build durations?",
+      "expected": true,
+      "evidence": "Explicit CI comparison request.",
+      "output": {
+        "answer": "yes",
+        "yes_score": 0.9960393084083093
+      },
+      "correct": true
+    },
+    {
+      "id": "q090",
+      "domain": "work",
+      "mode": "yes_no",
+      "question": "Should I only showcase repositories with no stars?",
+      "expected": false,
+      "evidence": "Explicit pinned repository request.",
+      "output": {
+        "answer": "no",
+        "yes_score": 0.020717408271318745
+      },
+      "correct": true
+    },
+    {
+      "id": "q091",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which company role fits my stated AI career goals?",
+      "options": [
+        "OpenAI reinforcement learning researcher",
+        "Unrelated retail cashier"
+      ],
+      "expected": [
+        "OpenAI reinforcement learning researcher",
+        "Unrelated retail cashier"
+      ],
+      "evidence": "Role relevance from career targets; not a company-wide preference.",
+      "output": {
+        "selected": "Unrelated retail cashier",
+        "ranking": [
+          {
+            "option": "Unrelated retail cashier",
+            "score": -2.402872323989868,
+            "input_index": 1
+          },
+          {
+            "option": "OpenAI reinforcement learning researcher",
+            "score": -2.672811269760132,
+            "input_index": 0
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": false
+    },
+    {
+      "id": "q092",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which company role fits my sandbox work?",
+      "options": [
+        "Daytona sandbox engineer",
+        "Fashion shop sales assistant"
+      ],
+      "expected": [
+        "Daytona sandbox engineer",
+        "Fashion shop sales assistant"
+      ],
+      "evidence": "Role relevance from technical interests.",
+      "output": {
+        "selected": "Daytona sandbox engineer",
+        "ranking": [
+          {
+            "option": "Daytona sandbox engineer",
+            "score": 4.6264119148254395,
+            "input_index": 0
+          },
+          {
+            "option": "Fashion shop sales assistant",
+            "score": -0.18816354870796204,
+            "input_index": 1
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": true
+    },
+    {
+      "id": "q093",
+      "domain": "work",
+      "mode": "rank",
+      "question": "Which companies would I prefer as employers?",
+      "options": [
+        "OpenAI",
+        "Anthropic",
+        "NVIDIA"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "NVIDIA",
+        "ranking": [
+          {
+            "option": "NVIDIA",
+            "score": 5.35092306137085,
+            "input_index": 2
+          },
+          {
+            "option": "Anthropic",
+            "score": 3.5595271587371826,
+            "input_index": 1
+          },
+          {
+            "option": "OpenAI",
+            "score": 3.379195213317871,
+            "input_index": 0
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": null
+    },
+    {
+      "id": "q094",
+      "domain": "work",
+      "mode": "rank",
+      "question": "Which companies would I prefer for compute?",
+      "options": [
+        "Modal",
+        "Daytona",
+        "AWS"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Modal",
+        "ranking": [
+          {
+            "option": "Modal",
+            "score": 10.758893966674805,
+            "input_index": 0
+          },
+          {
+            "option": "Daytona",
+            "score": 10.542126655578613,
+            "input_index": 1
+          },
+          {
+            "option": "AWS",
+            "score": 8.978449821472168,
+            "input_index": 2
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": null
+    },
+    {
+      "id": "q095",
+      "domain": "work",
+      "mode": "rank",
+      "question": "Which people would I most enjoy spending time with?",
+      "options": [
+        "Taylor Swift",
+        "Elon Musk",
+        "Albert Einstein"
+      ],
+      "expected": null,
+      "evidence": "No explicit preference order found; user label required.",
+      "output": {
+        "selected": "Elon Musk",
+        "ranking": [
+          {
+            "option": "Elon Musk",
+            "score": -4.421581745147705,
+            "input_index": 1
+          },
+          {
+            "option": "Taylor Swift",
+            "score": -4.681716442108154,
+            "input_index": 0
+          },
+          {
+            "option": "Albert Einstein",
+            "score": -5.030259132385254,
+            "input_index": 2
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": null
+    },
+    {
+      "id": "q096",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which person fits a secure execution collaboration?",
+      "options": [
+        "Engineer with sandbox isolation expertise",
+        "Salesperson with no relevant systems experience"
+      ],
+      "expected": [
+        "Engineer with sandbox isolation expertise",
+        "Salesperson with no relevant systems experience"
+      ],
+      "evidence": "Inferred professional relevance only.",
+      "output": {
+        "selected": "Engineer with sandbox isolation expertise",
+        "ranking": [
+          {
+            "option": "Engineer with sandbox isolation expertise",
+            "score": -4.991288185119629,
+            "input_index": 0
+          },
+          {
+            "option": "Salesperson with no relevant systems experience",
+            "score": -5.3390727043151855,
+            "input_index": 1
+          }
+        ],
+        "warning": "No general food, music, political, country or interpersonal preference labels were available. Unless a specific documented constraint applies, this order is an unsupported guess."
+      },
+      "correct": true
+    },
+    {
+      "id": "q097",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which biography link did I request?",
+      "options": [
+        "incredibuild.com",
+        "islo.dev"
+      ],
+      "expected": [
+        "incredibuild.com",
+        "islo.dev"
+      ],
+      "evidence": "Explicit bio revision.",
+      "output": {
+        "selected": "incredibuild.com",
+        "ranking": [
+          {
+            "option": "incredibuild.com",
+            "score": 10.398497581481934,
+            "input_index": 0
+          },
+          {
+            "option": "islo.dev",
+            "score": -6.169723987579346,
+            "input_index": 1
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": true
+    },
+    {
+      "id": "q098",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which production domain did I choose?",
+      "options": [
+        "yossieliaz.netlify.app",
+        "www.yossieliaz.com"
+      ],
+      "expected": [
+        "yossieliaz.netlify.app",
+        "www.yossieliaz.com"
+      ],
+      "evidence": "Explicit production domain.",
+      "output": {
+        "selected": "yossieliaz.netlify.app",
+        "ranking": [
+          {
+            "option": "yossieliaz.netlify.app",
+            "score": 7.582888126373291,
+            "input_index": 0
+          },
+          {
+            "option": "www.yossieliaz.com",
+            "score": -8.09771728515625,
+            "input_index": 1
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": true
+    },
+    {
+      "id": "q099",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which project implementation matches my course?",
+      "options": [
+        "Backend frontend and third microservice",
+        "Frontend without a backend"
+      ],
+      "expected": [
+        "Backend frontend and third microservice",
+        "Frontend without a backend"
+      ],
+      "evidence": "Explicit course requirements.",
+      "output": {
+        "selected": "Backend frontend and third microservice",
+        "ranking": [
+          {
+            "option": "Backend frontend and third microservice",
+            "score": -0.3319968283176422,
+            "input_index": 0
+          },
+          {
+            "option": "Frontend without a backend",
+            "score": -10.053020477294922,
+            "input_index": 1
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": true
+    },
+    {
+      "id": "q100",
+      "domain": "work",
+      "mode": "choice",
+      "question": "Which response would I prefer?",
+      "options": [
+        "Concise verified answer",
+        "Long speculative answer"
+      ],
+      "expected": [
+        "Concise verified answer",
+        "Long speculative answer"
+      ],
+      "evidence": "Repeated communication preferences.",
+      "output": {
+        "selected": "Concise verified answer",
+        "ranking": [
+          {
+            "option": "Concise verified answer",
+            "score": 2.029236316680908,
+            "input_index": 0
+          },
+          {
+            "option": "Long speculative answer",
+            "score": -4.262508392333984,
+            "input_index": 1
+          }
+        ],
+        "warning": "Experimental synthetic-label ranking; scores are not calibrated preference probabilities. Unknown options may rank arbitrarily."
+      },
+      "correct": true
+    }
+  ]
+}

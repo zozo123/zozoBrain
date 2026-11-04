@@ -1,0 +1,61 @@
+{
+  "parameters": 9272,
+  "float32_weight_bytes": 37088,
+  "seed": 42,
+  "steps": 1800,
+  "train": {
+    "yes_no": {
+      "correct": 296,
+      "total": 296,
+      "accuracy": 1.0
+    },
+    "option_utility": {
+      "correct": 176,
+      "total": 176,
+      "accuracy": 1.0
+    }
+  },
+  "held_out_template": {
+    "yes_no": {
+      "correct": 73,
+      "total": 74,
+      "accuracy": 0.9864864864864865
+    },
+    "option_utility": {
+      "correct": 44,
+      "total": 44,
+      "accuracy": 1.0
+    }
+  },
+  "held_out_template_pairwise": {
+    "correct": 22,
+    "total": 22
+  },
+  "loss": [
+    {
+      "step": 300,
+      "bce": 0.0012693091994151473
+    },
+    {
+      "step": 600,
+      "bce": 0.0007766550406813622
+    },
+    {
+      "step": 900,
+      "bce": 0.0005714676808565855
+    },
+    {
+      "step": 1200,
+      "bce": 0.00046297034714370966
+    },
+    {
+      "step": 1500,
+      "bce": 0.0003986561205238104
+    },
+    {
+      "step": 1800,
+      "bce": 0.00035850016865879297
+    }
+  ],
+  "limitations": "Synthetic assistant-written labels from supplied memory. Held-out templates reuse known propositions and option descriptions. Not user validation or unseen-topic evaluation. No food tastes or named-person preference order supplied."
+}

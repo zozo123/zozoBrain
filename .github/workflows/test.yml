@@ -1,0 +1,23 @@
+name: Verify decision policy and reproduce baseline
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12']
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - run: python -m pip install -r requirements.txt
+      - run: python weights.py
+      - run: python -m unittest -v
+      - run: python evaluate.py
+      - run: python -m unittest -v
+        working-directory: baselines/gradient

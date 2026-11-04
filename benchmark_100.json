@@ -1,0 +1,2613 @@
+[
+  {
+    "id": "d001",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Sushi",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Pizza",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d002",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Falafel",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Hummus",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d003",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Coffee",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Tea",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d004",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Sweet",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Savory",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d005",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Spicy",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Mild",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d006",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Steak",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Tofu",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d007",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Pasta",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Rice",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d008",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Olives",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Pickles",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d009",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Cake",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Fruit",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d010",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Chocolate",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Vanilla",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d011",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Italian",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Japanese",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Israeli",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d012",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Apple",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Banana",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Orange",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d013",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Soup",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Salad",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Sandwich",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d014",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Fish",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Chicken",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Lentils",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d015",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Espresso",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Latte",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Tea",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d016",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Breakfast",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Lunch",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Dinner",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d017",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Bread",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Rice",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Potato",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d018",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Yogurt",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Ice cream",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Sorbet",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d019",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Fresh",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Grilled",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Roasted",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d020",
+    "domain": "food",
+    "question": "Which food option would I prefer?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Noodles",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Curry",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Tacos",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d021",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Jazz",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Rock",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d022",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Bach",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Mozart",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d023",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Pop",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Hip hop",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d024",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Opera",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Electronic",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d025",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Live",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Recorded",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d026",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Piano",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Guitar",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d027",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Vocals",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Instrumental",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d028",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Hebrew",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "English",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d029",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Reggae",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Country",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d030",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Metal",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Folk",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d031",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Jazz",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Classical",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Pop",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d032",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Beatles",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Queen",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Rolling Stones",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d033",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Bach",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Mozart",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Beethoven",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d034",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Piano",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Violin",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Guitar",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d035",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Swift",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Beyonce",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Adele",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d036",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Concert",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Festival",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Home listening",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d037",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Blues",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Soul",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Funk",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d038",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Rock",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Metal",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Punk",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d039",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Solo",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Duet",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Orchestra",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d040",
+    "domain": "music",
+    "question": "Which music option would I prefer?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Musical theater",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Opera",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Ballet",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d041",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Democrats",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Republicans",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d042",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Likud",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Yesh Atid",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d043",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Higher taxes",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Lower taxes",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d044",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Mandatory voting",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Voluntary voting",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d045",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Proportional voting",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "District voting",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d046",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Term limits",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "No term limits",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d047",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "More immigration",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Less immigration",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d048",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Carbon tax",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "No carbon tax",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d049",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Public healthcare",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Private healthcare",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d050",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Two state solution",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Other solution",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d051",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Left",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Center",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Right",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d052",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Climate",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Housing",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Defense",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d053",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Parliamentary",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Presidential",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Mixed",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d054",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "More regulation",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Less regulation",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Current regulation",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d055",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Local",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "National",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Federal",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d056",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Party A",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Party B",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Party C",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d057",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Policy A",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Policy B",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Policy C",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d058",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Candidate A",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Candidate B",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Candidate C",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d059",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Raise taxes",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Keep taxes",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Cut taxes",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d060",
+    "domain": "politics",
+    "question": "Which politics option would I prefer?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Expand services",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Keep services",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Reduce services",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d061",
+    "domain": "countries",
+    "question": "Which flight to Australia would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d062",
+    "domain": "countries",
+    "question": "Which flight to United States would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d063",
+    "domain": "countries",
+    "question": "Which flight to United Kingdom would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d064",
+    "domain": "countries",
+    "question": "Which flight to France would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d065",
+    "domain": "countries",
+    "question": "Which flight to Japan would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d066",
+    "domain": "countries",
+    "question": "Which flight to Canada would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d067",
+    "domain": "countries",
+    "question": "Which flight to Germany would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d068",
+    "domain": "countries",
+    "question": "Which flight to Italy would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d069",
+    "domain": "countries",
+    "question": "Which flight to Spain would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d070",
+    "domain": "countries",
+    "question": "Which flight to New Zealand would I choose?",
+    "contexts": [
+      "travel",
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "shabbat",
+        "label": "Fly on Shabbat",
+        "attributes": {
+          "shabbat_flight": 1
+        }
+      },
+      {
+        "id": "weekday",
+        "label": "Weekday flight; possibly miss a conference day",
+        "attributes": {
+          "avoids_shabbat": 1,
+          "misses_one_or_two_days": 1
+        }
+      }
+    ],
+    "expected_decision": "weekday",
+    "expected_status": "only_feasible_option",
+    "evidence": "Explicit no flying on Shabbat. Destination does not establish a country preference."
+  },
+  {
+    "id": "d071",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Australia",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "United States",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "France",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d072",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "United States",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "United Kingdom",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Japan",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d073",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "United Kingdom",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "France",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Canada",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d074",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "France",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Japan",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Germany",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d075",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Japan",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Canada",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Italy",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d076",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Canada",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Germany",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Spain",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d077",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Germany",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Italy",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "New Zealand",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d078",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Italy",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Spain",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Australia",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d079",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Spain",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "New Zealand",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "United States",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d080",
+    "domain": "countries",
+    "question": "Which country would I prefer to live in?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "New Zealand",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Australia",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "United Kingdom",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d081",
+    "domain": "work",
+    "question": "Which answer style would I prefer?",
+    "contexts": [
+      "communication"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "concise": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "speculative": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d082",
+    "domain": "work",
+    "question": "Should a reply use verified facts or speculation?",
+    "contexts": [
+      "communication"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "verified": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "speculative": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d083",
+    "domain": "work",
+    "question": "Which assistant behavior fits my requests?",
+    "contexts": [
+      "communication"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "autonomous_completion": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "redundant_approval": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d084",
+    "domain": "work",
+    "question": "Should authorized work finish or stop for redundant approval?",
+    "contexts": [
+      "communication"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "finished_deliverable": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "redundant_approval": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d085",
+    "domain": "work",
+    "question": "Which portrait matches my revisions?",
+    "contexts": [
+      "design"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "pastel": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "printed_name": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d086",
+    "domain": "work",
+    "question": "Which portrait detail did I request?",
+    "contexts": [
+      "design"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "coarse_beard": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "printed_name": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d087",
+    "domain": "work",
+    "question": "Which CV length did I request?",
+    "contexts": [
+      "cv"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "single_page": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "multi_page": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d088",
+    "domain": "work",
+    "question": "Which production domain should I choose?",
+    "contexts": [
+      "website"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "netlify_domain": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "old_custom_domain": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d089",
+    "domain": "work",
+    "question": "Which contribution satisfies my course?",
+    "contexts": [
+      "teaching"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "merged_pr": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "unmerged_pr": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d090",
+    "domain": "work",
+    "question": "Which project satisfies my course?",
+    "contexts": [
+      "teaching"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "required_services": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "frontend_only": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d091",
+    "domain": "work",
+    "question": "Which analytics report matches my requirements?",
+    "contexts": [
+      "analytics"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "genuine_visitors": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "ci_as_visitors": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Documented qualitative preference; numerical utility authored, not measured."
+  },
+  {
+    "id": "d092",
+    "domain": "work",
+    "question": "If I explicitly state A is preferred and B disliked, which should win?",
+    "contexts": [
+      "food"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "explicitly_preferred": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "explicitly_disliked": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Hypothetical supplied preference, not a Yossi fact."
+  },
+  {
+    "id": "d093",
+    "domain": "work",
+    "question": "If I explicitly prefer song A over B, which should win?",
+    "contexts": [
+      "music"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "explicitly_preferred": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "explicitly_disliked": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Hypothetical supplied preference, not a Yossi fact."
+  },
+  {
+    "id": "d094",
+    "domain": "work",
+    "question": "If I explicitly state a political preference A over B, which should win?",
+    "contexts": [
+      "politics"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "explicitly_preferred": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "explicitly_disliked": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Hypothetical supplied preference, not a Yossi fact."
+  },
+  {
+    "id": "d095",
+    "domain": "work",
+    "question": "If I explicitly prefer destination A over B, which should win?",
+    "contexts": [
+      "countries"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "explicitly_preferred": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "explicitly_disliked": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Hypothetical supplied preference, not a Yossi fact."
+  },
+  {
+    "id": "d096",
+    "domain": "work",
+    "question": "If I explicitly prefer collaborator A over B, which should win?",
+    "contexts": [
+      "people"
+    ],
+    "options": [
+      {
+        "id": "A",
+        "attributes": {
+          "explicitly_preferred": 1
+        }
+      },
+      {
+        "id": "B",
+        "attributes": {
+          "explicitly_disliked": 1
+        }
+      }
+    ],
+    "expected_decision": "A",
+    "expected_status": "decision",
+    "evidence": "Hypothetical supplied preference, not a Yossi fact."
+  },
+  {
+    "id": "d097",
+    "domain": "work",
+    "question": "Which company or person would I choose?",
+    "contexts": [
+      "career",
+      "people"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "OpenAI",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Anthropic",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "NVIDIA",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d098",
+    "domain": "work",
+    "question": "Which company or person would I choose?",
+    "contexts": [
+      "career",
+      "people"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Modal",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Daytona",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "AWS",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d099",
+    "domain": "work",
+    "question": "Which company or person would I choose?",
+    "contexts": [
+      "career",
+      "people"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Person A",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Person B",
+        "attributes": {}
+      },
+      {
+        "id": "2",
+        "label": "Person C",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  },
+  {
+    "id": "d100",
+    "domain": "work",
+    "question": "Which company or person would I choose?",
+    "contexts": [
+      "career",
+      "people"
+    ],
+    "options": [
+      {
+        "id": "0",
+        "label": "Colleague A",
+        "attributes": {}
+      },
+      {
+        "id": "1",
+        "label": "Colleague B",
+        "attributes": {}
+      }
+    ],
+    "expected_decision": null,
+    "expected_status": "insufficient_preference_evidence",
+    "evidence": "No personal preference supplied. Expected abstention is a system behavior, not a taste label."
+  }
+]

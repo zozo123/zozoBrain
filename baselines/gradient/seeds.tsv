@@ -1,0 +1,75 @@
+label	question	evidence
+1	Do I prefer concise answers?	Repeated requests for concise replies and posts.
+0	Do I prefer verbose padded answers?	Repeated requests for concise replies and posts.
+1	Should you verify uncertain claims carefully?	Repeated requests to verify deeply and check sources.
+0	Should you guess facts without checking?	Repeated verification requests.
+1	Do I want concrete final links and status reports?	Explicit EASS and PR requests.
+0	Do I want only a plan when I ask you to do work?	Repeated requests to finish and make it happen; inferred preference.
+1	Should you finish authorized work autonomously?	Repeated requests to do whatever is needed; inferred preference.
+0	Should you repeatedly ask permission for routine work?	Repeated requests to proceed; inferred preference.
+1	Do I prefer simple clear designs?	Repeated image and website design requests.
+0	Do I prefer cluttered designs?	Repeated requests for cleaner designs; inferred opposite.
+1	Do I like pastel colors for my portrait?	Explicit portrait requests.
+0	Do I want my name printed on my final portrait?	Explicit request to remove Yossi Eliaz.
+1	Do I prefer a coarse abstract beard in my portrait?	Explicit request for fewer beard patches.
+0	Do I prefer many fine lines in my portrait beard?	Explicit request for fewer beard patches.
+1	Do I avoid flying on Shabbat?	Explicit November 2026 travel constraint.
+0	Would I accept a flight on Shabbat?	Explicit November 2026 travel constraint.
+1	Can I miss a day or two of a conference?	Explicit November 2026 travel flexibility.
+0	Must I attend every day of a conference?	Explicit November 2026 travel flexibility.
+1	Is San Francisco on the table for my travel plans?	Explicit November 2026 travel statement.
+1	Am I interested in El Al flight connections?	Explicit request for El Al connections.
+0	Should you assume I need a ten day trip?	User challenged unexplained ten day duration.
+1	Should my personal website use yossieliaz.netlify.app?	Explicit sole production domain request.
+0	Should my personal website use www.yossieliaz.com as its official domain?	Explicit sole production domain request.
+0	Should you rename my Netlify project?	Explicit prohibition in domain cleanup task.
+0	Should you create a second website for domain cleanup?	Explicit prohibition in domain cleanup task.
+1	Should my GitHub bio link to incredibuild.com?	Explicit November 2026 bio edit.
+0	Should my GitHub bio keep islo.dev instead of incredibuild.com?	Explicit November 2026 bio edit.
+1	Should pinned projects include Airflow software factory?	Explicit pinned repository request.
+0	Should pinned projects include only zero star repositories?	Explicit request not to pin only zero star projects.
+1	Do I want genuine visitors separated from CI tests in analytics?	Explicit PostHog request.
+0	Should CI test traffic count as genuine website visitors?	Explicit PostHog request.
+1	Am I interested in AI systems for computational science?	Stated career direction.
+1	Am I interested in secure agent sandboxes?	Principal engineering work and talks.
+1	Am I interested in forkable snapshots?	Research, CI work and talks.
+1	Am I interested in distributed execution and caching?	Engineering role and projects.
+1	Am I interested in reinforcement learning for reasoning?	Career targets and technical discussions.
+1	Am I interested in reproducible environments?	Engineering work and technical discussions.
+1	Do I contribute to Apache Airflow?	Repeated Airflow PR work.
+1	Do I contribute to Apache Spark?	Repeated Spark PR work.
+1	Do I care about open source contributions?	Repeated OSS work and course requirements.
+0	Am I uninterested in open source?	Repeated OSS work and course requirements.
+0	Do I dislike scientific computing?	Scientific AI career and research.
+0	Do I want to abandon sandbox research?	Active sandbox work; inferred opposite, not a future commitment.
+1	Do I want measured CI performance comparisons?	Explicit compare CI times request.
+0	Should performance claims rely only on hype?	Requests for measured comparisons; inferred preference.
+1	Do I care about sandbox credential isolation?	Talk and security research topics.
+0	Is process isolation alone enough to secure an agent?	Talk about non-escape escapes; technical stance inferred.
+1	Do I teach at HIT?	Teaching context.
+1	Does my EASS course use FastAPI and Docker?	Explicit course requirements.
+1	Does my EASS course use Pydantic?	Explicit course requirements.
+1	Does my EASS course require a frontend and backend?	Explicit course requirements.
+1	Does my EASS course require a third microservice?	Explicit course requirements.
+1	Do students need three merged open source pull requests?	Explicit course requirements.
+0	Do unmerged pull requests satisfy my course contribution requirement?	Merged to main requirement.
+0	Is GitHub Pages mandatory for my EASS course?	GitHub Pages optional.
+0	Can students skip the backend entirely?	Backend required.
+1	Do I prefer a single page CV?	Repeated CV constraints.
+0	Do I prefer a long multi page CV?	Repeated single page CV constraints.
+1	Have I worked at Mobileye?	Career history.
+1	Have I worked at Harvard?	Career history.
+1	Do I have a PhD in physics?	Education history.
+1	Do I have a masters degree in computer science?	Education history.
+1	Do I have an MBA?	Education history.
+0	Is my PhD in law?	Physics doctorate.
+0	Have I never worked at Mobileye?	Career history.
+0	Have I never taught programming?	Teaching history.
+1	Am I willing to consider moving to San Francisco?	OpenAI career application context; historical willingness.
+0	Have I ruled out moving to San Francisco?	OpenAI career application context; historical willingness.
+1	Do I prefer final artifacts that are ready to use?	Repeated final deliverable requests; inferred preference.
+0	Should you invent missing personal information about me?	Verification preference; inferred label.
+0	Should you ignore my explicit travel constraints?	Explicit Shabbat constraint; inferred preference.
+0	Should you publish unfinished changes as if they were verified?	Repeated final status verification; inferred preference.
+0	Do I prefer decorative complexity over clear communication?	Repeated concise and simple requests; inferred preference.
+1	Should technical claims distinguish capability from productivity?	Explicit AI productivity post distinction.

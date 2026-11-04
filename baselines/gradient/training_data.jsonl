@@ -1,0 +1,590 @@
+{"text": "Do I prefer concise answers?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer concise answers?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer concise answers?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer concise answers?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I prefer verbose padded answers?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer verbose padded answers?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer verbose padded answers?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer verbose padded answers?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should you verify uncertain claims carefully?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Should you verify uncertain claims carefully?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you verify uncertain claims carefully?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you verify uncertain claims carefully?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should you guess facts without checking?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you guess facts without checking?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you guess facts without checking?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you guess facts without checking?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I want concrete final links and status reports?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I want concrete final links and status reports?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I want concrete final links and status reports?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I want concrete final links and status reports?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I want only a plan when I ask you to do work?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I want only a plan when I ask you to do work?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I want only a plan when I ask you to do work?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I want only a plan when I ask you to do work?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should you finish authorized work autonomously?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Should you finish authorized work autonomously?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you finish authorized work autonomously?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you finish authorized work autonomously?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should you repeatedly ask permission for routine work?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you repeatedly ask permission for routine work?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you repeatedly ask permission for routine work?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you repeatedly ask permission for routine work?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I prefer simple clear designs?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer simple clear designs?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer simple clear designs?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer simple clear designs?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I prefer cluttered designs?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer cluttered designs?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer cluttered designs?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer cluttered designs?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I like pastel colors for my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I like pastel colors for my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I like pastel colors for my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I like pastel colors for my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I want my name printed on my final portrait?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I want my name printed on my final portrait?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I want my name printed on my final portrait?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I want my name printed on my final portrait?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I prefer a coarse abstract beard in my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer a coarse abstract beard in my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer a coarse abstract beard in my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer a coarse abstract beard in my portrait?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I prefer many fine lines in my portrait beard?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer many fine lines in my portrait beard?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer many fine lines in my portrait beard?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer many fine lines in my portrait beard?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I avoid flying on Shabbat?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I avoid flying on Shabbat?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I avoid flying on Shabbat?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I avoid flying on Shabbat?", "label": 1, "head": 0, "split": "train"}
+{"text": "Would I accept a flight on Shabbat?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Would I accept a flight on Shabbat?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Would I accept a flight on Shabbat?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Would I accept a flight on Shabbat?", "label": 0, "head": 0, "split": "train"}
+{"text": "Can I miss a day or two of a conference?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Can I miss a day or two of a conference?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Can I miss a day or two of a conference?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Can I miss a day or two of a conference?", "label": 1, "head": 0, "split": "train"}
+{"text": "Must I attend every day of a conference?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Must I attend every day of a conference?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Must I attend every day of a conference?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Must I attend every day of a conference?", "label": 0, "head": 0, "split": "train"}
+{"text": "Is San Francisco on the table for my travel plans?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Is San Francisco on the table for my travel plans?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Is San Francisco on the table for my travel plans?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Is San Francisco on the table for my travel plans?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I interested in El Al flight connections?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in El Al flight connections?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in El Al flight connections?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in El Al flight connections?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should you assume I need a ten day trip?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you assume I need a ten day trip?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you assume I need a ten day trip?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you assume I need a ten day trip?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should my personal website use yossieliaz.netlify.app?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Should my personal website use yossieliaz.netlify.app?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Should my personal website use yossieliaz.netlify.app?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should my personal website use yossieliaz.netlify.app?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should my personal website use www.yossieliaz.com as its official domain?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should my personal website use www.yossieliaz.com as its official domain?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should my personal website use www.yossieliaz.com as its official domain?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should my personal website use www.yossieliaz.com as its official domain?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should you rename my Netlify project?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you rename my Netlify project?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you rename my Netlify project?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you rename my Netlify project?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should you create a second website for domain cleanup?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you create a second website for domain cleanup?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you create a second website for domain cleanup?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you create a second website for domain cleanup?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should my GitHub bio link to incredibuild.com?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Should my GitHub bio link to incredibuild.com?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Should my GitHub bio link to incredibuild.com?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should my GitHub bio link to incredibuild.com?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should my GitHub bio keep islo.dev instead of incredibuild.com?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should my GitHub bio keep islo.dev instead of incredibuild.com?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should my GitHub bio keep islo.dev instead of incredibuild.com?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should my GitHub bio keep islo.dev instead of incredibuild.com?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should pinned projects include Airflow software factory?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Should pinned projects include Airflow software factory?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Should pinned projects include Airflow software factory?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should pinned projects include Airflow software factory?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should pinned projects include only zero star repositories?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should pinned projects include only zero star repositories?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should pinned projects include only zero star repositories?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should pinned projects include only zero star repositories?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I want genuine visitors separated from CI tests in analytics?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I want genuine visitors separated from CI tests in analytics?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I want genuine visitors separated from CI tests in analytics?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I want genuine visitors separated from CI tests in analytics?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should CI test traffic count as genuine website visitors?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should CI test traffic count as genuine website visitors?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should CI test traffic count as genuine website visitors?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should CI test traffic count as genuine website visitors?", "label": 0, "head": 0, "split": "train"}
+{"text": "Am I interested in AI systems for computational science?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in AI systems for computational science?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in AI systems for computational science?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in AI systems for computational science?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I interested in secure agent sandboxes?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in secure agent sandboxes?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in secure agent sandboxes?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in secure agent sandboxes?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I interested in forkable snapshots?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in forkable snapshots?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in forkable snapshots?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in forkable snapshots?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I interested in distributed execution and caching?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in distributed execution and caching?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in distributed execution and caching?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in distributed execution and caching?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I interested in reinforcement learning for reasoning?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in reinforcement learning for reasoning?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in reinforcement learning for reasoning?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in reinforcement learning for reasoning?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I interested in reproducible environments?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I interested in reproducible environments?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I interested in reproducible environments?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I interested in reproducible environments?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I contribute to Apache Airflow?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I contribute to Apache Airflow?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I contribute to Apache Airflow?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I contribute to Apache Airflow?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I contribute to Apache Spark?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I contribute to Apache Spark?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I contribute to Apache Spark?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I contribute to Apache Spark?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I care about open source contributions?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I care about open source contributions?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I care about open source contributions?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I care about open source contributions?", "label": 1, "head": 0, "split": "train"}
+{"text": "Am I uninterested in open source?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Am I uninterested in open source?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I uninterested in open source?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I uninterested in open source?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I dislike scientific computing?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I dislike scientific computing?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I dislike scientific computing?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I dislike scientific computing?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I want to abandon sandbox research?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I want to abandon sandbox research?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I want to abandon sandbox research?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I want to abandon sandbox research?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I want measured CI performance comparisons?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I want measured CI performance comparisons?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I want measured CI performance comparisons?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I want measured CI performance comparisons?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should performance claims rely only on hype?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should performance claims rely only on hype?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should performance claims rely only on hype?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should performance claims rely only on hype?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I care about sandbox credential isolation?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I care about sandbox credential isolation?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I care about sandbox credential isolation?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I care about sandbox credential isolation?", "label": 1, "head": 0, "split": "train"}
+{"text": "Is process isolation alone enough to secure an agent?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Is process isolation alone enough to secure an agent?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Is process isolation alone enough to secure an agent?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Is process isolation alone enough to secure an agent?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I teach at HIT?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I teach at HIT?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I teach at HIT?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I teach at HIT?", "label": 1, "head": 0, "split": "train"}
+{"text": "Does my EASS course use FastAPI and Docker?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Does my EASS course use FastAPI and Docker?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Does my EASS course use FastAPI and Docker?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Does my EASS course use FastAPI and Docker?", "label": 1, "head": 0, "split": "train"}
+{"text": "Does my EASS course use Pydantic?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Does my EASS course use Pydantic?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Does my EASS course use Pydantic?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Does my EASS course use Pydantic?", "label": 1, "head": 0, "split": "train"}
+{"text": "Does my EASS course require a frontend and backend?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Does my EASS course require a frontend and backend?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Does my EASS course require a frontend and backend?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Does my EASS course require a frontend and backend?", "label": 1, "head": 0, "split": "train"}
+{"text": "Does my EASS course require a third microservice?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Does my EASS course require a third microservice?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Does my EASS course require a third microservice?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Does my EASS course require a third microservice?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do students need three merged open source pull requests?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do students need three merged open source pull requests?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do students need three merged open source pull requests?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do students need three merged open source pull requests?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do unmerged pull requests satisfy my course contribution requirement?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do unmerged pull requests satisfy my course contribution requirement?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do unmerged pull requests satisfy my course contribution requirement?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do unmerged pull requests satisfy my course contribution requirement?", "label": 0, "head": 0, "split": "train"}
+{"text": "Is GitHub Pages mandatory for my EASS course?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Is GitHub Pages mandatory for my EASS course?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Is GitHub Pages mandatory for my EASS course?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Is GitHub Pages mandatory for my EASS course?", "label": 0, "head": 0, "split": "train"}
+{"text": "Can students skip the backend entirely?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Can students skip the backend entirely?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Can students skip the backend entirely?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Can students skip the backend entirely?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I prefer a single page CV?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer a single page CV?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer a single page CV?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer a single page CV?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I prefer a long multi page CV?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer a long multi page CV?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer a long multi page CV?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer a long multi page CV?", "label": 0, "head": 0, "split": "train"}
+{"text": "Have I worked at Mobileye?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Have I worked at Mobileye?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Have I worked at Mobileye?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Have I worked at Mobileye?", "label": 1, "head": 0, "split": "train"}
+{"text": "Have I worked at Harvard?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Have I worked at Harvard?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Have I worked at Harvard?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Have I worked at Harvard?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I have a PhD in physics?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I have a PhD in physics?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I have a PhD in physics?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I have a PhD in physics?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I have a masters degree in computer science?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I have a masters degree in computer science?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I have a masters degree in computer science?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I have a masters degree in computer science?", "label": 1, "head": 0, "split": "train"}
+{"text": "Do I have an MBA?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I have an MBA?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I have an MBA?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I have an MBA?", "label": 1, "head": 0, "split": "train"}
+{"text": "Is my PhD in law?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Is my PhD in law?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Is my PhD in law?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Is my PhD in law?", "label": 0, "head": 0, "split": "train"}
+{"text": "Have I never worked at Mobileye?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Have I never worked at Mobileye?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Have I never worked at Mobileye?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Have I never worked at Mobileye?", "label": 0, "head": 0, "split": "train"}
+{"text": "Have I never taught programming?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Have I never taught programming?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Have I never taught programming?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Have I never taught programming?", "label": 0, "head": 0, "split": "train"}
+{"text": "Am I willing to consider moving to San Francisco?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Am I willing to consider moving to San Francisco?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Am I willing to consider moving to San Francisco?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Am I willing to consider moving to San Francisco?", "label": 1, "head": 0, "split": "train"}
+{"text": "Have I ruled out moving to San Francisco?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Have I ruled out moving to San Francisco?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Have I ruled out moving to San Francisco?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Have I ruled out moving to San Francisco?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I prefer final artifacts that are ready to use?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer final artifacts that are ready to use?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer final artifacts that are ready to use?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer final artifacts that are ready to use?", "label": 1, "head": 0, "split": "train"}
+{"text": "Should you invent missing personal information about me?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you invent missing personal information about me?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you invent missing personal information about me?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you invent missing personal information about me?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should you ignore my explicit travel constraints?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you ignore my explicit travel constraints?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you ignore my explicit travel constraints?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you ignore my explicit travel constraints?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should you publish unfinished changes as if they were verified?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Should you publish unfinished changes as if they were verified?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Should you publish unfinished changes as if they were verified?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should you publish unfinished changes as if they were verified?", "label": 0, "head": 0, "split": "train"}
+{"text": "Do I prefer decorative complexity over clear communication?", "label": 0, "head": 0, "split": "train"}
+{"text": "Please answer: Do I prefer decorative complexity over clear communication?", "label": 0, "head": 0, "split": "train"}
+{"text": "For Yossi: Do I prefer decorative complexity over clear communication?", "label": 0, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Do I prefer decorative complexity over clear communication?", "label": 0, "head": 0, "split": "train"}
+{"text": "Should technical claims distinguish capability from productivity?", "label": 1, "head": 0, "split": "train"}
+{"text": "Please answer: Should technical claims distinguish capability from productivity?", "label": 1, "head": 0, "split": "train"}
+{"text": "For Yossi: Should technical claims distinguish capability from productivity?", "label": 1, "head": 0, "split": "train"}
+{"text": "Based on my preferences: Should technical claims distinguish capability from productivity?", "label": 1, "head": 0, "split": "train"}
+{"text": "Which answer style would I prefer? option: Concise direct answers with verified facts", "label": 1, "head": 1, "split": "train"}
+{"text": "Which answer style would I prefer? option: Long padded answers with unsupported claims", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which answer style would I prefer? option: Concise direct answers with verified facts", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which answer style would I prefer? option: Long padded answers with unsupported claims", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which answer style would I prefer? option: Concise direct answers with verified facts", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which answer style would I prefer? option: Long padded answers with unsupported claims", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which answer style would I prefer? option: Concise direct answers with verified facts", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which answer style would I prefer? option: Long padded answers with unsupported claims", "label": 0, "head": 1, "split": "train"}
+{"text": "Which assistant behavior would I prefer? option: Finish authorized work and provide final links", "label": 1, "head": 1, "split": "train"}
+{"text": "Which assistant behavior would I prefer? option: Stop after proposing a plan and ask permission repeatedly", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which assistant behavior would I prefer? option: Finish authorized work and provide final links", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which assistant behavior would I prefer? option: Stop after proposing a plan and ask permission repeatedly", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which assistant behavior would I prefer? option: Finish authorized work and provide final links", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which assistant behavior would I prefer? option: Stop after proposing a plan and ask permission repeatedly", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which assistant behavior would I prefer? option: Finish authorized work and provide final links", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which assistant behavior would I prefer? option: Stop after proposing a plan and ask permission repeatedly", "label": 0, "head": 1, "split": "train"}
+{"text": "Which flight would I prefer? option: A flight outside Shabbat", "label": 1, "head": 1, "split": "train"}
+{"text": "Which flight would I prefer? option: A flight during Shabbat", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which flight would I prefer? option: A flight outside Shabbat", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which flight would I prefer? option: A flight during Shabbat", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which flight would I prefer? option: A flight outside Shabbat", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which flight would I prefer? option: A flight during Shabbat", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which flight would I prefer? option: A flight outside Shabbat", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which flight would I prefer? option: A flight during Shabbat", "label": 0, "head": 1, "split": "train"}
+{"text": "Which itinerary would I prefer? option: Avoid Shabbat even if I miss one conference day", "label": 1, "head": 1, "split": "train"}
+{"text": "Which itinerary would I prefer? option: Fly on Shabbat to attend every conference day", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which itinerary would I prefer? option: Avoid Shabbat even if I miss one conference day", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which itinerary would I prefer? option: Fly on Shabbat to attend every conference day", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which itinerary would I prefer? option: Avoid Shabbat even if I miss one conference day", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which itinerary would I prefer? option: Fly on Shabbat to attend every conference day", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which itinerary would I prefer? option: Avoid Shabbat even if I miss one conference day", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which itinerary would I prefer? option: Fly on Shabbat to attend every conference day", "label": 0, "head": 1, "split": "train"}
+{"text": "Which personal website domain would I choose? option: yossieliaz.netlify.app", "label": 1, "head": 1, "split": "train"}
+{"text": "Which personal website domain would I choose? option: www.yossieliaz.com", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which personal website domain would I choose? option: yossieliaz.netlify.app", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which personal website domain would I choose? option: www.yossieliaz.com", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which personal website domain would I choose? option: yossieliaz.netlify.app", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which personal website domain would I choose? option: www.yossieliaz.com", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which personal website domain would I choose? option: yossieliaz.netlify.app", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which personal website domain would I choose? option: www.yossieliaz.com", "label": 0, "head": 1, "split": "train"}
+{"text": "Which link belongs in my GitHub bio? option: incredibuild.com", "label": 1, "head": 1, "split": "train"}
+{"text": "Which link belongs in my GitHub bio? option: islo.dev", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which link belongs in my GitHub bio? option: incredibuild.com", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which link belongs in my GitHub bio? option: islo.dev", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which link belongs in my GitHub bio? option: incredibuild.com", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which link belongs in my GitHub bio? option: islo.dev", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which link belongs in my GitHub bio? option: incredibuild.com", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which link belongs in my GitHub bio? option: islo.dev", "label": 0, "head": 1, "split": "train"}
+{"text": "Which CV would I prefer? option: A concise single page CV", "label": 1, "head": 1, "split": "train"}
+{"text": "Which CV would I prefer? option: A long multi page CV", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which CV would I prefer? option: A concise single page CV", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which CV would I prefer? option: A long multi page CV", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which CV would I prefer? option: A concise single page CV", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which CV would I prefer? option: A long multi page CV", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which CV would I prefer? option: A concise single page CV", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which CV would I prefer? option: A long multi page CV", "label": 0, "head": 1, "split": "train"}
+{"text": "Which portrait would I prefer? option: Pastel colors with a coarse abstract beard", "label": 1, "head": 1, "split": "train"}
+{"text": "Which portrait would I prefer? option: Many fine beard lines with my name printed over the portrait", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which portrait would I prefer? option: Pastel colors with a coarse abstract beard", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which portrait would I prefer? option: Many fine beard lines with my name printed over the portrait", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which portrait would I prefer? option: Pastel colors with a coarse abstract beard", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which portrait would I prefer? option: Many fine beard lines with my name printed over the portrait", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which portrait would I prefer? option: Pastel colors with a coarse abstract beard", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which portrait would I prefer? option: Many fine beard lines with my name printed over the portrait", "label": 0, "head": 1, "split": "train"}
+{"text": "Which research topic fits me better? option: AI systems for computational science", "label": 1, "head": 1, "split": "train"}
+{"text": "Which research topic fits me better? option: Celebrity gossip marketing", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which research topic fits me better? option: AI systems for computational science", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which research topic fits me better? option: Celebrity gossip marketing", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which research topic fits me better? option: AI systems for computational science", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which research topic fits me better? option: Celebrity gossip marketing", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which research topic fits me better? option: AI systems for computational science", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which research topic fits me better? option: Celebrity gossip marketing", "label": 0, "head": 1, "split": "train"}
+{"text": "Which engineering work fits me better? option: Secure agent sandboxes and forkable snapshots", "label": 1, "head": 1, "split": "train"}
+{"text": "Which engineering work fits me better? option: Unrelated advertising copywriting", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which engineering work fits me better? option: Secure agent sandboxes and forkable snapshots", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which engineering work fits me better? option: Unrelated advertising copywriting", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which engineering work fits me better? option: Secure agent sandboxes and forkable snapshots", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which engineering work fits me better? option: Unrelated advertising copywriting", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which engineering work fits me better? option: Secure agent sandboxes and forkable snapshots", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which engineering work fits me better? option: Unrelated advertising copywriting", "label": 0, "head": 1, "split": "train"}
+{"text": "Which project should I pin? option: Airflow software factory with meaningful contributions", "label": 1, "head": 1, "split": "train"}
+{"text": "Which project should I pin? option: Only empty zero star repositories", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which project should I pin? option: Airflow software factory with meaningful contributions", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which project should I pin? option: Only empty zero star repositories", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which project should I pin? option: Airflow software factory with meaningful contributions", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which project should I pin? option: Only empty zero star repositories", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which project should I pin? option: Airflow software factory with meaningful contributions", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which project should I pin? option: Only empty zero star repositories", "label": 0, "head": 1, "split": "train"}
+{"text": "Which CI result matters more to me? option: Measured compile time improvement with warm cache", "label": 1, "head": 1, "split": "train"}
+{"text": "Which CI result matters more to me? option: An unverified promise of faster builds", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which CI result matters more to me? option: Measured compile time improvement with warm cache", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which CI result matters more to me? option: An unverified promise of faster builds", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which CI result matters more to me? option: Measured compile time improvement with warm cache", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which CI result matters more to me? option: An unverified promise of faster builds", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which CI result matters more to me? option: Measured compile time improvement with warm cache", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which CI result matters more to me? option: An unverified promise of faster builds", "label": 0, "head": 1, "split": "train"}
+{"text": "Which analytics report would I prefer? option: Real visitors separated from automated CI traffic", "label": 1, "head": 1, "split": "train"}
+{"text": "Which analytics report would I prefer? option: CI traffic counted as real visitors", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which analytics report would I prefer? option: Real visitors separated from automated CI traffic", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which analytics report would I prefer? option: CI traffic counted as real visitors", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which analytics report would I prefer? option: Real visitors separated from automated CI traffic", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which analytics report would I prefer? option: CI traffic counted as real visitors", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which analytics report would I prefer? option: Real visitors separated from automated CI traffic", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which analytics report would I prefer? option: CI traffic counted as real visitors", "label": 0, "head": 1, "split": "train"}
+{"text": "Which student contribution satisfies my course? option: Three pull requests merged to main in major open source repositories", "label": 1, "head": 1, "split": "train"}
+{"text": "Which student contribution satisfies my course? option: Three unmerged pull requests", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which student contribution satisfies my course? option: Three pull requests merged to main in major open source repositories", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which student contribution satisfies my course? option: Three unmerged pull requests", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which student contribution satisfies my course? option: Three pull requests merged to main in major open source repositories", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which student contribution satisfies my course? option: Three unmerged pull requests", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which student contribution satisfies my course? option: Three pull requests merged to main in major open source repositories", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which student contribution satisfies my course? option: Three unmerged pull requests", "label": 0, "head": 1, "split": "train"}
+{"text": "Which course project fits my requirements? option: FastAPI backend frontend and third microservice using Docker", "label": 1, "head": 1, "split": "train"}
+{"text": "Which course project fits my requirements? option: Frontend only without a backend", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which course project fits my requirements? option: FastAPI backend frontend and third microservice using Docker", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which course project fits my requirements? option: Frontend only without a backend", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which course project fits my requirements? option: FastAPI backend frontend and third microservice using Docker", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which course project fits my requirements? option: Frontend only without a backend", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which course project fits my requirements? option: FastAPI backend frontend and third microservice using Docker", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which course project fits my requirements? option: Frontend only without a backend", "label": 0, "head": 1, "split": "train"}
+{"text": "Which companies fit my AI systems career interests? option: OpenAI research engineering and reinforcement learning", "label": 1, "head": 1, "split": "train"}
+{"text": "Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my AI systems career interests? option: OpenAI research engineering and reinforcement learning", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my AI systems career interests? option: OpenAI research engineering and reinforcement learning", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my AI systems career interests? option: OpenAI research engineering and reinforcement learning", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "Which companies fit my AI systems career interests? option: Anthropic AI research and agent infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my AI systems career interests? option: Anthropic AI research and agent infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my AI systems career interests? option: Anthropic AI research and agent infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my AI systems career interests? option: Anthropic AI research and agent infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "train"}
+{"text": "Which companies fit my AI infrastructure interests? option: Modal compute infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Which companies fit my AI infrastructure interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my AI infrastructure interests? option: Modal compute infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my AI infrastructure interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my AI infrastructure interests? option: Modal compute infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my AI infrastructure interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my AI infrastructure interests? option: Modal compute infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my AI infrastructure interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Which companies fit my sandbox engineering interests? option: Daytona agent sandboxes", "label": 1, "head": 1, "split": "train"}
+{"text": "Which companies fit my sandbox engineering interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my sandbox engineering interests? option: Daytona agent sandboxes", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my sandbox engineering interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my sandbox engineering interests? option: Daytona agent sandboxes", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my sandbox engineering interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my sandbox engineering interests? option: Daytona agent sandboxes", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my sandbox engineering interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Which companies fit my scientific AI interests? option: NVIDIA deep learning systems", "label": 1, "head": 1, "split": "train"}
+{"text": "Which companies fit my scientific AI interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my scientific AI interests? option: NVIDIA deep learning systems", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which companies fit my scientific AI interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my scientific AI interests? option: NVIDIA deep learning systems", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which companies fit my scientific AI interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my scientific AI interests? option: NVIDIA deep learning systems", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which companies fit my scientific AI interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "train"}
+{"text": "Which person would I prioritize for a research meeting? option: A scientist working on computational genomics and AI infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Which person would I prioritize for a research meeting? option: A salesperson with no connection to my work", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which person would I prioritize for a research meeting? option: A scientist working on computational genomics and AI infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which person would I prioritize for a research meeting? option: A salesperson with no connection to my work", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which person would I prioritize for a research meeting? option: A scientist working on computational genomics and AI infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which person would I prioritize for a research meeting? option: A salesperson with no connection to my work", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which person would I prioritize for a research meeting? option: A scientist working on computational genomics and AI infrastructure", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which person would I prioritize for a research meeting? option: A salesperson with no connection to my work", "label": 0, "head": 1, "split": "train"}
+{"text": "Which collaborator fits this sandbox research project? option: An engineer experienced in reproducible secure execution", "label": 1, "head": 1, "split": "train"}
+{"text": "Which collaborator fits this sandbox research project? option: Someone without relevant systems experience", "label": 0, "head": 1, "split": "train"}
+{"text": "Please answer: Which collaborator fits this sandbox research project? option: An engineer experienced in reproducible secure execution", "label": 1, "head": 1, "split": "train"}
+{"text": "Please answer: Which collaborator fits this sandbox research project? option: Someone without relevant systems experience", "label": 0, "head": 1, "split": "train"}
+{"text": "For Yossi: Which collaborator fits this sandbox research project? option: An engineer experienced in reproducible secure execution", "label": 1, "head": 1, "split": "train"}
+{"text": "For Yossi: Which collaborator fits this sandbox research project? option: Someone without relevant systems experience", "label": 0, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which collaborator fits this sandbox research project? option: An engineer experienced in reproducible secure execution", "label": 1, "head": 1, "split": "train"}
+{"text": "Based on my preferences: Which collaborator fits this sandbox research project? option: Someone without relevant systems experience", "label": 0, "head": 1, "split": "train"}
+{"text": "Considering what you know about me, Do I prefer concise answers?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer verbose padded answers?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you verify uncertain claims carefully?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you guess facts without checking?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I want concrete final links and status reports?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I want only a plan when I ask you to do work?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you finish authorized work autonomously?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you repeatedly ask permission for routine work?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer simple clear designs?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer cluttered designs?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I like pastel colors for my portrait?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I want my name printed on my final portrait?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer a coarse abstract beard in my portrait?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer many fine lines in my portrait beard?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I avoid flying on Shabbat?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Would I accept a flight on Shabbat?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Can I miss a day or two of a conference?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Must I attend every day of a conference?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Is San Francisco on the table for my travel plans?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in El Al flight connections?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you assume I need a ten day trip?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should my personal website use yossieliaz.netlify.app?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should my personal website use www.yossieliaz.com as its official domain?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you rename my Netlify project?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you create a second website for domain cleanup?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should my GitHub bio link to incredibuild.com?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should my GitHub bio keep islo.dev instead of incredibuild.com?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should pinned projects include Airflow software factory?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should pinned projects include only zero star repositories?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I want genuine visitors separated from CI tests in analytics?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should CI test traffic count as genuine website visitors?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in AI systems for computational science?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in secure agent sandboxes?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in forkable snapshots?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in distributed execution and caching?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in reinforcement learning for reasoning?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I interested in reproducible environments?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I contribute to Apache Airflow?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I contribute to Apache Spark?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I care about open source contributions?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I uninterested in open source?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I dislike scientific computing?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I want to abandon sandbox research?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I want measured CI performance comparisons?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should performance claims rely only on hype?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I care about sandbox credential isolation?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Is process isolation alone enough to secure an agent?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I teach at HIT?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Does my EASS course use FastAPI and Docker?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Does my EASS course use Pydantic?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Does my EASS course require a frontend and backend?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Does my EASS course require a third microservice?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do students need three merged open source pull requests?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do unmerged pull requests satisfy my course contribution requirement?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Is GitHub Pages mandatory for my EASS course?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Can students skip the backend entirely?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer a single page CV?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer a long multi page CV?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Have I worked at Mobileye?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Have I worked at Harvard?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I have a PhD in physics?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I have a masters degree in computer science?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I have an MBA?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Is my PhD in law?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Have I never worked at Mobileye?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Have I never taught programming?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Am I willing to consider moving to San Francisco?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Have I ruled out moving to San Francisco?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer final artifacts that are ready to use?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you invent missing personal information about me?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you ignore my explicit travel constraints?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should you publish unfinished changes as if they were verified?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Do I prefer decorative complexity over clear communication?", "label": 0, "head": 0, "split": "test"}
+{"text": "Considering what you know about me, Should technical claims distinguish capability from productivity?", "label": 1, "head": 0, "split": "test"}
+{"text": "Considering my background, Which answer style would I prefer? option: Concise direct answers with verified facts", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which answer style would I prefer? option: Long padded answers with unsupported claims", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which assistant behavior would I prefer? option: Finish authorized work and provide final links", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which assistant behavior would I prefer? option: Stop after proposing a plan and ask permission repeatedly", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which flight would I prefer? option: A flight outside Shabbat", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which flight would I prefer? option: A flight during Shabbat", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which itinerary would I prefer? option: Avoid Shabbat even if I miss one conference day", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which itinerary would I prefer? option: Fly on Shabbat to attend every conference day", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which personal website domain would I choose? option: yossieliaz.netlify.app", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which personal website domain would I choose? option: www.yossieliaz.com", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which link belongs in my GitHub bio? option: incredibuild.com", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which link belongs in my GitHub bio? option: islo.dev", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which CV would I prefer? option: A concise single page CV", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which CV would I prefer? option: A long multi page CV", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which portrait would I prefer? option: Pastel colors with a coarse abstract beard", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which portrait would I prefer? option: Many fine beard lines with my name printed over the portrait", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which research topic fits me better? option: AI systems for computational science", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which research topic fits me better? option: Celebrity gossip marketing", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which engineering work fits me better? option: Secure agent sandboxes and forkable snapshots", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which engineering work fits me better? option: Unrelated advertising copywriting", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which project should I pin? option: Airflow software factory with meaningful contributions", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which project should I pin? option: Only empty zero star repositories", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which CI result matters more to me? option: Measured compile time improvement with warm cache", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which CI result matters more to me? option: An unverified promise of faster builds", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which analytics report would I prefer? option: Real visitors separated from automated CI traffic", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which analytics report would I prefer? option: CI traffic counted as real visitors", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which student contribution satisfies my course? option: Three pull requests merged to main in major open source repositories", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which student contribution satisfies my course? option: Three unmerged pull requests", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which course project fits my requirements? option: FastAPI backend frontend and third microservice using Docker", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which course project fits my requirements? option: Frontend only without a backend", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my AI systems career interests? option: OpenAI research engineering and reinforcement learning", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my AI systems career interests? option: Anthropic AI research and agent infrastructure", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my AI systems career interests? option: An unrelated company offering only retail sales", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my AI infrastructure interests? option: Modal compute infrastructure", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my AI infrastructure interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my sandbox engineering interests? option: Daytona agent sandboxes", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my sandbox engineering interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my scientific AI interests? option: NVIDIA deep learning systems", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which companies fit my scientific AI interests? option: An unrelated fashion retailer", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which person would I prioritize for a research meeting? option: A scientist working on computational genomics and AI infrastructure", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which person would I prioritize for a research meeting? option: A salesperson with no connection to my work", "label": 0, "head": 1, "split": "test"}
+{"text": "Considering my background, Which collaborator fits this sandbox research project? option: An engineer experienced in reproducible secure execution", "label": 1, "head": 1, "split": "test"}
+{"text": "Considering my background, Which collaborator fits this sandbox research project? option: Someone without relevant systems experience", "label": 0, "head": 1, "split": "test"}
