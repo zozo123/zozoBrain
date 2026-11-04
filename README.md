@@ -12,10 +12,10 @@ This is **weight-space programming**, not a tiny conversational clone. The weigh
 
 ## Try Yossi’s decisions
 
-After installing the single dependency (`python -m pip install -r requirements.txt`), run:
+With [uv installed](https://docs.astral.sh/uv/getting-started/installation/), run (uv creates the environment automatically):
 
 ```bash
-python demo.py
+uv run --locked demo.py
 ```
 
 | Decision | Demo output |
@@ -45,23 +45,20 @@ Yes/no decisions are simply two options named `yes` and `no`. Lists of food, com
 
 ## Run from an agent or harness
 
-See [HARNESS.md](HARNESS.md) for a copy-paste Codex / Claude Code task, shell setup, and the tested JSON Lines subprocess interface (`python harness.py`). No API key or special integration is needed.
+See [HARNESS.md](HARNESS.md) for a copy-paste Codex / Claude Code task, shell setup, and the tested JSON Lines subprocess interface (`uv run --locked harness.py`). No API key or special integration is needed.
 
 ## Run
 
-Python 3.11+:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) once. The committed `uv.lock` pins dependencies; no manual virtual environment activation is needed. Python 3.11–3.13 is supported. `uv run --locked` refuses dependency drift. See the [uv locking documentation](https://docs.astral.sh/uv/concepts/projects/sync/).
 
 ```bash
 git clone https://github.com/zozo123/zozoBrain.git
 cd zozoBrain
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python model.py examples/travel.json
-python model.py examples/work.json
-python model.py examples/food.json
-python -m unittest -v
-python evaluate.py
+uv run --locked model.py examples/travel.json
+uv run --locked model.py examples/work.json
+uv run --locked model.py examples/food.json
+uv run --locked python -m unittest -v
+uv run --locked evaluate.py
 ```
 
 The travel example selects `no`: do not fly on Shabbat. The food example abstains because no food preferences were supplied. `--force` requests an answer for unknowns/ties, using utility then input order, and marks the result as forced. It never overrides vetoes. A forced order is not evidence of a preference.
@@ -99,7 +96,7 @@ The inputs are 32 option attributes and 16 context indicators. Outputs are utili
 | b2 | 3 | 3 |
 | **Total** | | **2,499** |
 
-There are 150 nonzero entries, but **2,499 is the relevant total**. Float32 tensor storage is 9,996 bytes before container overhead. `python weights.py` deterministically emits [weights.npz](weights.npz) from the assignments; inference builds those same weights. No training is needed. Sorting, abstention, validation, and veto filtering are ordinary deterministic wrapper logic; the veto activations themselves come from the neural forward pass.
+There are 150 nonzero entries, but **2,499 is the relevant total**. Float32 tensor storage is 9,996 bytes before container overhead. `uv run --locked weights.py` deterministically emits [weights.npz](weights.npz) from the assignments; inference builds those same weights. No training is needed. Sorting, abstention, validation, and veto filtering are ordinary deterministic wrapper logic; the veto activations themselves come from the neural forward pass.
 
 ## What is encoded—and what is not
 
@@ -119,20 +116,27 @@ The main 100 probes cover 20 each in food, countries/travel, music, politics, an
 
 See [EVALUATION.md](EVALUATION.md), [benchmark_100.json](benchmark_100.json), and [evaluation_100.json](evaluation_100.json) for all inputs, outputs, provenance notes, and expectations. The [gradient baseline](baselines/gradient/README.md) and its weights/training code are preserved for reproducibility. It uses a different input contract, so the numbers are not an apples-to-apples model comparison.
 
-## Replicate or personalize
+## Make your own in three steps
 
-1. Define a narrow decision domain and collect explicit preferences and constraints.
-2. Edit the rules and direct assignments in `weights.py`. Do not infer missing preferences from identity or mere interest in a topic.
-3. Supply transparent option attributes. Keep attribute extraction separate from neural decision-making. If an LLM supplies them, disclose that additional model rather than calling the entire system a 2,499-parameter model.
-4. Run `python weights.py`, `python -m unittest -v`, and `python evaluate.py`.
-5. Collect independent user-labeled choices **before** editing weights. Reserve those choices for a real predictive evaluation. Never report development probes as held-out human accuracy.
+```bash
+uv run --locked init_personal.py alice
+uv run --locked personal/alice/model.py personal/alice/decision.json
+```
+
+1. **Start blank.** The generator creates a private, gitignored `personal/alice/` folder. All utilities and veto flags start at zero: no Yossi preferences are inherited. The first run abstains.
+2. **Author your policy.** Edit `personal/alice/policy.json`. If you actually prefer lower cost, set the `low_cost` utility to `3` and `high_cost` to `-3`. Run the same command again: the sample selects `A`. Keep 32 uniquely named attributes and 16 contexts; rename unused slots for your own domains. Veto flags represent your explicit hard constraints. The generated README explains the schema.
+3. **Validate separately.** Supply your own options in `decision.json`. Record real choices before changing weights and keep held-out cases. Yossi’s benchmark is not an evaluation of you. Export your authored weights with `uv run --locked personal/alice/weights.py`.
+
+Your folder contains its own model, harness, weights compiler, policy, and example. The JSONL interface also works: `uv run --locked personal/alice/harness.py`. The generated folder is excluded from git commits by default; publishing it is an explicit choice. The generator refuses to overwrite an existing profile. The original Yossi model is untouched.
+
+Attributes describe options; utilities describe your preferences. Language interpretation remains external to the tiny network. Do not encode guessed preferences as if you supplied them. All profiles keep the same 2,499-total-parameter architecture, without fitting or optimization.
 
 No optimization is required for the main model. The optional historical baseline can be reproduced with:
 
 ```bash
 cd baselines/gradient
-OPENBLAS_NUM_THREADS=1 python train.py --output-dir reproduced
-python -m unittest -v
+OPENBLAS_NUM_THREADS=1 uv run --locked train.py --output-dir reproduced
+uv run --locked python -m unittest -v
 ```
 
 The motivating weight-space examples were supplied by the user; this repository does not independently validate their published performance claims. This implementation demonstrates direct policy compilation into a small neural net. It does not claim a general digital twin, robust language understanding, or authority to make decisions on anyone's behalf.

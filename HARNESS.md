@@ -6,9 +6,9 @@ This is an ordinary local Python program. An agent with shell access can clone i
 
 ```text
 Clone https://github.com/zozo123/zozoBrain and read README.md and HARNESS.md.
-Create a local Python 3.11+ virtual environment and install requirements.txt.
-Run python -m unittest -v and python evaluate.py, then run
-python model.py examples/travel.json and python model.py examples/food.json.
+Use uv and the committed uv.lock; do not install packages globally.
+Run uv run --locked python -m unittest -v and uv run --locked evaluate.py, then run
+uv run --locked model.py examples/travel.json and uv run --locked model.py examples/food.json.
 Report the actual outputs and any failures.
 
 For my subsequent decision requests, create a structured JSON input using only
@@ -26,19 +26,16 @@ Codex and Claude Code are examples of shell-capable callers, not bundled depende
 ```bash
 git clone https://github.com/zozo123/zozoBrain.git
 cd zozoBrain
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m unittest -v
-python evaluate.py
-python model.py examples/travel.json
+uv run --locked python -m unittest -v
+uv run --locked evaluate.py
+uv run --locked model.py examples/travel.json
 ```
 
-On Windows, activate with `.venv\Scripts\Activate.ps1`, or invoke `.venv\Scripts\python.exe` directly.
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) first. These commands work without manual environment activation on Windows, macOS, and Linux. To make your own policy, run `uv run --locked init_personal.py alice` and follow the generated README.
 
 ## JSON Lines subprocess protocol
 
-Start `python harness.py`. Send one complete JSON object per stdin line. Each nonblank input line returns one JSON object on stdout, flushed immediately. Do not send pretty-printed multiline JSON to this interface. Logs/formatting do not pollute stdout.
+Start `uv run --locked harness.py`. Send one complete JSON object per stdin line. Each nonblank input line returns one JSON object on stdout, flushed immediately. Do not send pretty-printed multiline JSON to this interface. Logs/formatting do not pollute stdout.
 
 Example request:
 
@@ -53,14 +50,13 @@ For a single call from another Python application:
 ```python
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 repo = Path('/absolute/path/to/zozoBrain')
 request = json.loads((repo / 'examples/travel.json').read_text())
 request['id'] = 'decision-1'
 response = subprocess.run(
-    [sys.executable, str(repo / 'harness.py')],
+    ['uv', 'run', '--locked', '--project', str(repo), str(repo / 'harness.py')],
     input=json.dumps(request) + '\n',
     text=True, capture_output=True, check=True,
 )
@@ -69,7 +65,7 @@ assert message['ok'], message
 print(message['result']['decision'])
 ```
 
-Use the Python executable from the environment where NumPy is installed. For multiple requests, keep the process running and read one response line for each nonblank request. The model initializes once per process.
+This subprocess form lets uv select the locked project environment even when the caller uses a different Python environment. For multiple requests, keep the process running and read one response line for each nonblank request. The model initializes once per process.
 
 ## Boundaries
 

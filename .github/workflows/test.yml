@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.11', '3.12']
+        python: ['3.11', '3.12', '3.13']
     env:
       OPENBLAS_NUM_THREADS: '1'
     steps:
@@ -15,9 +15,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python }}'
-      - run: python -m pip install -r requirements.txt
-      - run: python weights.py
-      - run: python -m unittest -v
-      - run: python evaluate.py
-      - run: python -m unittest -v
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.5"
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run --locked weights.py
+      - run: uv run --locked python -m unittest -v
+      - run: uv run --locked evaluate.py
+      - run: uv run --locked python -m unittest -v
         working-directory: baselines/gradient
