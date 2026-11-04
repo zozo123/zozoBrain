@@ -23,6 +23,11 @@ def validate_layout(layout):
             raise ValueError(f'Exactly {count} unique {key} required')
         if any(not isinstance(name, str) or not name.strip() or len(name) > 128 for name in names):
             raise ValueError(f'{key} must contain nonempty names of at most 128 characters')
+        for name in names:
+            try:
+                name.encode('utf-8')
+            except UnicodeEncodeError as error:
+                raise ValueError(f'{key} names must be valid UTF-8 text') from error
         if len(set(names)) != count:
             raise ValueError(f'{key} must be unique')
         result[key] = list(names)

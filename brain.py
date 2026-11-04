@@ -4,12 +4,13 @@ import json
 from pathlib import Path
 import re
 import shlex
+import subprocess
 import sys
 
 import numpy as np
 
 from brain_bundle import (
-    apply_patches, create_blank, diff_bundles, edit_bundle, load_bundle,
+    _unique_object, apply_patches, create_blank, diff_bundles, edit_bundle, load_bundle,
     pack_bundle, save_bundle,
 )
 from network import TENSOR_SHAPES
@@ -26,7 +27,8 @@ def _reject_constant(value):
 
 
 def _read_json(path):
-    return json.loads(Path(path).read_text(encoding='utf-8'), parse_constant=_reject_constant)
+    return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=_unique_object,
+                      parse_constant=_reject_constant)
 
 
 def _print_json(value):
@@ -123,7 +125,10 @@ def _write_patch(path, patch):
 
 def _runtime_command(*args):
     script = Path(__file__).resolve()
-    return shlex.join(['uv', 'run', '--locked', '--project', str(script.parent), str(script), *map(str, args)])
+    command = ['uv', 'run', '--locked', '--project', str(script.parent), str(script), *map(str, args)]
+    if sys.platform == 'win32':
+        return subprocess.list2cmdline(command)
+    return shlex.join(command)
 
 
 def _prompt(path, bundle):
