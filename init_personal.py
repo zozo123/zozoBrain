@@ -15,6 +15,7 @@ def create(name, parent=None):
     # Check required runtime files before creating the destination.
     runtime = [
         'model.py', 'harness.py', 'network.py', 'edit_weights.py', 'weight_patches.py',
+        'brain.py', 'brain_bundle.py',
         'pyproject.toml', 'uv.lock', 'LICENSE',
     ]
     sources = [ROOT / filename for filename in runtime] + [ROOT / 'templates/personal_weights.py']
@@ -35,139 +36,125 @@ def create(name, parent=None):
     }
     (target / 'decision.json').write_text(json.dumps(decision, indent=2) + '\n', encoding='utf-8')
     (target / '.gitignore').write_text(
-        '__pycache__/\n*.pyc\n.venv/\ncontributions/\n*.npz\n*.patch.json\n*.stack.json\n*.manifest.json\n',
+        '__pycache__/\n*.pyc\n.venv/\ncontributions/\n*.brain\n*.brain.lock\n*.npz\n*.patch.json\n*.stack.json\n*.manifest.json\n',
         encoding='utf-8',
     )
-    readme = '''# Your own direct weights
+    readme = '''# NAME: one portable brain
 
-This profile starts with zero utility, veto, and evidence outputs. Its first decision
-abstains. No Yossi preferences are inherited. There is no policy.json or training step.
-
-## Edit the actual tensors
-
-Open weights.py and edit the numerical assignments in authored_weights(). The w2
-columns are utility, veto activation, and evidence activation. For the supplied input,
-neuron 0 represents low_cost and neuron 1 high_cost, both in the general context.
-Only if you explicitly prefer lower cost, uncomment these assignments:
-
-```python
-w2[0] = [3, 0, 1]
-w2[1] = [-3, 0, 1]
-```
-
-Run from the repository root:
+Start blank. No utility, veto, evidence, or Yossi preferences are inherited.
+Use the unified CLI with one .brain file as the active model and history.
+Run these commands from inside this generated folder:
 
 ```bash
-uv run --locked personal/NAME/model.py personal/NAME/decision.json
+uv run --locked brain.py init NAME.brain --name NAME
+uv run --locked brain.py inspect NAME.brain
+uv run --locked brain.py decide NAME.brain decision.json
 ```
 
-That command uses the current source assignments on every invocation. After those
-example edits it selects A. Utility magnitudes are your authored hypotheses; evidence
-1 means you supplied a preference. Scores are not probabilities. Do not add guessed
-preferences to make the system answer.
-
-Keep 32 unique attribute names and 16 unique context names. Attribute slots describe
-options. The w1 connections and b1 biases determine their context gating. Edit them
-directly for your own domains; the template wires attributes to the general context.
-A positive veto output excludes an option. When authoring a hard constraint, also add
-its attribute name to BINARY_ATTRIBUTES so fractional inputs are rejected. The
-explicitly_disallowed attribute is already listed there, but its veto weight starts
-at zero. A forced decision never overrides a veto.
-
-## Export or load an explicitly edited artifact
+The initial decision abstains. Inspect the ordered attribute/context names and
+actual tensor values with:
 
 ```bash
-uv run --locked personal/NAME/weights.py
-uv run --locked personal/NAME/weights.py --check
-uv run --locked personal/NAME/model.py personal/NAME/decision.json --weights personal/NAME/weights.npz
-uv run --locked personal/NAME/edit_weights.py inspect personal/NAME/weights.npz
-uv run --locked personal/NAME/edit_weights.py set personal/NAME/weights.npz --tensor w2 --index 0 0 --value 6 --output personal/NAME/my_weights.npz
+uv run --locked brain.py inspect NAME.brain --json
+uv run --locked brain.py inspect NAME.brain --tensor w2 --index 0
 ```
 
-weights.npz is a tensor snapshot. Source edits affect the default run; artifact edits
-affect runs that explicitly select that artifact with --weights. Exporting again
-replaces the snapshot with the source assignments. The Python API likewise accepts
-DecisionModel(weights=path_to_npz). For the artifact editor example to express a
-preference, first author the source example's evidence entries; changing only a
-utility entry on a blank profile leaves evidence at zero and the model abstains.
+## Edit the actual weights
 
-## Run the profile on its own
-
-The folder includes its own pyproject.toml, uv.lock, model, harness, tensor runtime,
-editor, weight-patch tools, and MIT license notice. You can move or copy the whole folder elsewhere.
-With uv installed, run from inside that folder:
+The w2 columns are utility, veto activation, and evidence activation. The blank
+network wires neuron 0 to low_cost and neuron 1 to high_cost in the general
+context. Only if you explicitly prefer lower cost, directly set these tensor rows:
 
 ```bash
-uv run --locked model.py decision.json
-uv run --locked weights.py
-uv run --locked harness.py
+uv run --locked brain.py set NAME.brain --tensor w2 --index 0 --values 3 0 1 --reason "Reference to my explicit lower-cost preference" --harness manual
+uv run --locked brain.py set NAME.brain --tensor w2 --index 1 --values -3 0 1 --reason "Reference to my explicit lower-cost preference" --harness manual
+uv run --locked brain.py decide NAME.brain decision.json
 ```
 
-NumPy installation requires internet access once unless it is already cached.
-Inference then runs locally. The harness accepts one structured JSON object per
-stdin line. Question text is metadata; you must supply the option attributes and
-contexts yourself. Collect your own held-out decisions before editing weights;
-Yossi's benchmark does not measure your profile.
+The sample then selects A. Each set command directly assigns the numeric values;
+there is no preference compiler or training. Edit individual entries with two
+indices, for example --tensor w2 --index 0 0 --values 3. Utilities are authored
+hypotheses, not learned estimates or probabilities. Evidence 1 means you supplied
+a preference; changing only utility on a blank profile leaves evidence at zero.
+Do not guess personal preferences to make the model answer.
 
-## Carry this brain to another agent
+A positive veto output excludes an option. Hard constraints also need their input
+name in the embedded binary_attributes metadata; explicitly_disallowed is already
+listed, with its veto initially zero. Coordinate feature-schema changes explicitly.
+A forced decision never overrides a veto. The input has 32 attributes and 16
+contexts; w1 and b1 wire inputs to hidden neurons. All 2,499 entries can be edited.
 
-Move the whole folder, including the active snapshot, patches, and matching
-manifest. Use this task in Codex, Claude Code, or another shell-capable agent:
+set atomically updates the input file and preserves its contribution history.
+Use --output other.brain to keep the original. Updates check the loaded revision
+under a write lock; concurrent stale writes fail. A .brain.lock sidecar is only
+local write coordination and is not required when moving the brain.
 
-```text
-Use my profile at /absolute/path/to/this-folder. Read README.md, weights.py, and
-the active manifest. Use uv run --locked and the local uv.lock.
-Use only explicit preferences, constraints, and corrections from context I have
-authorized. Record short evidence references and distinguish stated preferences
-from your hypotheses about numerical strengths. Report missing feature coverage.
-Load the active NPZ and edit w1, b1, w2, b2 directly. Preserve the feature layout;
-coordinate schema changes separately. Do not train, fit, compile preferences, or
-average weights. Add evidence output for authored preferences and binary input
-metadata plus veto output for hard constraints. Test structured decision cases.
-Keep the input snapshot unchanged. Save an edited snapshot, capture its diff with
-your harness name and unique contribution ID, and stack it against the active
-snapshot. Use --resume-manifest when provenance already exists. Keep the resulting
-manifest and verify inference with --weights and --manifest. Preserve abstentions.
-Report actual changed entries, their evidence, checks, and remaining gaps.
-```
-
-From inside this folder, export the initial base once:
+## Use it from any agent
 
 ```bash
-uv run --locked weights.py --output base.npz
+uv run --locked brain.py prompt NAME.brain
+uv run --locked brain.py serve NAME.brain
 ```
 
-After an agent directly edits that base and saves edited.npz, capture and apply its
-contribution (replace the harness, ID, and evidence with the actual source):
+The first command prints a task with this brain's exact path, state fingerprints,
+and direct tensor-edit command. Give that task to Codex, Claude Code, or another
+shell-capable agent. Use only context you authorize, explicit preferences, and
+short evidence references. The second command accepts one structured JSON object
+per stdin line and returns one JSON response per line. Restart a running process
+after editing the brain. For a single machine-readable decision, add --json to
+decide. The supplied decision.json is a request example.
+
+The .brain file embeds the ordered feature layout, four tensors, and verified
+contribution history. It is data only: inspecting, editing, deciding, serving,
+diffing, and merging do not execute an embedded weights.py. Copy just this file
+to another compatible runtime to continue. This generated folder also includes
+its own runtime, pyproject.toml, uv.lock, and MIT notice, so you can move the whole
+folder elsewhere. With uv installed, the same commands work there. Dependencies
+require internet once unless cached; decisions run locally afterward.
+
+For parallel contributions, give each agent the same unchanged base file. After
+they directly edit their own copies, capture and combine explicit JSON patches:
 
 ```bash
-uv run --locked weight_patches.py diff base.npz edited.npz --harness codex --id codex-001 --evidence "Reference to my explicit preference" --output codex.patch.json
-uv run --locked weight_patches.py stack base.npz codex.patch.json --output active.npz --manifest active.manifest.json
-uv run --locked model.py decision.json --weights active.npz --manifest active.manifest.json
+uv run --locked brain.py diff base.brain codex.brain --harness codex --reason "Reference to my explicit preference" --output codex.patch.json
+uv run --locked brain.py diff base.brain claude.brain --harness claude --reason "Reference to my next explicit preference" --output claude.patch.json
+uv run --locked brain.py merge base.brain codex.patch.json claude.patch.json --output combined.brain
 ```
 
-For a later contribution, the next agent edits active.npz into next-edited.npz.
-Capture its diff against active.npz, then retain the earlier history when stacking:
+These commands assume those agent-edited files exist. Compatible changes combine;
+conflicting values or schemas fail. Sequential set edits accumulate directly in
+one file; use patches for independent parallel copies. Preserve abstentions and
+verify behavior using your own structured held-out decisions. Yossi's root
+benchmark does not evaluate your profile. Question text is metadata; supply the
+option attributes and contexts yourself.
+
+## Source and NPZ compatibility
+
+weights.py remains directly editable for the original source/NPZ workflow. Its
+commented w2 row examples start disabled. The old model.py command reads those
+source assignments, whereas brain.py decide reads the selected .brain file.
+Source edits never silently overwrite an accumulated .brain model. To explicitly
+pack a source snapshot and this trusted local source layout into a new brain:
 
 ```bash
-uv run --locked weight_patches.py diff active.npz next-edited.npz --harness claude --id claude-001 --evidence "Reference to my next explicit preference" --output claude.patch.json
-uv run --locked weight_patches.py stack active.npz claude.patch.json --resume-manifest active.manifest.json --output combined.npz --manifest combined.manifest.json
-uv run --locked model.py decision.json --weights combined.npz --manifest combined.manifest.json
+uv run --locked weights.py --output source.npz
+uv run --locked brain.py pack --weights source.npz --output from-source.brain
 ```
 
-The response reports both contributing harnesses. Keep combined.npz and its manifest
-as the next session's active state. Patches with a different feature schema or
-conflicting entry values fail instead of being averaged or silently overridden.
-For details, see the upstream [weight guide](https://github.com/zozo123/zozoBrain/blob/main/WEIGHTS.md),
+pack is the explicit bridge that reads trusted local weights.py for its layout.
+The original model.py, harness.py, edit_weights.py, and weight_patches.py commands
+remain available. See the upstream [weight guide](https://github.com/zozo123/zozoBrain/blob/main/WEIGHTS.md),
 [portable formats](https://github.com/zozo123/zozoBrain/blob/main/FORMATS.md), and
 [harness guide](https://github.com/zozo123/zozoBrain/blob/main/HARNESS.md).
 
-The parent repository gitignores personal/ by default. This folder's own .gitignore
-also excludes snapshots, *.patch.json, *.stack.json, *.manifest.json, and the
-contributions/ directory. Store private agent contribution patches and their evidence
-in contributions/. These files can contain personal preferences and quoted evidence;
-publish them only deliberately. Gitignore is a commit default, not access control.
-Existing profiles are never overwritten.
+## Private defaults
+
+The parent repository gitignores personal/. This folder's .gitignore excludes
+*.brain, *.brain.lock, NPZ snapshots, contribution patch/manifest JSON, and the
+contributions/ directory. Store private evidence there. Bundles and patches can
+contain personal preferences and evidence; publish them only deliberately.
+Gitignore is a commit default, not access control. Existing profiles and initial
+brain files are never overwritten by init.
 '''
     (target / 'README.md').write_text(readme.replace('NAME', name), encoding='utf-8')
     return target

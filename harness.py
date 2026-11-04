@@ -11,8 +11,11 @@ def reject_nonfinite(value):
     raise ValueError(f'Nonfinite JSON number is not allowed: {value}')
 
 
-def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None):
-    model = DecisionModel(weights, manifest)
+def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None, layout=None, model=None):
+    if model is None:
+        model = DecisionModel(weights, manifest, layout=layout)
+    elif weights is not None or manifest is not None or layout is not None:
+        raise ValueError('Supply a prepared model or weights/layout, not both')
     for line in source:
         if not line.strip():
             continue

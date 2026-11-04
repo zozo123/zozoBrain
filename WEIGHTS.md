@@ -5,6 +5,16 @@ training loop, optimizer, preference-fitting step, or JSON-to-weight compiler in
 the main implementation. Both source edits and snapshot edits change these exact
 tensors.
 
+The recommended everyday interface is `brain.py set FILE.brain --tensor w2
+--index 0 --values 3 0 1 --reason "Reference to an explicit preference"`. That
+assigns the actual output row and saves the matching schema/history atomically.
+Use two indices and one value to set a scalar; inspect actual values with
+`brain.py inspect FILE.brain --tensor w2 --index 0`. [Complete guide](USAGE.md)
+
+Source/NPZ workflows below remain available for authoring and migration. A source
+edit affects the source-based interface; an accumulated `.brain` changes through
+explicit bundle edits or a newly packed file.
+
 ## Source assignments
 
 Default `DecisionModel()` reads the assignments in `weights.py`. In the shipped

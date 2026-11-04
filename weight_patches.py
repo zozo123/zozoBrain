@@ -4,6 +4,7 @@ Patches carry the author's evidence and exact before/after float32 values. They
 never train, infer a preference, average edits, or silently resolve a conflict.
 """
 import argparse
+from collections import Counter
 import copy
 import json
 import os
@@ -50,6 +51,14 @@ def _digest(value,label):
     return value
 
 
+def _expected_schema(value):
+    return schema_digest() if value is None else _digest(value,'Expected schema_sha256')
+
+
+def _weights(value):
+    return validate_weights(value) if isinstance(value,(tuple,list)) else load_weights(value)
+
+
 def _number(value,label):
     if isinstance(value,bool) or not isinstance(value,(int,float)):
         raise ValueError(f'{label} must be a finite float32 number')
@@ -63,8 +72,9 @@ def _number(value,label):
     return number
 
 
-def validate_patch(patch):
+def validate_patch(patch,*,schema_sha256=None):
     """Validate a v1 patch completely before any tensor is changed."""
+    expected_schema=_expected_schema(schema_sha256)
     _keys(patch,['format','id','source','schema_sha256','base_weights_sha256','edits'],'Patch')
     if patch['format']!=PATCH_FORMAT:
         raise ValueError(f'Unsupported patch format; expected {PATCH_FORMAT}')
@@ -73,7 +83,7 @@ def validate_patch(patch):
     _text(patch['source']['harness'],'Source harness')
     _text(patch['source']['evidence'],'Source evidence')
     _digest(patch['schema_sha256'],'schema_sha256')
-    if patch['schema_sha256']!=schema_digest():
+    if patch['schema_sha256']!=expected_schema:
         raise ValueError('Patch schema does not match the current attributes, contexts, and tensors')
     _digest(patch['base_weights_sha256'],'base_weights_sha256')
     if not isinstance(patch['edits'],list):
@@ -103,13 +113,14 @@ def validate_patch(patch):
     return patch
 
 
-def diff(base_path,edited_path,*,harness,evidence,patch_id):
+def diff(base_path,edited_path,*,harness,evidence,patch_id,schema_sha256=None):
     """Return every changed tensor entry as an explicit, attributable patch."""
+    expected_schema=_expected_schema(schema_sha256)
     _text(harness,'Source harness')
     _text(evidence,'Source evidence')
     _text(patch_id,'Patch id')
-    base=load_weights(base_path)
-    edited=load_weights(edited_path)
+    base=_weights(base_path)
+    edited=_weights(edited_path)
     edits=[]
     for tensor,before,after in zip(TENSOR_NAMES,base,edited):
         for coordinates in np.argwhere(before.view(np.uint32)!=after.view(np.uint32)):
@@ -119,9 +130,9 @@ def diff(base_path,edited_path,*,harness,evidence,patch_id):
                           'reason':evidence})
     patch={'format':PATCH_FORMAT,'id':patch_id,
            'source':{'harness':harness,'evidence':evidence},
-           'schema_sha256':schema_digest(),'base_weights_sha256':weights_digest(base),
+           'schema_sha256':expected_schema,'base_weights_sha256':weights_digest(base),
            'edits':edits}
-    return validate_patch(patch)
+    return validate_patch(patch,schema_sha256=expected_schema)
 
 
 def _read_patch(value):
@@ -144,22 +155,23 @@ def _actions(record):
     return actions
 
 
-def validate_manifest(manifest,base_weights):
+def validate_manifest(manifest,base_weights,*,schema_sha256=None):
     """Validate saved provenance against the actual final tensors and schema.
 
     Reversing recorded changes checks every intermediate tensor digest. It
     validates consistency, not the truth of an author's evidence statement.
     """
+    expected_schema=_expected_schema(schema_sha256)
     manifest=_read_patch(manifest)
     _keys(manifest,['format','schema_sha256','original_weights_sha256',
                     'final_weights_sha256','patches','duplicate_patch_ids_skipped'],'Manifest')
     if manifest['format']!=STACK_FORMAT:
         raise ValueError(f'Unsupported manifest format; expected {STACK_FORMAT}')
-    if manifest['schema_sha256']!=schema_digest():
+    if manifest['schema_sha256']!=expected_schema:
         raise ValueError('Manifest schema does not match the current attributes, contexts, and tensors')
     _digest(manifest['original_weights_sha256'],'original_weights_sha256')
     _digest(manifest['final_weights_sha256'],'final_weights_sha256')
-    tensors=validate_weights(base_weights)
+    tensors=_weights(base_weights)
     if manifest['final_weights_sha256']!=weights_digest(tensors):
         raise ValueError('Manifest final_weights_sha256 does not match the supplied base weights')
     if not isinstance(manifest['patches'],list):
@@ -171,7 +183,7 @@ def validate_manifest(manifest,base_weights):
         if isinstance(record,dict) and 'edit_actions' in record:
             keys.append('edit_actions')
         _keys(record,keys,'Manifest patch record')
-        patch=validate_patch(record['patch'])
+        patch=validate_patch(record['patch'],schema_sha256=expected_schema)
         if patch['id'] in seen:
             raise ValueError('Manifest contains duplicate patch records')
         seen[patch['id']]=_canonical(patch)
@@ -187,10 +199,7 @@ def validate_manifest(manifest,base_weights):
     if not isinstance(skipped,list) or any(not isinstance(patch_id,str) or patch_id not in seen for patch_id in skipped):
         raise ValueError('Manifest skipped IDs must refer to retained patch records')
     reverse=tuple(array.copy() for array in tensors)
-    states={weights_digest(reverse):tuple(array.copy() for array in reverse)}
     for record in reversed(manifest['patches']):
-        if weights_digest(reverse)!=record['output_weights_sha256']:
-            raise ValueError('Manifest output digest does not match recorded tensor changes')
         for edit,action in reversed(list(zip(record['patch']['edits'],_actions(record)))):
             tensor=reverse[TENSOR_NAMES.index(edit['tensor'])]
             index=tuple(edit['index'])
@@ -198,33 +207,56 @@ def validate_manifest(manifest,base_weights):
                 raise ValueError('Manifest after value does not match recorded tensor changes')
             if action=='applied':
                 tensor[index]=_number(edit['before'],'Edit before')
-        if weights_digest(reverse)!=record['input_weights_sha256']:
-            raise ValueError('Manifest input digest does not match recorded tensor changes')
-        states[record['input_weights_sha256']]=tuple(array.copy() for array in reverse)
     if weights_digest(reverse)!=manifest['original_weights_sha256']:
         raise ValueError('Manifest original digest does not match recorded tensor changes')
-    prior_states={manifest['original_weights_sha256']}
+    # Replay from the reconstructed original, retaining a snapshot only while
+    # later patches still refer to that historical base. A linear chain needs
+    # no growing collection of dense 2,499-parameter snapshots.
+    replay=reverse
+    remaining=Counter(record['patch']['base_weights_sha256'] for record in manifest['patches'])
+    snapshots={}
     for record in manifest['patches']:
         patch=record['patch']
-        if patch['base_weights_sha256'] not in prior_states:
+        base_digest=patch['base_weights_sha256']
+        input_digest=record['input_weights_sha256']
+        if base_digest==input_digest:
+            declared=replay
+        elif base_digest in snapshots:
+            declared=snapshots[base_digest]
+        else:
             raise ValueError('Manifest patch declares an unrelated base state')
-        declared=states[patch['base_weights_sha256']]
-        for edit in patch['edits']:
+        actions=_actions(record)
+        for edit,action in zip(patch['edits'],actions):
             value=declared[TENSOR_NAMES.index(edit['tensor'])][tuple(edit['index'])]
             if not _same(value,_number(edit['before'],'Edit before')):
                 raise ValueError('Manifest patch before value does not match its declared base')
-        prior_states.add(record['output_weights_sha256'])
+            current=replay[TENSOR_NAMES.index(edit['tensor'])][tuple(edit['index'])]
+            expected_value=edit['before'] if action=='applied' else edit['after']
+            if not _same(current,_number(expected_value,'Edit value')):
+                raise ValueError('Manifest edit action does not match its input tensor state')
+        remaining[base_digest]-=1
+        if (record['input_weights_sha256']!=record['output_weights_sha256']
+                and remaining[input_digest]>0 and input_digest not in snapshots):
+            snapshots[input_digest]=tuple(array.copy() for array in replay)
+        for edit,action in zip(patch['edits'],actions):
+            if action=='applied':
+                replay[TENSOR_NAMES.index(edit['tensor'])][tuple(edit['index'])]=_number(edit['after'],'Edit after')
+        if weights_digest(replay)!=record['output_weights_sha256']:
+            raise ValueError('Manifest output digest does not match recorded tensor changes')
+        if remaining[base_digest]==0:
+            snapshots.pop(base_digest,None)
     return manifest
 
 
-def stack(base_path,patches,previous_manifest=None):
+def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
     """Apply ordered, compatible edits in memory; return tensors and provenance.
 
     A new patch may name this run's base or the current state at its start. This
     supports both disjoint parallel edits and an explicit chain of revisions.
     A prior manifest preserves and verifies history across separate invocations.
     """
-    current=tuple(array.copy() for array in load_weights(base_path))
+    expected_schema=_expected_schema(schema_sha256)
+    current=_weights(base_path)
     run_base=tuple(array.copy() for array in current)
     run_base_digest=weights_digest(run_base)
     original_digest=run_base_digest
@@ -232,13 +264,13 @@ def stack(base_path,patches,previous_manifest=None):
     records=[]
     skipped=[]
     if previous_manifest is not None:
-        previous=validate_manifest(previous_manifest,current)
+        previous=validate_manifest(previous_manifest,current,schema_sha256=expected_schema)
         original_digest=previous['original_weights_sha256']
         records=previous['patches']
         skipped=previous['duplicate_patch_ids_skipped']
         seen={record['patch']['id']:_canonical(record['patch']) for record in records}
     for value in patches:
-        patch=validate_patch(_read_patch(value))
+        patch=validate_patch(_read_patch(value),schema_sha256=expected_schema)
         identity=_canonical(patch)
         patch_id=patch['id']
         if patch_id in seen:
@@ -273,7 +305,7 @@ def stack(base_path,patches,previous_manifest=None):
         records.append({'patch':patch,'input_weights_sha256':start_digest,
                         'output_weights_sha256':weights_digest(current),'edit_actions':actions})
         seen[patch_id]=identity
-    manifest={'format':STACK_FORMAT,'schema_sha256':schema_digest(),
+    manifest={'format':STACK_FORMAT,'schema_sha256':expected_schema,
               'original_weights_sha256':original_digest,
               'final_weights_sha256':weights_digest(current),
               'patches':records,'duplicate_patch_ids_skipped':skipped}

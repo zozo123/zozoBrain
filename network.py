@@ -12,6 +12,31 @@ import numpy as np
 TENSOR_SHAPES = {'w1': (48, 48), 'b1': (48,), 'w2': (48, 3), 'b2': (3,)}
 
 
+def validate_layout(layout):
+    """Normalize the data-only feature schema independently of executable source."""
+    if not isinstance(layout, dict) or set(layout) != {'attributes', 'contexts', 'binary_attributes'}:
+        raise ValueError('Layout must contain attributes, contexts, and binary_attributes')
+    result = {}
+    for key, count in [('attributes', 32), ('contexts', 16)]:
+        names = layout[key]
+        if not isinstance(names, (list, tuple)) or len(names) != count:
+            raise ValueError(f'Exactly {count} unique {key} required')
+        if any(not isinstance(name, str) or not name.strip() or len(name) > 128 for name in names):
+            raise ValueError(f'{key} must contain nonempty names of at most 128 characters')
+        if len(set(names)) != count:
+            raise ValueError(f'{key} must be unique')
+        result[key] = list(names)
+    binary = layout['binary_attributes']
+    if not isinstance(binary, (list, tuple, set, frozenset)) or any(
+        not isinstance(name, str) or name not in result['attributes'] for name in binary
+    ):
+        raise ValueError('binary_attributes must name known attributes')
+    if len(set(binary)) != len(binary):
+        raise ValueError('binary_attributes must be unique')
+    result['binary_attributes'] = sorted(binary)
+    return result
+
+
 def layout_digest(attributes, contexts, binary_attributes):
     schema = {'attributes': list(attributes), 'contexts': list(contexts),
               'binary_attributes': sorted(binary_attributes), 'dtype': 'float32',
@@ -83,10 +108,19 @@ def save_weights(path, weights):
 
 def weights_digest(weights):
     """Hash named canonical float32 tensors, independent of ZIP timestamps."""
+    return digest_validated_weights(validate_weights(weights))
+
+
+def digest_validated_weights(tensors):
+    """Internal hash for the independent snapshot returned by validate_weights.
+
+    Callers must validate first. Hashing that same snapshot avoids another copy
+    while keeping the fingerprint tied to the tensors used for this inference.
+    """
     digest = hashlib.sha256()
-    for name, tensor in zip(TENSOR_SHAPES, validate_weights(weights)):
+    for name, tensor in zip(TENSOR_SHAPES, tensors):
         digest.update(name.encode('ascii') + b'\0')
-        digest.update(tensor.astype('<f4').tobytes(order='C'))
+        digest.update(tensor.astype('<f4', copy=False).tobytes(order='C'))
     return digest.hexdigest()
 
 

@@ -1,10 +1,49 @@
 # zozoBrain
 
-### One personal decision model. Contributions from any AI harness.
+### One portable brain file. Direct weight edits from any AI harness.
 
 **Accumulate explicit preferences from Codex, Claude Code, or another shell-capable agent by directly editing a tiny network's weights. Carry one portable brain between them.**
 
-[Direct weight editing](WEIGHTS.md) · [Codex + Claude workflow](HARNESS.md) · [Portable formats](FORMATS.md) · [Evaluation](EVALUATION.md)
+[Start here](USAGE.md) · [Direct weight editing](WEIGHTS.md) · [Codex + Claude](HARNESS.md) · [Formats](FORMATS.md) · [Speed](PERFORMANCE.md) · [Evaluation](EVALUATION.md)
+
+## Start with one file
+
+```bash
+git clone https://github.com/zozo123/zozoBrain.git
+cd zozoBrain
+uv run --locked brain.py init personal/me.brain
+uv run --locked brain.py inspect personal/me.brain
+uv run --locked brain.py decide personal/me.brain examples/personal.json
+```
+
+The blank brain abstains. Its `.brain` file carries the weights, ordered feature
+layout, and complete contribution history together. Move that file between agents
+and use the same command interface; no separate active manifest or snapshot path
+is needed. Loading it executes no weight-source Python code.
+
+To express an **actual stated** lower-cost preference, directly assign the two
+output rows (utility, veto, evidence):
+
+```bash
+uv run --locked brain.py set personal/me.brain --tensor w2 --index 0 --values 3 0 1 --reason "I explicitly prefer lower cost" --harness codex
+uv run --locked brain.py set personal/me.brain --tensor w2 --index 1 --values -3 0 1 --reason "I explicitly prefer lower cost" --harness claude
+uv run --locked brain.py decide personal/me.brain examples/personal.json
+```
+
+The sample now selects `A` and reports both contributors. Those numbers are
+authored hypotheses, not learned estimates. `set` updates the same file atomically
+and preserves its history; use `--output copy.brain` to keep the input unchanged.
+`brain.py prompt personal/me.brain` prints a handoff task with the exact paths and
+fingerprints. [Full guide, parallel edits, and existing-model migration](USAGE.md)
+
+For frequent requests, keep `uv run --locked brain.py serve personal/me.brain`
+running and exchange JSON Lines. Local measurement: about **36 microseconds per
+in-process two-option decision**; 1,000 requests in one subprocess took **151 ms**
+including startup. A shipped-policy bundle was **1,690 bytes** including its
+layout/history. Timings and sizes depend on environment and history. [Reproduce](PERFORMANCE.md)
+
+The source/NPZ interfaces below remain available for direct authoring and existing
+integrations. A `.brain` file is the recommended portable runtime artifact.
 
 2,499 total parameters, 150 nonzero entries. No gradient descent, optimizer, training loop, pretrained backbone, external model, or network call in the main implementation. The network scores options using a small set of documented qualitative preferences attributed to Yossi Eliaz. Unknown preferences remain unknown.
 

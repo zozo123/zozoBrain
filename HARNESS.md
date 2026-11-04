@@ -5,6 +5,17 @@ portable decision model runs the resulting tensors locally. Any agent that can
 read/write files and run Python can use the same workflow. No provider SDK, API
 key, hosted service, or automatic chat-history access is bundled.
 
+## Recommended: one portable file
+
+Use the [one-file workflow](USAGE.md) for new integrations. `brain.py set`
+directly edits scalar/row tensor entries and retains evidence in the same
+`.brain` file; `brain.py decide` loads its matching schema and history together.
+`brain.py prompt FILE` generates an agent handoff with current paths and hashes.
+`brain.py serve FILE` provides the JSONL protocol below with one startup
+verification. Keep it alive for repeated requests; restart for a saved update.
+
+The snapshot/manifest commands below remain supported as lower-level interfaces.
+
 ## Accumulate Codex then Claude
 
 Create a blank brain once. All following commands run inside that directory:

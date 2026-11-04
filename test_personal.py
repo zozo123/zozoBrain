@@ -96,11 +96,40 @@ class PersonalTests(unittest.TestCase):
                 create(name, Path(self.tmp.name))
 
     def test_profile_carries_locked_runtime_and_private_contribution_defaults(self):
-        for filename in ('pyproject.toml', 'uv.lock', 'network.py', 'weight_patches.py', 'edit_weights.py', 'LICENSE'):
+        for filename in ('pyproject.toml', 'uv.lock', 'network.py', 'weight_patches.py', 'edit_weights.py',
+                         'brain.py', 'brain_bundle.py', 'LICENSE'):
             self.assertEqual((self.folder / filename).read_bytes(), (ROOT / filename).read_bytes())
         ignored = (self.folder / '.gitignore').read_text(encoding='utf-8').splitlines()
         self.assertIn('contributions/', ignored)
         self.assertIn('*.patch.json', ignored)
+        self.assertIn('*.brain', ignored)
+        self.assertIn('*.brain.lock', ignored)
+
+    def test_data_only_brain_roundtrip_in_portable_profile(self):
+        # This profile is outside the repository. No operation below may execute
+        # its source-weight compatibility file.
+        (self.folder / 'weights.py').write_text("raise RuntimeError('do not execute source')\n", encoding='utf-8')
+        cli = self.folder / 'brain.py'
+        brain = self.folder / 'portable.brain'
+
+        def call(*args, input=None):
+            return subprocess.run([sys.executable, str(cli), *map(str, args)],
+                                  input=input, capture_output=True, text=True, check=True)
+
+        call('init', brain)
+        for row, values in [(0, [3, 0, 1]), (1, [-3, 0, 1])]:
+            call('set', brain, '--tensor', 'w2', '--index', row, '--values', *values,
+                 '--reason', 'Explicit preference for this mechanical test', '--harness', 'portable-test')
+        moved = self.folder.parent / 'moved.brain'
+        moved.write_bytes(brain.read_bytes())
+        info = json.loads(call('inspect', moved, '--json').stdout)
+        self.assertEqual(info['contributing_harnesses'], ['portable-test'])
+        result = json.loads(call('decide', moved, self.folder / 'decision.json', '--json').stdout)
+        self.assertEqual(result['decision'], 'A')
+        request = (self.folder / 'decision.json').read_text(encoding='utf-8')
+        message = json.loads(call('serve', moved, input=json.dumps(json.loads(request)) + '\n').stdout)
+        self.assertTrue(message['ok'])
+        self.assertEqual(message['result']['decision'], 'A')
 
 
 if __name__ == '__main__':

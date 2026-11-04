@@ -1,0 +1,8 @@
+{
+  "question": "Which option would I choose?",
+  "contexts": ["general"],
+  "options": [
+    {"id": "A", "label": "Lower-cost option", "attributes": {"low_cost": 1}},
+    {"id": "B", "label": "Higher-cost option", "attributes": {"high_cost": 1}}
+  ]
+}

@@ -246,6 +246,61 @@ class WeightPatchTests(unittest.TestCase):
             self.assertEqual(source.stat().st_size,stamp.st_size)
             self.assertNotEqual(before,schema_digest())
 
+    def test_explicit_schema_supports_data_only_arrays_without_loading_source(self):
+        expected_schema='a'*64
+        edited=self.edited(2,(0,0),6)
+        with mock_patch.object(weight_patches,'load_weight_source',side_effect=AssertionError('Source must not execute')), \
+             mock_patch.object(weight_patches,'load_weights',side_effect=AssertionError('Arrays must not load a file')):
+            captured=diff(list(self.tensors),edited,harness='codex',
+                          evidence='Explicit data-only tensor edit.',patch_id='bundle-001',
+                          schema_sha256=expected_schema)
+            self.assertEqual(validate_patch(captured,schema_sha256=expected_schema),captured)
+            tensors,manifest=stack(self.tensors,[captured],schema_sha256=expected_schema)
+            self.assertEqual(manifest['schema_sha256'],expected_schema)
+            self.assertEqual(validate_manifest(manifest,tensors,schema_sha256=expected_schema),manifest)
+            unchanged,resumed=stack(list(tensors),[captured],previous_manifest=manifest,
+                                    schema_sha256=expected_schema)
+            self.assertEqual(weights_digest(unchanged),weights_digest(tensors))
+            self.assertEqual(resumed['duplicate_patch_ids_skipped'],['bundle-001'])
+            with self.assertRaisesRegex(ValueError,'schema'):
+                validate_manifest(manifest,tensors,schema_sha256='b'*64)
+
+    def test_thousand_patch_history_validates_with_one_schema_read_per_operation(self):
+        source=tuple(array.copy() for array in self.tensors)
+        expected_schema=schema_digest()
+        patches=[]
+        for number in range(1000):
+            before=float(source[2][0,0])
+            base_digest=weights_digest(source)
+            source[2][0,0]=before+1
+            patches.append({
+                'format':weight_patches.PATCH_FORMAT,'id':f'chain-{number}',
+                'source':{'harness':'test','evidence':'Synthetic scalability test.'},
+                'schema_sha256':expected_schema,'base_weights_sha256':base_digest,
+                'edits':[{'tensor':'w2','index':[0,0],'before':before,'after':before+1,
+                          'reason':'Synthetic scalability test.'}],
+            })
+        with mock_patch.object(weight_patches,'load_weight_source',wraps=weight_patches.load_weight_source) as read_source:
+            tensors,manifest=stack(self.tensors,patches)
+            self.assertEqual(read_source.call_count,1)
+            self.assertEqual(len(manifest['patches']),1000)
+            self.assertEqual(validate_manifest(manifest,tensors),manifest)
+            self.assertEqual(read_source.call_count,2)
+        self.assertEqual(weights_digest(tensors),weights_digest(source))
+
+    def test_resumed_parallel_edits_validate_against_retained_historical_base(self):
+        first=self.patch(self.edited(2,(0,0),6),'codex-001')
+        initial,first_manifest=stack(self.tensors,[first])
+        current=self.folder/'current.npz'
+        save_weights(current,initial)
+        second=self.patch(self.edited(2,(1,0),8,initial),'claude-002','claude',base=current)
+        third=self.patch(self.edited(2,(2,0),-6,initial),'codex-003','codex',base=current)
+        combined,manifest=stack(initial,[second,third],previous_manifest=first_manifest)
+        self.assertEqual(combined[2][1,0],8)
+        self.assertEqual(combined[2][2,0],-6)
+        self.assertEqual(len(manifest['patches']),3)
+        self.assertEqual(validate_manifest(manifest,combined),manifest)
+
     def test_schema_mismatch_is_rejected(self):
         patch=self.patch(self.edited(2,(0,0),6),'codex-001')
         self.assertEqual(patch['schema_sha256'],schema_digest())

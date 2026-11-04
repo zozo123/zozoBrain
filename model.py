@@ -7,13 +7,7 @@ import re
 
 import numpy as np
 
-from network import forward, layout_digest, load_weight_source, load_weights, validate_weights, weights_digest
-
-_source = load_weight_source(Path(__file__).with_name('weights.py'))
-ATTRIBUTES = _source.ATTRIBUTES
-BINARY_ATTRIBUTES = _source.BINARY_ATTRIBUTES
-CONTEXTS = _source.CONTEXTS
-authored_weights = _source.authored_weights
+from network import digest_validated_weights, forward, layout_digest, load_weight_source, load_weights, validate_layout, validate_weights
 
 
 def validate_question(question):
@@ -23,48 +17,62 @@ def validate_question(question):
         raise ValueError('Question exceeds 100 regex word/punctuation tokens')
 
 
-def validate_schema():
-    for names, count, label in [(ATTRIBUTES, 32, 'attributes'), (CONTEXTS, 16, 'contexts')]:
-        if not isinstance(names, (list, tuple)) or len(names) != count:
-            raise ValueError(f'Exactly {count} unique {label} required')
-        if any(not isinstance(name, str) or not name.strip() for name in names) or len(set(names)) != count:
-            raise ValueError(f'{label} must be unique nonempty strings')
-    if not isinstance(BINARY_ATTRIBUTES, (list, tuple, set, frozenset)) or any(
-        name not in ATTRIBUTES for name in BINARY_ATTRIBUTES
-    ):
-        raise ValueError('BINARY_ATTRIBUTES must name known attributes')
-
-
 class DecisionModel:
-    def __init__(self, weights=None, manifest=None):
-        validate_schema()
+    def __init__(self, weights=None, manifest=None, layout=None):
+        if layout is None:
+            source = load_weight_source(Path(__file__).with_name('weights.py'))
+            layout = {'attributes': source.ATTRIBUTES, 'contexts': source.CONTEXTS,
+                      'binary_attributes': source.BINARY_ATTRIBUTES}
+            if weights is None:
+                weights = source.authored_weights()
+        elif weights is None:
+            raise ValueError('An explicit layout requires explicit weight tensors')
+        self.layout = validate_layout(layout)
+        self.attributes = tuple(self.layout['attributes'])
+        self.contexts = tuple(self.layout['contexts'])
+        self.binary_attributes = frozenset(self.layout['binary_attributes'])
+        self._attribute_index = {name: i for i, name in enumerate(self.attributes)}
+        self._context_index = {name: i for i, name in enumerate(self.contexts)}
         if isinstance(weights, (str, Path)):
             weights = load_weights(weights)
-        self.weights = validate_weights(authored_weights() if weights is None else weights)
+        self.weights = validate_weights(weights)
         self.parameter_count = sum(array.size for array in self.weights)
-        self.schema_sha256 = layout_digest(ATTRIBUTES, CONTEXTS, BINARY_ATTRIBUTES)
+        self.schema_sha256 = layout_digest(self.attributes, self.contexts, self.binary_attributes)
         self.contributing_harnesses = None
         self._manifest_weights_sha256 = None
         if manifest is not None:
             from weight_patches import validate_manifest
             if isinstance(manifest, (str, Path)):
                 manifest = json.loads(Path(manifest).read_text(encoding='utf-8'))
-            provenance = validate_manifest(manifest, self.weights)
-            if provenance['schema_sha256'] != self.schema_sha256:
-                raise ValueError('Manifest schema changed after model initialization; restart the process')
-            self._manifest_weights_sha256 = provenance['final_weights_sha256']
-            self.contributing_harnesses = list(dict.fromkeys(
-                record['patch']['source']['harness'] for record in provenance['patches']
-            ))
+            provenance = validate_manifest(manifest, self.weights, schema_sha256=self.schema_sha256)
+            self._attach_verified_provenance(provenance)
+
+    def _attach_verified_provenance(self, provenance):
+        if provenance['schema_sha256'] != self.schema_sha256:
+            raise ValueError('Manifest schema changed after model initialization; restart the process')
+        self._manifest_weights_sha256 = provenance['final_weights_sha256']
+        self.contributing_harnesses = list(dict.fromkeys(
+            record['patch']['source']['harness'] for record in provenance['patches']
+        ))
+
+    @classmethod
+    def from_bundle(cls, path):
+        from brain_bundle import load_bundle
+        bundle = load_bundle(path)
+        model = cls(bundle.weights, layout=bundle.layout)
+        # load_bundle already verified the complete history against these exact
+        # tensors and schema. Keep its guard without replaying the history twice.
+        model._attach_verified_provenance(bundle.manifest)
+        return model
 
     def decide(self, question, contexts, options, force=False):
         validate_question(question)
         if not isinstance(force, bool):
             raise ValueError('force must be boolean')
         if not isinstance(contexts, (list, tuple)) or not contexts or any(
-            not isinstance(context, str) or context not in CONTEXTS for context in contexts
+            not isinstance(context, str) or context not in self._context_index for context in contexts
         ):
-            raise ValueError('Supply a list of known contexts: ' + ', '.join(CONTEXTS))
+            raise ValueError('Supply a list of known contexts: ' + ', '.join(self.contexts))
         if len(set(contexts)) != len(contexts):
             raise ValueError('Contexts must be unique')
         if not isinstance(options, (list, tuple)) or len(options) < 2:
@@ -80,25 +88,26 @@ class DecisionModel:
             if 'label' in option and not isinstance(option['label'], str):
                 raise ValueError('Option labels must be strings')
         tensors = validate_weights(self.weights)
-        if self._manifest_weights_sha256 is not None and weights_digest(tensors) != self._manifest_weights_sha256:
+        fingerprint = digest_validated_weights(tensors)
+        if self._manifest_weights_sha256 is not None and fingerprint != self._manifest_weights_sha256:
             raise ValueError('Weights changed after manifest verification; capture a new contribution first')
         scored = []
         for option in options:
             attrs = option.get('attributes', {})
             if not isinstance(attrs, dict):
                 raise ValueError('Option attributes must be an object')
-            unknown = [name for name in attrs if name not in ATTRIBUTES]
+            unknown = [name for name in attrs if name not in self._attribute_index]
             if unknown:
                 raise ValueError('Unknown attributes: ' + str(unknown))
             x = np.zeros(48, dtype=np.float32)
             for attr, value in attrs.items():
                 if isinstance(value, (bool, np.bool_)) or not isinstance(value, Real) or not 0 <= value <= 1:
                     raise ValueError('Attributes must be finite numeric values in [0,1]')
-                if attr in BINARY_ATTRIBUTES and value not in (0, 1):
+                if attr in self.binary_attributes and value not in (0, 1):
                     raise ValueError('Hard constraint attributes must be 0 or 1')
-                x[ATTRIBUTES.index(attr)] = value
+                x[self._attribute_index[attr]] = value
             for context in contexts:
-                x[32 + CONTEXTS.index(context)] = 1
+                x[32 + self._context_index[context]] = 1
             utility, veto, support = forward(x, tensors).tolist()
             scored.append({
                 'id': option['id'], 'label': option.get('label', option['id']),
@@ -114,18 +123,18 @@ class DecisionModel:
             status = 'only_feasible_option'
         elif not all(row['modeled_evidence'] for row in ranked):
             status = 'insufficient_preference_evidence'
-        elif np.isclose(ranked[0]['utility'], ranked[1]['utility'], rtol=1e-6, atol=1e-7):
+        elif abs(ranked[0]['utility'] - ranked[1]['utility']) <= 1e-7 + 1e-6 * abs(ranked[1]['utility']):
             status = 'tie'
         selected = ranked[0]['id'] if ranked and (force or status in ('decision', 'only_feasible_option')) else None
         result = {
             'decision': selected, 'status': status,
             'forced': bool(force and status in ('tie', 'insufficient_preference_evidence')),
-            'ranking': ranked, 'vetoed': vetoed, 'weights_sha256': weights_digest(tensors),
+            'ranking': ranked, 'vetoed': vetoed, 'weights_sha256': fingerprint,
             'schema_sha256': self.schema_sha256,
             'note': 'Authored utility policy, not calibrated probability. Attributes and contexts are supplied by caller; question text is display metadata, not language understanding.',
         }
         if self.contributing_harnesses is not None:
-            result['contributing_harnesses'] = self.contributing_harnesses
+            result['contributing_harnesses'] = list(self.contributing_harnesses)
         return result
 
 
