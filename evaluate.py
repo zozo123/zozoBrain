@@ -1,7 +1,10 @@
 """100 structured policy probes. Not a held-out prediction-of-personality test."""
+import argparse
 import json
 from pathlib import Path
+import sys
 from model import DecisionModel
+from network import weights_digest
 
 ROOT=Path(__file__).resolve().parent
 
@@ -71,22 +74,24 @@ def benchmark():
     assert len(rows)==100
     return rows
 
-def run():
-    model=DecisionModel()
+def build_artifacts(model):
     rows=benchmark()
     results=[]
     for row in rows:
         out=model.decide(row['question'],row['contexts'],row['options'])
         results.append(dict(row,output=out,policy_check_passed=(out['decision']==row['expected_decision'] and out['status']==row['expected_status'])))
-    summary={'total_probes':100,'total_parameters':model.parameter_count,
+    summary={'total_probes':len(rows),'total_parameters':model.parameter_count,
+             'weights_sha256':weights_digest(model.weights),
              'policy_checks_passed':sum(r['policy_check_passed'] for r in results),
              'decisions':sum(r['output']['decision'] is not None for r in results),
              'abstentions':sum(r['output']['decision'] is None for r in results),
              'independent_user_labeled_predictions':0,
              'meaning':'Rule-conformance and abstention tests with structured inputs; not 100% accuracy at predicting a person.',
              'domains':{d:sum(r['domain']==d for r in results) for d in ['food','countries','music','politics','work']}}
-    (ROOT/'benchmark_100.json').write_text(json.dumps(rows,indent=2)+'\n')
-    (ROOT/'evaluation_100.json').write_text(json.dumps(dict(summary,results=results),indent=2)+'\n')
+    artifacts={
+        'benchmark_100.json':json.dumps(rows,indent=2,allow_nan=False)+'\n',
+        'evaluation_100.json':json.dumps(dict(summary,results=results),indent=2,allow_nan=False)+'\n',
+    }
     lines=['# Evaluation: weight-space decision model','',
            f"{summary['policy_checks_passed']}/100 policy checks passed: {summary['decisions']} decisions, {summary['abstentions']} abstentions.",
            '', '**This is not predictive personality accuracy.** Inputs explicitly encode the relevant option attributes. Expected results are rule-conformance targets. Five work probes use hypothetical caller-supplied preferences. No independent user-labeled predictions have been evaluated.',
@@ -95,7 +100,30 @@ def run():
            '', '| ID | Domain | Question | Decision | Status | Check |','|---|---|---|---|---|---|']
     for r in results:
         lines.append(f"| {r['id']} | {r['domain']} | {r['question']} | {r['output']['decision']} | {r['output']['status']} | {'pass' if r['policy_check_passed'] else 'FAIL'} |")
-    (ROOT/'EVALUATION.md').write_text('\n'.join(lines)+'\n')
-    print(json.dumps(summary,indent=2))
+    artifacts['EVALUATION.md']='\n'.join(lines)+'\n'
+    return summary,artifacts
 
-if __name__=='__main__': run()
+
+def run(check=False, model=None):
+    """Evaluate authored tensors; check mode never modifies the saved reports."""
+    summary,artifacts=build_artifacts(DecisionModel() if model is None else model)
+    success=summary['policy_checks_passed']==summary['total_probes']
+    for filename,content in artifacts.items():
+        path=ROOT/filename
+        if check:
+            if not path.is_file() or path.read_text(encoding='utf-8')!=content:
+                print(f'Stale or missing evaluation artifact: {filename}; run evaluate.py to refresh it.',file=sys.stderr)
+                success=False
+        else:
+            path.write_text(content,encoding='utf-8')
+    print(json.dumps(summary,indent=2))
+    if summary['policy_checks_passed']!=summary['total_probes']:
+        print('Policy checks failed. Review the failed cases before accepting weight changes.',file=sys.stderr)
+    return success
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check',action='store_true',help='Verify committed reports without writing files')
+    args=parser.parse_args()
+    sys.exit(0 if run(check=args.check) else 1)

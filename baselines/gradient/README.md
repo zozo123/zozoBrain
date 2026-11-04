@@ -1,4 +1,8 @@
-# zozoBrain
+# Historical gradient-trained baseline
+
+This directory preserves the earlier trained experiment for reproducibility. The
+[current zozoBrain implementation](../../README.md) uses directly authored weights;
+the training instructions below apply only to this historical baseline.
 
 A tiny experimental **personal decision model** of Yossi Eliaz: **9,272 total learned parameters**, with actual trained weights. Given a situation and candidate options, it estimates which option Yossi would choose. It also answers yes/no and ranks lists. Runs locally with NumPy; no LLM, embeddings API, retrieval service, or network call at inference.
 
@@ -10,7 +14,7 @@ Python 3.11+:
 
 ```bash
 git clone https://github.com/zozo123/zozoBrain.git
-cd zozoBrain
+cd zozoBrain/baselines/gradient
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
@@ -65,7 +69,9 @@ python evaluate.py
 python -m unittest -v
 ```
 
-The shipped model was trained from random initialization with seed 42, full-batch Adam, learning rate 0.015, 1,800 fixed steps, masked binary cross-entropy over the two heads, and 1e-5 weight regularization. 74 yes/no seeds plus 22 preference pairs yield 472 augmented training examples. Ranking is trained with preferred/rejected pointwise utility targets; it is not a listwise loss. There is no benchmark-based checkpoint selection. `train.py` never reads the 100-item benchmark. CPU/BLAS differences can yield small floating point differences; tests compare arrays with tolerances.
+The shipped model was trained from random initialization with seed 42, full-batch Adam, learning rate 0.015, 1,800 fixed steps, masked binary cross-entropy over the two heads, and 1e-5 weight regularization. 74 yes/no seeds plus 22 preference pairs yield 472 augmented training examples. Ranking is trained with preferred/rejected pointwise utility targets; it is not a listwise loss. There is no benchmark-based checkpoint selection. `train.py` never reads the 100-item benchmark.
+
+Float32 reductions can differ slightly across CPU and BLAS builds, with differences accumulating over the 1,800 Adam steps. Reproduction tests bound each weight using `atol=3e-5, rtol=1e-5` and require the same yes/no answers and complete option rankings as the shipped model on all 100 benchmark questions. The test checks both numerical drift and unchanged behavior; it does not require identical archive bytes across platforms.
 
 `metrics.json` reports 73/74 correct on held-out yes/no prefix variants and 22/22 pair orders. These are **same-fact template tests**, not a measure of generalization to new topics.
 

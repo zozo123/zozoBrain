@@ -1,14 +1,25 @@
 # zozoBrain
 
-### Your preferences. A tiny neural decision policy.
+### One personal decision model. Contributions from any AI harness.
 
-**Yossi Eliaz’s decision-policy experiment: directly written weights, local execution, transparent evaluation.**
+**Accumulate explicit preferences from Codex, Claude Code, or another shell-capable agent by directly editing a tiny network's weights. Carry one portable brain between them.**
 
-[Run the demo](#try-yossis-decisions) · [Codex / Claude Code / harness guide](HARNESS.md) · [100 questions about Yossi](QUESTION_BANK.md) · [Evaluation](EVALUATION.md)
+[Direct weight editing](WEIGHTS.md) · [Codex + Claude workflow](HARNESS.md) · [Portable formats](FORMATS.md) · [Evaluation](EVALUATION.md)
 
 2,499 total parameters, 150 nonzero entries. No gradient descent, optimizer, training loop, pretrained backbone, external model, or network call in the main implementation. The network scores options using a small set of documented qualitative preferences attributed to Yossi Eliaz. Unknown preferences remain unknown.
 
-This is **weight-space programming**, not a tiny conversational clone. The weights are explicit NumPy assignments in [weights.py](weights.py). The code, actual weight artifact, examples, tests, and evaluation are included.
+The core is **weight-space programming**: explicit NumPy assignments in [weights.py](weights.py), or directly edited tensors in an explicitly loaded `.npz` snapshot. There is no intermediate JSON preference compiler. JSON patches record the actual changed tensor entries, evidence, and contributing harness. Compatible edits combine; disagreements are reported for resolution. The shipped Yossi policy is one example; a new personal profile starts blank.
+
+```text
+Codex context ── direct tensor edits ── codex.json ──┐
+                                                   ├─ combined.npz → local decisions
+Claude context ─ direct tensor edits ── claude.json ─┘
+                                        combined.json preserves both sources
+```
+
+The external agent interprets statements and authors numerical edits. The tiny network executes the resulting policy. This does not merge the foundation models themselves or automatically access other apps' chat histories.
+
+Run `uv run --locked stack_demo.py` for a complete synthetic Codex-then-Claude example. It directly edits two weights, resumes the saved provenance, and demonstrates the resulting decisions without changing your source or saved brain.
 
 ## Try Yossi’s decisions
 
@@ -41,7 +52,7 @@ Given a context and structured candidate options, return:
 
 Yes/no decisions are simply two options named `yes` and `no`. Lists of food, companies, countries, music, or people use the same interface. Names alone do not reveal preferences. For example, it can apply the no-flying-on-Shabbat constraint; it cannot know whether Yossi prefers sushi to pizza or OpenAI to Anthropic without evidence.
 
-**Input contract:** a question of up to 100 regex word/punctuation tokens, explicit context tags, and structured option attributes. The question is validated and retained as metadata; the network does **not** parse arbitrary natural language. Attribute extraction is a separate caller responsibility and is not hidden in the parameter budget. This narrower contract makes the weight-space implementation honest and reproducible. The raw-text experiment is retained separately as a baseline.
+**Input contract:** a question of up to 100 regex word/punctuation tokens, explicit context tags, and structured option attributes. The question is validated as metadata; only structured features are scored. The network does **not** parse arbitrary natural language. Attribute extraction is a separate caller responsibility and is not hidden in the parameter budget. The raw-text experiment is retained separately as a baseline.
 
 ## Run from an agent or harness
 
@@ -58,7 +69,8 @@ uv run --locked model.py examples/travel.json
 uv run --locked model.py examples/work.json
 uv run --locked model.py examples/food.json
 uv run --locked python -m unittest -v
-uv run --locked evaluate.py
+uv run --locked weights.py --check
+uv run --locked evaluate.py --check
 ```
 
 The travel example selects `no`: do not fly on Shabbat. The food example abstains because no food preferences were supplied. `--force` requests an answer for unknowns/ties, using utility then input order, and marks the result as forced. It never overrides vetoes. A forced order is not evidence of a preference.
@@ -96,7 +108,7 @@ The inputs are 32 option attributes and 16 context indicators. Outputs are utili
 | b2 | 3 | 3 |
 | **Total** | | **2,499** |
 
-There are 150 nonzero entries, but **2,499 is the relevant total**. Float32 tensor storage is 9,996 bytes before container overhead. `uv run --locked weights.py` deterministically emits [weights.npz](weights.npz) from the assignments; inference builds those same weights. No training is needed. Sorting, abstention, validation, and veto filtering are ordinary deterministic wrapper logic; the veto activations themselves come from the neural forward pass.
+There are 150 nonzero entries in the shipped policy, but **2,499 is the relevant total**. Float32 tensor storage is 9,996 bytes before container overhead. `uv run --locked weights.py` exports [weights.npz](weights.npz) from the source assignments. Default inference reads the source; `--weights PATH` explicitly selects an edited snapshot. Every response includes a canonical `weights_sha256` fingerprint. No training is needed. Sorting, abstention, validation, and veto filtering are ordinary deterministic wrapper logic; the veto activations themselves come from the neural forward pass.
 
 ## What is encoded—and what is not
 
@@ -116,18 +128,19 @@ The main 100 probes cover 20 each in food, countries/travel, music, politics, an
 
 See [EVALUATION.md](EVALUATION.md), [benchmark_100.json](benchmark_100.json), and [evaluation_100.json](evaluation_100.json) for all inputs, outputs, provenance notes, and expectations. The [gradient baseline](baselines/gradient/README.md) and its weights/training code are preserved for reproducibility. It uses a different input contract, so the numbers are not an apples-to-apples model comparison.
 
-## Make your own in three steps
+## Make your own and accumulate contributions
 
 ```bash
 uv run --locked init_personal.py alice
 uv run --locked personal/alice/model.py personal/alice/decision.json
 ```
 
-1. **Start blank.** The generator creates a private, gitignored `personal/alice/` folder. All utilities and veto flags start at zero: no Yossi preferences are inherited. The first run abstains.
-2. **Author your policy.** Edit `personal/alice/policy.json`. If you actually prefer lower cost, set the `low_cost` utility to `3` and `high_cost` to `-3`. Run the same command again: the sample selects `A`. Keep 32 uniquely named attributes and 16 contexts; rename unused slots for your own domains. Veto flags represent your explicit hard constraints. The generated README explains the schema.
-3. **Validate separately.** Supply your own options in `decision.json`. Record real choices before changing weights and keep held-out cases. Yossi’s benchmark is not an evaluation of you. Export your authored weights with `uv run --locked personal/alice/weights.py`.
+1. **Start blank.** The generator creates a private, gitignored `personal/alice/` folder. Utility, veto, and evidence outputs start at zero; the first run abstains.
+2. **Edit the actual tensors.** Open `personal/alice/weights.py`. If you explicitly prefer lower cost, uncomment `w2[0] = [3, 0, 1]` and `w2[1] = [-3, 0, 1]`. The sample then selects `A`. Columns are utility, veto, and evidence. Edit `w1`, `b1`, and `b2` directly when changing feature wiring or biases. [Weight guide](WEIGHTS.md)
+3. **Accumulate harness contributions.** Export a shared base, let each agent directly edit a copy, capture each diff with its evidence, then stack the patches. Keep the manifest when continuing in another session. [Complete Codex + Claude walkthrough](HARNESS.md#accumulate-codex-then-claude)
+4. **Validate separately.** Record your own real decisions before editing weights and keep held-out cases. Yossi's benchmark measures the shipped example, not your personal profile.
 
-Your folder contains its own model, harness, weights compiler, policy, and example. The JSONL interface also works: `uv run --locked personal/alice/harness.py`. The generated folder is excluded from git commits by default; publishing it is an explicit choice. The generator refuses to overwrite an existing profile. The original Yossi model is untouched.
+Your folder contains its own model, source weights, JSONL harness, tensor editor, patch tools, example, and locked dependencies. It can be moved to another harness or computer as one directory. Keep the same attribute/context layout when exchanging patches. The generator refuses to overwrite an existing profile. Older generated profiles using `policy.json` are left intact; create a new profile and explicitly transfer your own tensor values to use this workflow.
 
 Attributes describe options; utilities describe your preferences. Language interpretation remains external to the tiny network. Do not encode guessed preferences as if you supplied them. All profiles keep the same 2,499-total-parameter architecture, without fitting or optimization.
 
@@ -139,6 +152,8 @@ OPENBLAS_NUM_THREADS=1 uv run --locked train.py --output-dir reproduced
 uv run --locked python -m unittest -v
 ```
 
-The motivating weight-space examples were supplied by the user; this repository does not independently validate their published performance claims. This implementation demonstrates direct policy compilation into a small neural net. It does not claim a general digital twin, robust language understanding, or authority to make decisions on anyone's behalf.
+## Inspiration
+
+Inspired by [Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights](https://rikiyat.github.io/blog/weight-space-programming/) by Rikiya Takehi, Jayden Teoh, **Alex Zhang**, and Omar Khattab (November 2, 2026). zozoBrain applies direct weight authoring to a small structured personal decision policy. It does not reproduce that work's experiments or establish comparable performance. Personal predictive accuracy remains unmeasured.
 
 MIT license applies to code, weights, and example artifacts.

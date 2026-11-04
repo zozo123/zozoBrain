@@ -20,8 +20,8 @@ jobs:
           version: "0.13.5"
           enable-cache: true
       - run: uv sync --locked
-      - run: uv run --locked weights.py
+      - run: uv run --locked weights.py --check
       - run: uv run --locked python -m unittest -v
-      - run: uv run --locked evaluate.py
+      - run: uv run --locked evaluate.py --check
       - run: uv run --locked python -m unittest -v
         working-directory: baselines/gradient
