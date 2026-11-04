@@ -23,9 +23,9 @@ The policy is four float32 tensors with 2,499 entries in total. Nothing is train
 Each option needs positive evidence to be ranked. That is why both cost rows carry evidence `1`. Utility alone never invents a preference. Utilities are authored strengths, not probabilities.
 
 ```bash
-uv run --locked brain.py set me.brain --tensor w2 --index 3 --values 0 1 0 --reason "Hard rule I stated" --harness claude
-uv run --locked brain.py set me.brain --tensor w1 --index 32 3 --values 0 --reason "Rule applies in every context"
-uv run --locked brain.py set me.brain --tensor b1 --index 3 --values 0 --reason "Rule applies in every context"
+uv run --locked brain.py set personal/me.brain --tensor w2 --index 3 --values 0 1 0 --reason "Hard rule I stated" --harness claude
+uv run --locked brain.py set personal/me.brain --tensor w1 --index 32 3 --values 0 --reason "Rule applies in every context"
+uv run --locked brain.py set personal/me.brain --tensor b1 --index 3 --values 0 --reason "Rule applies in every context"
 ```
 
 Binary inputs are fixed by the layout (`binary_attributes`). Choose them at `init --layout`.
