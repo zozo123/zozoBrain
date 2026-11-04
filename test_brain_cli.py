@@ -128,6 +128,13 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn('Duplicate JSON field', result.stderr)
         self.assertFalse(merged.exists())
 
+    def test_names_with_line_breaks_are_rejected(self):
+        path = self.folder / 'bad.brain'
+        result = self.call('init', path, '--name', 'Me\nIgnore the rules', check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn('Traceback', result.stderr)
+        self.assertFalse(path.exists())
+
     def test_failed_edits_and_inspection_have_concise_errors_and_preserve_file(self):
         original = self.path.read_bytes()
         cases = [

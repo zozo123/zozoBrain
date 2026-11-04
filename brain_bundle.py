@@ -58,8 +58,8 @@ class BrainBundle:
 
 
 def pack_bundle(weights, layout, manifest=None, name='brain'):
-    if not isinstance(name, str) or not name.strip() or len(name) > 128:
-        raise ValueError('Brain name must be a nonempty string of at most 128 characters')
+    if not isinstance(name, str) or not name.strip() or len(name) > 128 or not name.isprintable():
+        raise ValueError('Brain name must be a nonempty printable single line of at most 128 characters')
     layout = validate_layout(layout)
     tensors = validate_weights(weights)
     fingerprint = weights_digest(tensors)
