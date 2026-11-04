@@ -72,11 +72,28 @@ class Tests(unittest.TestCase):
         self.assertEqual(report['labeled']+report['unlabeled'],100)
         self.assertEqual(report['correct'],sum(r['correct'] is True for r in report['results']))
 
-    def test_retraining_reproduces_arrays(self):
+    def test_retraining_reproduces_arrays_and_benchmark_choices(self):
         with tempfile.TemporaryDirectory() as tmp:
             subprocess.run([sys.executable,str(ROOT/'train.py'),'--output-dir',tmp],check=True,capture_output=True)
             with np.load(Path(tmp)/'weights.npz') as regenerated,np.load(ROOT/'weights.npz') as shipped:
+                self.assertEqual(set(regenerated.files),set(shipped.files))
                 for key in shipped.files:
-                    np.testing.assert_allclose(regenerated[key],shipped[key],atol=1e-5,rtol=1e-5)
+                    self.assertEqual(regenerated[key].dtype,np.float32)
+                    self.assertTrue(np.isfinite(regenerated[key]).all())
+                    # Float32 reductions differ slightly across CPU/BLAS builds,
+                    # and those differences accumulate over 1,800 Adam steps.
+                    # Bound numerical drift and require identical choices below.
+                    np.testing.assert_allclose(regenerated[key],shipped[key],atol=3e-5,rtol=1e-5)
+            regenerated_model=Model(Path(tmp)/'weights.npz')
+            shipped_model=Model()
+            for item in json.loads((ROOT/'benchmark_100.json').read_text()):
+                with self.subTest(id=item['id']):
+                    if item['mode']=='yes_no':
+                        self.assertEqual(regenerated_model.predict(item['question'])['answer'],
+                                         shipped_model.predict(item['question'])['answer'])
+                    else:
+                        regenerated_order=[row['option'] for row in regenerated_model.rank(item['options'],item['question'])['ranking']]
+                        shipped_order=[row['option'] for row in shipped_model.rank(item['options'],item['question'])['ranking']]
+                        self.assertEqual(regenerated_order,shipped_order)
 
 if __name__=='__main__': unittest.main()

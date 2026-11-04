@@ -49,4 +49,28 @@ class Tests(unittest.TestCase):
                 self.assertEqual(out['decision'],r['expected_decision'])
                 self.assertEqual(out['status'],r['expected_status'])
 
+    def test_malformed_requests_cannot_activate_constraints_or_force_a_choice(self):
+        model = DecisionModel()
+        options = [{'id': 'a'}, {'id': 'b'}]
+        for force in ['false', 1, None]:
+            with self.subTest(force=force), self.assertRaises(ValueError):
+                model.decide('Which?', ['general'], options, force)
+        for contexts in [{'travel': False}, 'travel', ['travel', 'travel'], [None]]:
+            with self.subTest(contexts=contexts), self.assertRaises(ValueError):
+                model.decide('Which?', contexts, options)
+        for bad in [None, [], {'concise': True}, {'concise': float('inf')}, {'concise': float('nan')}]:
+            with self.subTest(attributes=bad), self.assertRaises(ValueError):
+                model.decide('Which?', ['communication'], [{'id': 'a', 'attributes': bad}, options[1]])
+
+    def test_float32_roundoff_is_treated_as_a_tie(self):
+        tensors = list(authored_weights())
+        tensors[2][0, 0] = 0.1 + 0.2
+        tensors[2][1, 0] = 0.3
+        result = DecisionModel(tensors).decide('Which?', ['communication'], [
+            {'id': 'a', 'attributes': {'concise': 1}},
+            {'id': 'b', 'attributes': {'verified': 1}},
+        ])
+        self.assertIsNone(result['decision'])
+        self.assertEqual(result['status'], 'tie')
+
 if __name__=='__main__': unittest.main()

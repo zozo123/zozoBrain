@@ -1,43 +1,72 @@
-"""Compile explicit policy.json values into weights; no fitting or training."""
-import json
+"""Your directly editable neural weights. No training or preference inheritance.
+
+Edit the tensor assignments in authored_weights(), then rerun the model.
+Output columns are [utility, veto activation, preference evidence].
+The commented examples are hypothetical; enable them only for your own preferences.
+"""
+import argparse
 from pathlib import Path
+
 import numpy as np
 
-ROOT=Path(__file__).resolve().parent
-POLICY=json.loads((ROOT/'policy.json').read_text())
-CONTEXTS=POLICY['contexts']
-RULES=POLICY['rules']
-ATTRIBUTES=[r['name'] for r in RULES]
-if len(CONTEXTS)!=16 or len(set(CONTEXTS))!=16 or len(RULES)!=32 or len(set(ATTRIBUTES))!=32:
-    raise ValueError('Exactly 16 unique contexts and 32 unique attributes required')
+from network import forward as network_forward
+from network import load_weights, save_weights, validate_weights, weights_digest
+
+CONTEXTS = ['general'] + [f'context_{i}' for i in range(2, 17)]
+ATTRIBUTES = ['low_cost', 'high_cost', 'offline', 'explicitly_disallowed'] + [
+    f'attribute_{i}' for i in range(5, 33)
+]
+# Add or rename attributes here when you author a hard constraint.
+# Their input values must be exactly 0 or 1, including when loading a .npz file.
+BINARY_ATTRIBUTES = ['explicitly_disallowed']
+
 
 def authored_weights():
-    w1=np.zeros((48,48),dtype=np.float32)
-    b1=np.zeros(48,dtype=np.float32)
-    w2=np.zeros((48,3),dtype=np.float32)
-    b2=np.zeros(3,dtype=np.float32)
-    for i,rule in enumerate(RULES):
-        context=rule['context']
-        utility=rule['utility']
-        veto=rule['veto']
-        if not isinstance(utility,(float,int)) or not np.isfinite(utility) or abs(utility)>1000:
-            raise ValueError('Utility must be finite and between -1000 and 1000')
-        if not isinstance(veto,bool):
-            raise ValueError('veto must be boolean')
-        w1[i,i]=1
-        if context is not None:
-            w1[32+CONTEXTS.index(context),i]=1
-            b1[i]=-1
-        w2[i]=[utility,int(veto),int(utility!=0 or veto)]
-    return w1,b1,w2,b2
+    w1 = np.zeros((48, 48), dtype=np.float32)
+    b1 = np.zeros(48, dtype=np.float32)
+    w2 = np.zeros((48, 3), dtype=np.float32)
+    b2 = np.zeros(3, dtype=np.float32)
 
-def forward(x,weights=None):
-    for i,rule in enumerate(RULES):
-        if rule['veto'] and x[i] not in (0,1):
-            raise ValueError('Hard constraint inputs must be binary')
-    w1,b1,w2,b2=authored_weights() if weights is None else weights
-    return np.maximum(0,x@w1+b1)@w2+b2
+    # Neuron i activates attribute i only in the 'general' context:
+    # ReLU(attribute + context - 1). Edit these connections for other contexts.
+    for i in range(32):
+        w1[i, i] = 1
+        w1[32, i] = 1
+        b1[i] = -1
 
-if __name__=='__main__':
-    np.savez(ROOT/'weights.npz',**dict(zip(['w1','b1','w2','b2'],authored_weights())))
-    print('Wrote weights.npz: 2,499 total parameters, no training')
+    # All outputs stay zero until you directly author your numerical weights.
+    # If you explicitly prefer lower cost, uncomment these two assignments:
+    # w2[0] = [3, 0, 1]       # low_cost: utility, veto, evidence
+    # w2[1] = [-3, 0, 1]      # high_cost
+    # If explicitly_disallowed is an actual hard constraint, uncomment:
+    # w2[3] = [-20, 1, 1]     # forbidden choices are vetoed even with --force
+
+    # Hidden units 32..47 remain available for your own direct connections.
+    return validate_weights((w1, b1, w2, b2))
+
+
+def forward(x, weights=None):
+    """Compatibility helper; inference uses the same shared tensor runtime."""
+    return network_forward(x, authored_weights() if weights is None else weights)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('weights.npz'))
+    parser.add_argument('--check', action='store_true', help='Verify the export matches the source assignments')
+    args = parser.parse_args(argv)
+    try:
+        tensors = authored_weights()
+        if args.check:
+            if weights_digest(load_weights(args.output)) != weights_digest(tensors):
+                raise ValueError('Export differs from source weights; export again or use --weights explicitly')
+            print('Export matches direct source weights: ' + weights_digest(tensors))
+        else:
+            save_weights(args.output, tensors)
+            print('Wrote ' + str(args.output) + ': 2,499 total parameters; no training')
+    except (OSError, ValueError) as exc:
+        parser.exit(1, f'Error: {exc}\n')
+
+
+if __name__ == '__main__':
+    main()
