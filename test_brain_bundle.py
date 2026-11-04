@@ -220,10 +220,13 @@ class BrainBundleTests(unittest.TestCase):
             load_bundle(self.archive({**self.members(),'w1.npy':raw},'unbalanced.brain'))
 
     def test_declared_member_size_bounds_decompression(self):
-        # A 64 MiB zero stream declared as 100 bytes must not be inflated.
-        path=self.archive([('brain.json',b'\0'*(64*1024*1024)),
-                           *((name,data) for name,data in self.members().items() if name!='brain.json')],
-                          'lying-size.brain')
+        # 64 MiB of zeros, DEFLATE-compressed to about 64 KiB, declared as 100 bytes.
+        path=self.folder/'lying-size.brain'
+        with zipfile.ZipFile(path,'w') as archive:
+            archive.writestr('brain.json',b'\0'*(64*1024*1024),compress_type=zipfile.ZIP_DEFLATED)
+            for name,data in self.members().items():
+                if name!='brain.json':
+                    archive.writestr(name,data)
         data=bytearray(path.read_bytes())
         for signature,offset in ((b'PK\x03\x04',22),(b'PK\x01\x02',24)):
             struct.pack_into('<I',data,data.find(signature)+offset,100)

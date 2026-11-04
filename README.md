@@ -34,6 +34,8 @@ uv run --locked brain.py prompt personal/me.brain
 
 Paste the output into Codex, Claude Code, Copilot, or any agent with a shell, and add what you want encoded. The agent inspects the labeled rows, edits them in place with `set`, and checks decisions with a request file. For the next agent, run `prompt` again. [Agents and parallel edits](HARNESS.md)
 
+**Tested end to end with real agents.** Starting from a fresh clone, GitHub Copilot CLI (GPT-5.6) encoded a cost preference. Claude Code (Opus 5.5) then added a hard rule that holds in all 16 contexts and an offline tie-breaker to the same file. Both agents appear in the verified history, and every check passed. [Run log](HARNESS.md#tested-with-real-agents)
+
 ## How it works
 
 ```text

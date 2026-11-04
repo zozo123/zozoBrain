@@ -16,13 +16,34 @@ uv run --locked brain.py prompt personal/me.brain
 `brain.py inspect personal/me.brain` shows who changed what:
 
 ```text
-History: 3 verified contributions:
+Contributors: copilot, claude-code
+History: 4 verified contributions:
   1 copilot: 2 edits, evidence "owner-2026-11-04-S1"
-  2 claude-code: 3 edits, evidence "owner-2026-11-04-S2"
-  ...
+  2 copilot: 2 edits, evidence "owner-2026-11-04-S1"
+  3 claude-code: 3 edits, evidence "owner-2026-11-04-S2"
+  4 claude-code: 2 edits, evidence "owner-2026-11-04-S3"
 ```
 
 For agents working at the same time, give each a copy and combine them with `diff` and `merge` ([USAGE.md](USAGE.md#parallel-copies)). Conflicting values are refused. The harness name and evidence are claims made by the caller, so review the numbers as well.
+
+## Tested with real agents
+
+November 4, 2026, from a fresh clone of `main`. Each agent got only the `prompt` handoff and the owner's statements:
+
+| Statement | Agent | Edits it made | Time |
+|---|---|---|---|
+| S1 "I prefer lower cost" | GitHub Copilot CLI (GPT-5.6 Luna) | `w2[0] = [1, 0, 1]`, `w2[1] = [-1, 0, 1]` | 25 s |
+| S2 "Never pick explicitly disallowed options, in every context" | Claude Code (Opus 5.5) | `w1[32, 3] = 0`, `b1[3] = 0`, `w2[3] = [0, 1, 0]` | 6.3 min, S2 and S3 together |
+| S3 "Prefer offline when otherwise equal" | Claude Code | `w2[2] = [0.01, 0, 1]` | |
+
+Copilot's rows survived Claude's edits. Every check passed:
+
+- cheap beats pricey, 1 to −1;
+- the banned option is vetoed in all 16 contexts, even with `--force`;
+- cheap_offline beats cheap_cloud, 1.01 to 1;
+- options with no stated preference still abstain.
+
+Claude Code also reported what the layout cannot express: a tie-breaker weight is exact only for 0/1 attributes.
 
 ## Programs: JSON Lines
 

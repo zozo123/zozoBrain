@@ -1,5 +1,6 @@
 """The one-file CLI must preserve direct edits, provenance, and portable use."""
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -30,9 +31,10 @@ class BrainCliTests(unittest.TestCase):
         self.input = self.folder / 'decision.json'
         self.input.write_text(json.dumps(self.request), encoding='utf-8')
 
-    def call(self, *args, check=True, input=None, cli=CLI):
+    def call(self, *args, check=True, input=None, cli=CLI, env=None):
         result = subprocess.run([sys.executable, str(cli), *map(str, args)],
-                                input=input, text=True, capture_output=True)
+                                input=input, text=isinstance(input, (str, type(None))), capture_output=True,
+                                env=None if env is None else {**os.environ, **env})
         if check and result.returncode != 0:
             self.fail(f'CLI failed: {args}\n{result.stderr}')
         return result
@@ -163,6 +165,50 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn(self.inspect()['revision_sha256'], prompt)
         self.assertIn('--tensor w2', prompt)
         self.assertIn('authorized', prompt)
+
+    def test_serve_answers_around_undecodable_and_deeply_nested_lines(self):
+        good = json.dumps(dict(self.request, id='good')).encode()
+        stream = b'\n'.join([good, b'{"id": "\xff"}', b'[' * 100000, good]) + b'\n'
+        result = self.call('serve', self.path, input=stream, env={'LC_ALL': 'en_US.UTF-8'})
+        rows = [json.loads(line) for line in result.stdout.decode().splitlines()]
+        self.assertEqual([row['ok'] for row in rows], [True, False, False, True])
+
+    def test_handoff_edits_in_place_and_explains_the_outputs(self):
+        prompt = self.call('prompt', self.path).stdout
+        self.assertNotIn('--output', prompt.split('2. Edit.')[1].split('3. Check')[0])
+        self.assertIn('[utility, veto, evidence]', prompt)
+        self.assertIn('"low_cost": 1', prompt)
+        self.assertIn('Name: "Me"', prompt)
+
+    def test_inspect_shows_history_and_output_rows(self):
+        self.set_row(0, [3, 0, 1])
+        human = self.call('inspect', self.path).stdout
+        self.assertIn('History: 1 verified contributions:', human)
+        self.assertIn('1 codex: 2 edits, evidence "Explicit preference in this mechanical test"', human)
+        info = self.inspect()
+        self.assertEqual(info['history'][0]['harness'], 'codex')
+        self.assertEqual(info['w2'][0], [3, 0, 1])
+
+    def test_misshaped_requests_and_empty_diffs_fail_loudly(self):
+        flat = dict(self.request, options=[{'id': 'A', 'low_cost': 1}, {'id': 'B', 'high_cost': 1}])
+        self.input.write_text(json.dumps(flat), encoding='utf-8')
+        result = self.call('decide', self.path, self.input, check=False)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('Unknown option fields', result.stderr)
+        copy = self.folder / 'copy.brain'
+        shutil.copy2(self.path, copy)
+        empty = self.call('diff', self.path, copy, '--harness', 'codex', '--reason', 'Nothing',
+                          '--output', self.folder / 'empty.patch.json', check=False)
+        self.assertEqual(empty.returncode, 2)
+        self.assertIn('nothing to contribute', empty.stderr)
+        self.assertFalse((self.folder / 'empty.patch.json').exists())
+
+    def test_tilde_paths_and_narrow_console_encodings(self):
+        home = self.folder / 'home'
+        home.mkdir()
+        self.call('init', '~/tilde.brain', '--name', 'Мой мозг', env={'HOME': str(home), 'USERPROFILE': str(home),
+                                                                       'PYTHONIOENCODING': 'cp1252'})
+        self.assertTrue((home / 'tilde.brain').is_file())
 
     def test_pack_existing_numeric_snapshot(self):
         packed = self.folder / 'yossi.brain'
