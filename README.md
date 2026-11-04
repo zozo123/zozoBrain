@@ -6,8 +6,24 @@
 
 ```bash
 git clone https://github.com/zozo123/zozoBrain.git && cd zozoBrain
-uv run --locked stack_demo.py
+uv run --locked simplest.py     # the idea in one screen
+uv run --locked stack_demo.py   # two agents, one brain
 ```
+
+No training: you write the weights. [simplest.py](simplest.py) is the whole idea with one 4 × 3 matrix:
+
+```python
+W = np.zeros((4, 3))   # rows: low_cost, high_cost, offline, disallowed; columns: utility, veto, evidence
+decide(W, options)     # abstain: nothing stated yet
+W[0] = [3, 0, 1]       # write "I prefer lower cost"
+W[1] = [-3, 0, 1]
+W[3] = [0, 1, 0]       # write "never pick disallowed options"
+decide(W, options)     # cheap (banned_cheap vetoed)
+W[1, 0] = 5            # change one weight
+decide(W, options)     # pricey
+```
+
+The real model is the same idea at 2,499 weights. A hidden layer adds contexts, and every edit is kept in a verified history.
 
 - **One small file.** A `.brain` (about 2 KB) holds the weights, the feature names, and every edit with its evidence. No training, API key, or network.
 - **Any agent can edit it.** `brain.py prompt` prints a handoff. The agent reads the labeled weights and assigns tensor entries directly.

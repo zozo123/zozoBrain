@@ -4,6 +4,7 @@ import io
 from demo import cases
 from model import DecisionModel
 from stack_demo import run as run_stack_demo
+from simplest import main as run_simplest
 
 class DemoTests(unittest.TestCase):
     def test_two_agent_demo_changes_decisions_and_refuses_conflicts(self):
@@ -16,6 +17,10 @@ class DemoTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in result['decisions'][1]['vetoed']], ['banned_cheap'])
         self.assertIn('Conflicting edit', result['conflict'])
         self.assertIn('merge refused', output.getvalue())
+
+    def test_simplest_written_weights_change_the_decision(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(run_simplest(), ['abstain', 'cheap', 'pricey'])
 
     def test_documented_outputs(self):
         expected=['no','yossieliaz.netlify.app','one page','concise and verified',None]
