@@ -40,7 +40,7 @@ def _print_json(value):
 
 
 def _summary(path, bundle):
-    rules, silent, _, free = _neurons(bundle)
+    rules, silent, wired, free = _neurons(bundle)
     return {
         'path': str(path), 'name': bundle.name,
         'total_parameters': sum(tensor.size for tensor in bundle.weights),
@@ -53,7 +53,8 @@ def _summary(path, bundle):
         'layout': bundle.layout,
         'tensors': {name: list(shape) for name, shape in TENSOR_SHAPES.items()},
         'neurons': rules,
-        'silent_neurons': silent,
+        'wired_without_output': silent,
+        'init_wired_without_output': wired,
         'free_neurons': free,
         'w2_columns': ['utility', 'veto', 'evidence'],
         'w2': bundle.weights[2].tolist(),
@@ -117,7 +118,9 @@ def _names(names, first):
 
 
 def _number(value):
-    return f'{float(value):g}'
+    """The shortest text that reads back as the same float32: -0.9999999 stays visible, 3.0 prints as 3."""
+    text = str(np.float32(value))
+    return text[:-2] if text.endswith('.0') else text
 
 
 def _neurons(bundle):
@@ -138,12 +141,16 @@ def _neurons(bundle):
         terms = [(column[i], names[i]) for i in np.flatnonzero(column)] + ([(bias, '')] if bias else [])
         for coefficient, name in terms:
             size = abs(float(coefficient))
-            term = name if size == 1 and name else f'{size:g}*{name}' if name else f'{size:g}'
+            term = name if size == 1 and name else f'{_number(size)}*{name}' if name else _number(size)
             sign = '-' if coefficient < 0 else '+'
             text += f' {sign} {term}' if text else (f'-{term}' if sign == '-' else term)
-        # Inputs are at most 1: if the attributes alone cannot lift it past zero, the neuron needs a context.
-        alone = float(np.maximum(column[:32], 0).sum()) + bias
-        can_fire = alone + float(np.maximum(column[32:], 0).sum()) > 0
+        # Evaluate the neuron the way the forward pass does, at its strongest input: every positively
+        # weighted attribute at 1, first without contexts, then with every positively weighted context.
+        x = np.zeros(48, dtype=np.float32)
+        x[:32] = column[:32] > 0
+        alone = float((x @ w1 + b1)[j])
+        x[32:] = column[32:] > 0
+        can_fire = float((x @ w1 + b1)[j]) > 0
         only_with = [] if alone > 0 else [bundle.layout['contexts'][i] for i in np.flatnonzero(column[32:] > 0)]
         if not np.any(w2[j]):
             silent.append({'neuron': j, 'rule': f'ReLU({text or 0})'})
@@ -168,7 +175,7 @@ def _print_brain(bundle, full_history=False):
     if silent:
         print('Wired, no output yet: ' + ', '.join(f'{row["neuron"]} {row["rule"]}' for row in silent))
     if wired:
-        print(f'Silent (init wiring, neuron i = ReLU(attribute i + {general} - 1)): {_span(wired)}')
+        print(f'Init wiring, no output yet (neuron i = ReLU(attribute i + {general} - 1)): {_span(wired)}')
     if free:
         print(f'Free for new rules: {_span(free)}')
     if np.any(bundle.weights[3]):
@@ -282,9 +289,9 @@ ReLU(sum of input_i * w1[i, j] + b1[j]). Its w2 row j is
 [utility, veto, evidence], and inspect prints each neuron as that rule.
 veto > 0 removes an option. Ranking needs evidence > 0 on every remaining
 option; otherwise the brain abstains. Hard rules need a binary input {json.dumps(layout['binary_attributes'])}.
-- In a brain made by init, neuron i < 32 is ReLU(attribute_i + {general} - 1):
-  write w2 row i for a rule in {general}. To apply it in every context, also set
-  w1[32, i] and b1[i] to 0.
+- In a brain made by init, neuron i < 32 is ReLU(attribute_i + context {json.dumps(general)} - 1):
+  write w2 row i for a rule in that context. To apply it in every context, also
+  set w1[32, i] and b1[i] to 0.
 - For a rule in one context only, wire a free neuron j: w1[ATTRIBUTE_ROW, j] = 1,
   w1[CONTEXT_ROW, j] = 1, b1[j] = -1, then w2 row j.
 - To fix or remove a rule, assign the wrong entries their correct values (0 to unwire).
@@ -299,11 +306,13 @@ make several assignments one verified edit:
 3. Check decisions with a request file such as
 {json.dumps(example)}
 {_runtime_command('decide', path, 'REQUEST.json')}
-List every active context: rules wired through {general} apply only when it is
-listed, so check a context rule with ["{general}", "CONTEXT"].
+List every active context: rules wired through the first context apply only
+when it is listed, so check a context rule with {json.dumps([general, 'CONTEXT'])}.
 
 Report the exact edits, evidence, and decisions. For parallel work, edit a copy
-(set ... --output COPY.brain), then combine copies with brain.py diff and merge.''')
+(set ... --output COPY.brain), then combine copies with brain.py diff and merge.
+Copies that change the same neuron cannot be merged, so parallel agents should
+wire different free neurons.''')
 
 
 def build_parser():
@@ -379,6 +388,12 @@ def main(argv=None):
                     'tensor': args.tensor, 'index': args.index or [],
                     'values': _selection(bundle, args.tensor, args.index),
                 }
+            if args.history:
+                for item, stored in zip(summary['history'], bundle.manifest['patches']):
+                    actions = stored.get('edit_actions', ['applied'] * len(stored['patch']['edits']))
+                    item['entries'] = [{'tensor': edit['tensor'], 'index': edit['index'], 'before': edit['before'],
+                                        'after': edit['after'], 'action': action}
+                                       for edit, action in zip(stored['patch']['edits'], actions)]
             if args.json:
                 _print_json(summary)
             else:

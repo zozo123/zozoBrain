@@ -263,6 +263,7 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
     seen={}
     records=[]
     skipped=[]
+    claimed={}
     if previous_manifest is not None:
         previous=validate_manifest(previous_manifest,current,schema_sha256=expected_schema)
         original_digest=previous['original_weights_sha256']
@@ -281,8 +282,10 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
         start_digest=weights_digest(current)
         if patch['base_weights_sha256'] not in (run_base_digest,start_digest):
             raise ValueError(f'Patch {patch_id!r} was authored against an unrelated weight state')
-        declared=run_base if patch['base_weights_sha256']==run_base_digest else tuple(array.copy() for array in current)
+        parallel=patch['base_weights_sha256']==run_base_digest
+        declared=run_base if parallel else tuple(array.copy() for array in current)
         actions=[]
+        changed=set()
         for edit in patch['edits']:
             tensor=current[TENSOR_NAMES.index(edit['tensor'])]
             index=tuple(edit['index'])
@@ -293,8 +296,17 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
                                  f'{edit["tensor"]}{index}')
             after=_number(edit['after'],'Edit after')
             if _same(tensor[index],before):
+                # A neuron's weights are one rule. Entries from two parallel copies would
+                # combine into a rule neither wrote, so a copy may not change a neuron
+                # that an earlier copy in this merge changed.
+                neuron=_neuron(edit)
+                if parallel and claimed.get(neuron,patch_id)!=patch_id:
+                    raise ValueError(f'Conflicting edit in patch {patch_id!r}: hidden neuron {neuron} '
+                                     f'was already changed by patch {claimed[neuron]!r} in this merge')
                 tensor[index]=after
                 actions.append('applied')
+                if neuron is not None:
+                    changed.add(neuron)
             elif _same(tensor[index],after):
                 actions.append('already_present')
             else:
@@ -302,6 +314,7 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
                                  f'{edit["tensor"]}{index} expects {float(before)}, '
                                  f'currently {float(tensor[index])}')
         validate_weights(current)
+        claimed.update(dict.fromkeys(changed,patch_id))
         records.append({'patch':patch,'input_weights_sha256':start_digest,
                         'output_weights_sha256':weights_digest(current),'edit_actions':actions})
         seen[patch_id]=identity
@@ -310,6 +323,13 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
               'final_weights_sha256':weights_digest(current),
               'patches':records,'duplicate_patch_ids_skipped':skipped}
     return current,manifest
+
+
+def _neuron(edit):
+    """The hidden neuron an entry belongs to: w1 column, b1 index, or w2 row; b2 belongs to none."""
+    if edit['tensor']=='w1':
+        return edit['index'][1]
+    return None if edit['tensor']=='b2' else edit['index'][0]
 
 
 def _distinct_output(path,inputs):

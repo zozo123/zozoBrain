@@ -56,7 +56,7 @@ uv run --locked brain.py diff personal/base.brain personal/claude.brain --harnes
 uv run --locked brain.py merge personal/base.brain personal/codex.patch.json personal/claude.patch.json --output personal/combined.brain
 ```
 
-Different entries combine. Identical edits are kept once with both sources. Conflicting values fail, and nothing is written. `diff` refuses a copy that was not made from the base, so one agent's diff can never silently undo another agent's edits.
+Edits to different hidden neurons combine. Identical edits are kept once with both sources. Conflicting values fail, and so do two copies that change the same neuron differently, because merging a neuron entry by entry could build a rule neither agent wrote; nothing is written. Give parallel agents different free neurons. `diff` refuses a copy that was not made from the base, so one agent's diff can never silently undo another agent's edits.
 
 ## Serve decisions
 

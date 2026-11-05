@@ -24,7 +24,7 @@ W[1, 0] = 5            # change one weight
 decide(W, options)     # pricey
 ```
 
-**One layer deeper.** A context such as traveling is the same input for every option, so in one matrix it shifts every score equally and can never change the winner. [deep.py](deep.py) adds a hidden layer and writes one neuron by hand: an AND gate made of two weights and a bias.
+**One layer deeper.** A context such as traveling is the same input for every option, so in one matrix it shifts every utility equally and can never reorder the options. [deep.py](deep.py) adds a hidden layer and writes one neuron by hand: an AND gate made of two weights and a bias.
 
 ```text
                                   home    traveling

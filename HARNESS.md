@@ -24,7 +24,7 @@ History: 4 verified contributions:
   4 claude-code: 2 edits, evidence "owner-2026-11-04-S3"
 ```
 
-For agents working at the same time, give each a copy and combine them with `diff` and `merge` ([USAGE.md](USAGE.md#parallel-copies)). Conflicting values are refused. The harness name and evidence are claims made by the caller, so review the numbers as well.
+For agents working at the same time, give each a copy and combine them with `diff` and `merge` ([USAGE.md](USAGE.md#parallel-copies)). Conflicting values are refused, and so are two copies that change the same hidden neuron differently; give parallel agents different free neurons. The harness name and evidence are claims made by the caller, so review the numbers as well.
 
 ## Tested with real agents
 

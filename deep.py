@@ -1,7 +1,7 @@
 """One layer deeper than simplest.py: hidden neurons are rules you write by hand. Still no training.
 
 A context such as traveling is the same input for every option, so in one matrix it adds
-the same row to every score and can never change the winner. A hidden ReLU neuron can
+the same row to every score and can never reorder the options. A hidden ReLU neuron can
 combine it with an option attribute: ReLU(offline + traveling - 1) fires only when both are 1.
 """
 import itertools
