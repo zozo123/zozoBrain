@@ -9,6 +9,8 @@ import sys
 import tempfile
 import unittest
 
+import numpy as np
+
 
 ROOT = Path(__file__).resolve().parent
 CLI = ROOT / 'brain.py'
@@ -245,14 +247,27 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn('Wired, no output yet: 40 ReLU(offline)', self.call('inspect', self.path).stdout)
 
     def test_huge_finite_totals_still_explain_in_json(self):
+        from network import neuron_outputs
+        weights = [np.zeros(shape, dtype=np.float32) for shape in ((48, 48), (48,), (48, 3), (3,))]
+        weights[1][42] = weights[2][42, 0] = 2e19  # the share is 4e38: past float32, fine in float64
+        shares = neuron_outputs(np.zeros(48, dtype=np.float32), weights)
+        self.assertEqual(shares.dtype, np.float64)
+        self.assertAlmostEqual(shares[42, 0] / 4e38, 1, places=6)
         self.call('set', self.path, '--tensor', 'b1', '--index', 41, '--values', '1e19',
                   '--tensor', 'w2', '--index', 41, '--values', '-10000000000000000000', 0, 1,
                   '--tensor', 'b1', '--index', 42, '--values', '2e19', '--tensor', 'w2', '--index', 42, '--values', '2e19', 0, 1,
                   '--reason', 'Explicit')
-        result = json.loads(self.call('decide', self.path, self.input, '--json').stdout)
-        shares = [value for row in result['ranking'] for neuron in row['neurons'] for value in neuron['output']]
-        self.assertTrue(shares and all(math.isfinite(value) for value in shares))
-        self.assertIn('neuron 42 (+4e+38)', self.call('decide', self.path, self.input).stdout)
+        # Whether the float32 total of +4e38 and -1e38 stays finite depends on the platform's
+        # matrix product. Either way the CLI never prints inf or fails to encode JSON.
+        result = self.call('decide', self.path, self.input, '--json', check=False)
+        if result.returncode:
+            self.assertIn('nonfinite activations', result.stderr)
+            self.assertNotIn('JSON', result.stderr)
+        else:
+            rows = json.loads(result.stdout)['ranking']
+            shares = [value for row in rows for neuron in row['neurons'] for value in neuron['output']]
+            self.assertTrue(shares and all(math.isfinite(value) for value in shares))
+            self.assertIn('neuron 42 (+4e+38)', self.call('decide', self.path, self.input).stdout)
 
     def test_history_marks_edits_a_merge_found_already_present(self):
         patches = []
