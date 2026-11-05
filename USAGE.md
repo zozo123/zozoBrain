@@ -10,7 +10,7 @@ uv run --locked brain.py inspect personal/me.brain
 uv run --locked brain.py decide personal/me.brain examples/personal.json
 ```
 
-A new brain abstains. `inspect` reads every neuron that drives decisions back as the rule it computes, such as `32 ReLU(offline + context:traveling - 1) -> [10, 0, 1]`, then lists the free neurons, the attributes and contexts by `w1` row, the binary (hard-rule) inputs, and the history. `decide` prints each option's utility as the sum of the neurons behind it. Add `--json` to `inspect` or `decide` for machine-readable output, or `--tensor w1 --index 32` to read any tensor slice.
+A new brain abstains. `inspect` reads every neuron that drives decisions back as the rule it computes, such as `32 ReLU(offline + context:traveling - 1) -> [10, 0, 1]`, then lists the free neurons, the attributes and contexts by `w1` row, the binary (hard-rule) inputs, and the history. `inspect --history` lists every entry each edit changed. `decide` prints each option's utility as the sum of the neurons behind it. Add `--json` to `inspect` or `decide` for machine-readable output, or `--tensor w1 --index 32` to read just one tensor slice.
 
 A request lists every active context and gives each option's attributes, with values in [0,1]. List `general` in every request: a new brain wires each attribute through it, so base preferences apply only when it is listed. Add specific contexts next to it, such as `["general", "traveling"]`:
 
@@ -73,7 +73,7 @@ uv run --locked brain.py diff personal/base.brain personal/claude.brain --harnes
 uv run --locked brain.py merge personal/base.brain personal/codex.patch.json personal/claude.patch.json --output personal/combined.brain
 ```
 
-Edits to different hidden neurons combine. Identical edits are kept once with both sources. Conflicting values fail, and so do two copies that change the same neuron differently, because merging a neuron entry by entry could build a rule neither agent wrote; nothing is written. `diff` refuses a copy that was not made from the base, so one agent's diff can never silently undo another agent's edits.
+Edits to different hidden neurons combine. Identical edits are kept once with both sources. A parallel copy may not re-apply an entry that an earlier patch in the same merge changed, so list parallel copies before revisions built on them. Conflicting values fail, and so do two copies that change the same neuron differently, because merging a neuron entry by entry could build a rule neither agent wrote; nothing is written. `diff` refuses a copy that was not made from the base, so one agent's diff can never silently undo another agent's edits.
 
 ## Serve decisions
 

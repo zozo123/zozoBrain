@@ -10,10 +10,10 @@ import unittest
 
 ROOT = Path(__file__).resolve().parent
 RUNTIME = ['brain.py', 'brain_bundle.py', 'network.py', 'weight_patches.py', 'model.py', 'harness.py', 'simplest.py',
-           'deep.py', 'stack_demo.py', 'weights.py', 'edit_weights.py']
-# Run elsewhere: cloning, the repository's own checks (CI runs them), and the timing benchmark.
+           'deep.py', 'stack_demo.py', 'weights.py', 'edit_weights.py', 'benchmark.py']
+# Run elsewhere: cloning, and the repository's own checks, which CI runs directly.
 SKIP = ('git clone', 'uv run --locked python -m unittest', 'uv run --locked weights.py --check',
-        'uv run --locked evaluate.py --check', 'uv run --locked benchmark.py')
+        'uv run --locked evaluate.py --check')
 
 
 def commands(name):
@@ -59,9 +59,10 @@ class DocsTests(unittest.TestCase):
         self.assertIn(f"Saved {Path('personal', 'combined.brain')}", outputs[-2])
         self.assertIn('Contributors: codex, manual, claude', outputs[-2])
 
-    def test_weights_and_harness_run_as_written(self):
+    def test_weights_harness_and_performance_run_as_written(self):
         self.run_documented(['uv run --locked brain.py init personal/me.brain', *commands('WEIGHTS.md')])
         self.run_documented(commands('HARNESS.md'))
+        self.run_documented(commands('PERFORMANCE.md'))
 
 
 if __name__ == '__main__':

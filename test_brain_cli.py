@@ -349,8 +349,13 @@ class BrainCliTests(unittest.TestCase):
         self.set_row(0, [3, 0, 1])
         self.set_row(1, [-3, 0, 1])
         self.input.write_text(json.dumps(dict(self.request, contexts=['traveling'])), encoding='utf-8')
-        self.assertIn('Note: "general" is not listed, so neurons 0-1, which need it, are off',
+        self.assertIn('Note: "general" is not listed, so neurons 0-1, which would fire for these options with it, are off',
                       self.call('decide', self.path, self.input).stdout)
+        # Rules that also fire through the listed context are not off.
+        self.call('set', self.path, '--tensor', 'w1', '--index', 33, 0, '--values', 1, '--reason', 'Explicit')
+        traveling = self.call('decide', self.path, self.input).stdout
+        self.assertIn('A = neuron 0 (+3)', traveling)
+        self.assertIn('so neurons 1, which would fire', traveling)
         self.call('set', self.path, '--tensor', 'w1', '--index', 32, 3, '--values', 0, '--tensor', 'b1', '--index', 3,
                   '--values', 0, '--tensor', 'w2', '--index', 3, '--values', 0, 1, 0, '--reason', 'Explicit')
         self.request['options'][0]['attributes']['explicitly_disallowed'] = 1
@@ -359,6 +364,37 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn('Decision: B, the only option not vetoed',
                       self.call('decide', self.path, self.input).stdout)
         self.assertEqual(self.call('inspect', self.path, '--tensor', 'w2', '--index', 3).stdout, 'w2[3] = [0.0, 1.0, 0.0]\n')
+
+    def test_decide_adds_no_note_for_rules_a_missing_context_could_not_fire(self):
+        shipped = self.folder / 'shipped.brain'
+        self.call('pack', '--weights', ROOT / 'weights.npz', '--output', shipped)
+        for example in ('travel', 'food', 'work'):
+            self.assertNotIn('Note:', self.call('decide', shipped, ROOT / 'examples' / f'{example}.json').stdout, example)
+
+    def test_ties_with_negative_utilities_name_every_tied_option(self):
+        self.set_row(0, [-9999999, 0, 1])
+        self.set_row(1, [-10000009, 0, 1])
+        self.input.write_text(json.dumps(self.request), encoding='utf-8')
+        self.assertIn('Abstained: tie (A, B at -1e+07)', self.call('decide', self.path, self.input).stdout)
+
+    def test_unknown_request_fields_are_errors(self):
+        self.input.write_text(json.dumps(dict(self.request, forse=True)), encoding='utf-8')
+        result = self.call('decide', self.path, self.input, check=False)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Unknown request fields: 'forse'", result.stderr)
+        line = json.dumps(dict(self.request, id='x', forse=True)) + '\n'
+        response = json.loads(self.call('serve', self.path, input=line).stdout)
+        self.assertEqual((response['id'], response['ok']), ('x', False))
+        self.assertIn("Unknown request fields: 'forse'", response['error'])
+
+    @unittest.skipIf(sys.platform == 'win32', 'pipe-close behavior differs on Windows')
+    def test_a_short_output_to_a_closed_pipe_is_not_an_error(self):
+        process = subprocess.Popen([sys.executable, str(CLI), 'inspect', str(self.path)],
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process.stdout.close()
+        stderr = process.stderr.read()
+        process.stderr.close()
+        self.assertEqual((process.wait(), stderr), (0, b''))
 
     def test_ties_name_the_tied_options(self):
         self.set_row(0, [3, 0, 1])
@@ -370,7 +406,9 @@ class BrainCliTests(unittest.TestCase):
     def test_handoff_assigns_free_neurons_for_parallel_agents(self):
         prompt = self.call('prompt', self.path, '--neurons', '40-43,47').stdout
         self.assertIn('wire one of your free neurons 40-43, 47 (other agents use other neurons) as j', prompt)
-        self.assertIn('brain.py prompt FILE --neurons 32-39 for one, 40-47 for the next', prompt)
+        self.assertIn('edit only this file, in place', prompt)
+        self.assertNotIn('--neurons 32-39', prompt)
+        self.assertIn('brain.py prompt FILE --neurons 32-39 for one, 40-47 for the next', self.call('prompt', self.path).stdout)
         self.wire(33, 2, 33, [1, 0, 1])
         self.assertIn('--neurons 32,34-39 for one, 40-47 for the next', self.call('prompt', self.path).stdout)
         for value, message in (('0-3', 'Neurons 0-3 are not free'), ('48', 'numbered 0-47'), ('x', 'ranges such as')):
@@ -433,6 +471,9 @@ class BrainCliTests(unittest.TestCase):
         info = self.inspect(self.path, '--tensor', 'w2', '--index', 40)
         self.assertEqual(info['selection']['values'], [float(np.float32(v)) for v in (-1e19, -2.5e-3, 1e-30)])
         self.assertEqual(info['history'][-1]['evidence'], '-1e19 stays text')
+        from brain import _plain_negative_values
+        self.assertEqual(_plain_negative_values(['--values', '-1e19', '--reason', '-2e3', '--harness', '-3e1']),
+                         ['--values', '-10000000000000000000', '--reason', '-2e3', '--harness', '-3e1'])
 
     def test_inspect_shortens_only_runs_it_can_rebuild(self):
         from brain import _names

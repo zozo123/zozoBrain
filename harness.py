@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import sys
 
-from model import DecisionModel
+from model import DecisionModel, check_request_fields
 
 
 def reject_nonfinite(value):
@@ -31,6 +31,7 @@ def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None, layout=N
             if request_id is not None and (isinstance(request_id, bool) or not isinstance(request_id, (str, int))):
                 request_id = None
                 raise ValueError('Request id must be a string, integer, or null')
+            check_request_fields(request)
             result = model.decide(request['question'], request['contexts'], request['options'], request.get('force', False))
             response = {'id': request_id, 'ok': True, 'result': result}
             encoded = json.dumps(response, allow_nan=False)

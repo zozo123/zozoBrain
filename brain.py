@@ -210,6 +210,26 @@ def _print_brain(bundle, full_history=False):
                 print(f'      {edit["tensor"]}[{index}]: {_number(edit["before"])} -> {_number(edit["after"])}{note}')
 
 
+def _off_without_first_context(model, request):
+    """Rules that fire for none of these options now, but would for some if the first context were listed."""
+    if model.contexts[0] in request['contexts']:
+        return []
+    w1, b1, w2, _ = model.weights
+    driving = np.flatnonzero(np.any(w2 != 0, axis=1))
+    now, with_first = np.zeros(48, dtype=bool), np.zeros(48, dtype=bool)
+    for option in request['options']:
+        x = np.zeros(48, dtype=np.float32)
+        for name, value in option.get('attributes', {}).items():
+            x[model.attributes.index(name)] = value
+        for context in request['contexts']:
+            x[32 + model.contexts.index(context)] = 1
+        with np.errstate(over='ignore', invalid='ignore'):
+            now |= (x @ w1 + b1) > 0
+            x[32] = 1
+            with_first |= (x @ w1 + b1) > 0
+    return [int(j) for j in driving if with_first[j] and not now[j]]
+
+
 def _decision_text(result):
     if result['decision'] is None:
         detail = ''
@@ -217,7 +237,8 @@ def _decision_text(result):
             detail = ' (no evidence for ' + ', '.join(row['id'] for row in result['ranking'] if not row['modeled_evidence']) + ')'
         elif result['status'] == 'tie':
             top = result['ranking'][0]['utility']
-            tied = [row['id'] for row in result['ranking'] if abs(row['utility'] - top) <= 1e-7 + 1e-6 * abs(top)]
+            tied = [row['id'] for row in result['ranking']
+                    if abs(top - row['utility']) <= 1e-7 + 1e-6 * abs(row['utility'])]
             detail = f' ({", ".join(tied)} at {top:g})'
         print('Abstained: ' + result['status'].replace('_', ' ') + detail)
     else:
@@ -297,8 +318,13 @@ def _prompt(path, bundle, neurons=None):
         if taken:
             raise ValueError(f'Neurons {_span(taken)} are not free in this brain; inspect lists the free ones')
         free = f'one of your free neurons {_span(neurons)} (other agents use other neurons) as j'
+        closing = ('Other agents are editing their own copies, so edit only this file, in place;\n'
+                   'whoever gave you this handoff combines the copies.')
     else:
         free = 'a free neuron j'
+        closing = ('For parallel work, edit a copy (set ... --output COPY.brain), then combine\n'
+                   'copies with brain.py diff and merge. Copies that change the same neuron cannot\n'
+                   f'be merged, so give each parallel agent its own neurons: {split}.')
     example = {'question': 'Which option?', 'contexts': [layout['contexts'][0]], 'options': [
         {'id': 'A', 'attributes': {layout['attributes'][0]: 1}},
         {'id': 'B', 'attributes': {layout['attributes'][1]: 1}},
@@ -353,10 +379,8 @@ when it is listed, so check a context rule with {json.dumps([general, 'CONTEXT']
 To audit instead: every neuron is in one of inspect's groups, and inspect --history
 shows the exact entries each edit changed.
 
-Report the exact edits, evidence, and decisions. For parallel work, edit a copy
-(set ... --output COPY.brain), then combine copies with brain.py diff and merge.
-Copies that change the same neuron cannot be merged, so give each parallel agent
-its own neurons: {split}.''')
+Report the exact edits, evidence, and decisions.
+{closing}''')
 
 
 def build_parser():
@@ -478,10 +502,11 @@ def main(argv=None):
             for tensor, index, _ in assignments:
                 print(f'{tensor}{index} = ' + json.dumps(_selection(edited, tensor, index)))
         elif args.command == 'decide':
-            from model import DecisionModel
+            from model import DecisionModel, check_request_fields
             request = _read_json(args.input)
             if not isinstance(request, dict):
                 raise ValueError('Decision input must be a JSON object')
+            check_request_fields(request)
             requested_force = request.get('force', False)
             if not isinstance(requested_force, bool):
                 raise ValueError('force must be boolean')
@@ -494,10 +519,10 @@ def main(argv=None):
                 _print_json(result)
             else:
                 _decision_text(result)
-                first = model.layout['contexts'][0]
-                off = [row['neuron'] for row in _neurons(model)[0] if first in row['only_with']]
-                if first not in request['contexts'] and off:
-                    print(f'Note: {json.dumps(first)} is not listed, so neurons {_span(off)}, which need it, are off')
+                off = _off_without_first_context(model, request)
+                if off:
+                    print(f'Note: {json.dumps(model.contexts[0])} is not listed, so neurons {_span(off)}, '
+                          'which would fire for these options with it, are off')
         elif args.command == 'serve':
             from harness import run
             from model import DecisionModel
@@ -527,6 +552,7 @@ def main(argv=None):
             _saved(args.output, bundle)
         elif args.command == 'prompt':
             _prompt(args.path, load_bundle(args.path), args.neurons)
+        sys.stdout.flush()  # a reader that already closed the pipe raises here, inside the handler
     except BrokenPipeError:
         # A reader such as head closed the pipe early: stop quietly, and keep Python's
         # final flush from failing again on the closed pipe.

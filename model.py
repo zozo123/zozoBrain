@@ -17,6 +17,16 @@ def _some(names, limit=10):
     return shown + (f' and {len(names) - limit} more' if len(names) > limit else '')
 
 
+REQUEST_FIELDS = ('id', 'question', 'contexts', 'options', 'force')
+
+
+def check_request_fields(request):
+    """A misspelled field such as "forse" must fail, not be ignored."""
+    unknown = sorted(map(str, set(request) - set(REQUEST_FIELDS)))
+    if unknown:
+        raise ValueError('Unknown request fields: ' + _some(unknown) + '; requests use ' + ', '.join(REQUEST_FIELDS))
+
+
 def validate_question(question):
     if not isinstance(question, str) or not question.strip():
         raise ValueError('Question must be a nonempty string')
@@ -168,6 +178,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     try:
         payload = json.loads(args.decision_file.read_text())
+        check_request_fields(payload)
         result = DecisionModel(args.weights, args.manifest).decide(payload['question'], payload['contexts'], payload['options'], args.force)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.exit(2, f'error: {exc}\n')
