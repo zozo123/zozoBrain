@@ -56,7 +56,7 @@ class DocsTests(unittest.TestCase):
 
     def test_usage_runs_as_written(self):
         outputs = self.run_documented(commands('USAGE.md'))
-        self.assertIn('Saved personal/combined.brain', outputs[-2])
+        self.assertIn(f"Saved {Path('personal', 'combined.brain')}", outputs[-2])
         self.assertIn('Contributors: codex, manual, claude', outputs[-2])
 
     def test_weights_and_harness_run_as_written(self):
