@@ -18,15 +18,17 @@ uv run --locked brain.py prompt personal/me.brain
 ```text
 Contributors: copilot, claude-code
 History: 4 verified contributions:
-  1 copilot: 2 edits, evidence "owner-2026-11-04-S1"
-  2 copilot: 2 edits, evidence "owner-2026-11-04-S1"
-  3 claude-code: 3 edits, evidence "owner-2026-11-04-S2"
-  4 claude-code: 2 edits, evidence "owner-2026-11-04-S3"
+  1 copilot: 2 edits to neuron 0, evidence "owner-2026-11-04-S1"
+  2 copilot: 2 edits to neuron 1, evidence "owner-2026-11-04-S1"
+  3 claude-code: 3 edits to neuron 3, evidence "owner-2026-11-04-S2"
+  4 claude-code: 2 edits to neuron 2, evidence "owner-2026-11-04-S3"
 ```
 
-For agents working at the same time, give each a copy and combine them with `diff` and `merge` ([USAGE.md](USAGE.md#parallel-copies)). Conflicting values are refused, and so are two copies that change the same hidden neuron differently; give parallel agents different free neurons. The harness name and evidence are claims made by the caller, so review the numbers as well.
+For agents working at the same time, give each a copy and combine them with `diff` and `merge` ([USAGE.md](USAGE.md#parallel-copies)). Conflicting values are refused, and so are two copies that change the same hidden neuron differently, so give each agent its own neurons with `prompt --neurons`. The harness name and evidence are claims made by the caller, so review the numbers as well.
 
 ## Tested with real agents
+
+**November 5, 2026: parallel agents on the v0.4.0 release**, from a fresh clone of the tag. The owner stated a cost preference and a hard rule. Codex CLI (gpt-6.1-sol, 128 s) and GitHub Copilot CLI (GPT-5.6, 40 s) then each encoded one rule in its own copy at the same time, "when traveling, offline" and "when urgent, fast", and both chose utility 7 to beat the 6-point cost gap. Both also chose neuron 32, and `merge` refused the two copies instead of building a rule neither wrote. After Codex's copy was merged, Copilot ran again on the result and took neuron 33 (32 s). Claude Code (Opus 5.5) audited the result against all four statements, confirmed each one in every context, and made no edits (9.7 min). Because of this run, `prompt --neurons` gives each parallel agent its own neurons.
 
 **November 5, 2026: the hidden layer.** Each agent got only the `prompt` handoff and the statements below, on its own copy of a brain that already prefers lower cost (`w2[0] = [3, 0, 1]`, `w2[1] = [-3, 0, 1]`). Every result was checked independently: decisions in all 16 contexts and a diff of every changed entry.
 

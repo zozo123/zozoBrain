@@ -21,7 +21,7 @@ Hidden neuron `j` computes `ReLU(sum_i input_i * w1[i, j] + b1[j])`: rows 0–31
 | "When traveling, prefer offline" | free neuron 32: `w1[2, 32] = 1`, `w1[33, 32] = 1`, `b1[32] = -1`, `w2[32] = [10, 0, 1]` |
 | A stronger preference | raise the utility, e.g. `w2[0, 0] = 6` |
 
-Each option needs positive evidence to be ranked. That is why both cost rows carry evidence `1`. Utility alone never invents a preference. Utilities are authored strengths, not probabilities, and the outputs of all firing neurons add up: the traveling rule needs a utility above 6 to beat the ±3 cost pair. `decide` prints each utility as that sum.
+Each option needs positive evidence to be ranked. That is why both cost rows carry evidence `1`. Utility alone never invents a preference: if no firing neuron gives an option evidence, the brain abstains rather than guess. An attribute left out of a request counts as 0. Utilities are authored strengths, not probabilities, and the outputs of all firing neurons add up: the traveling rule needs a utility above 6 to beat the ±3 cost pair. `decide` prints each utility as that sum.
 
 A context is the same input for every option, so a weight from a context straight to the outputs would shift every option equally. A rule about a context therefore needs a hidden neuron that combines it with an attribute; [deep.py](deep.py) shows why.
 

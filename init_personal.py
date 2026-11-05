@@ -65,8 +65,10 @@ uv run --locked brain.py prompt NAME.brain
 
 Paste the output and your statements into Codex, Claude Code, or any agent with a
 shell. It edits the file in place and keeps the history. Run prompt again for the
-next agent. For agents working at the same time, give each a copy (set ...
---output COPY.brain), then combine with brain.py diff and merge. Conflicts fail.
+next agent. The handoff also explains rules that hold in one context only. For
+agents working at the same time, give each a copy and its own free neurons
+(prompt COPY.brain --neurons 40-43), then combine with brain.py diff and merge.
+Conflicts fail.
 For programs, `brain.py serve NAME.brain` answers one JSON request per line.
 
 ## Moving it

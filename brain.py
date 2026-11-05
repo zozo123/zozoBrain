@@ -1,6 +1,7 @@
 """Use one portable .brain file through direct tensor edits and local decisions."""
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import shlex
@@ -148,9 +149,10 @@ def _neurons(bundle):
         # weighted attribute at 1, first without contexts, then with every positively weighted context.
         x = np.zeros(48, dtype=np.float32)
         x[:32] = column[:32] > 0
-        alone = float((x @ w1 + b1)[j])
-        x[32:] = column[32:] > 0
-        can_fire = float((x @ w1 + b1)[j]) > 0
+        with np.errstate(over='ignore', invalid='ignore'):  # huge weights overflow here exactly as in decide
+            alone = float((x @ w1 + b1)[j])
+            x[32:] = column[32:] > 0
+            can_fire = float((x @ w1 + b1)[j]) > 0
         only_with = [] if alone > 0 else [bundle.layout['contexts'][i] for i in np.flatnonzero(column[32:] > 0)]
         if not np.any(w2[j]):
             silent.append({'neuron': j, 'rule': f'ReLU({text or 0})'})
@@ -162,7 +164,7 @@ def _neurons(bundle):
 
 def _print_brain(bundle, full_history=False):
     rules, silent, wired, free = _neurons(bundle)
-    print('Neurons that drive decisions (rule -> [utility, veto, evidence]):' + ('' if rules else ' none yet'))
+    print(f'Neurons that drive decisions, {len(rules)} (rule -> [utility, veto, evidence]):' + ('' if rules else ' none yet'))
     for row in rules:
         scope = (' (never fires)' if not row['can_fire']
                  else f' (only with {", ".join(row["only_with"])})' if row['only_with'] else '')
@@ -194,7 +196,10 @@ def _print_brain(bundle, full_history=False):
         if not full_history and len(evidence) > 70:
             evidence = evidence[:67] + '...'
         plural = '' if record['edits'] == 1 else 's'
-        print(f'  {number} {record["harness"]}: {record["edits"]} edit{plural}, evidence {json.dumps(evidence)}')
+        touched = sorted({edit['index'][1] if edit['tensor'] == 'w1' else edit['index'][0]
+                          for edit in stored['patch']['edits'] if edit['tensor'] != 'b2'})
+        where = f' to neuron{"s" if len(touched) > 1 else ""} {_span(touched)}' if touched else ''
+        print(f'  {number} {record["harness"]}: {record["edits"]} edit{plural}{where}, evidence {json.dumps(evidence)}')
         if full_history:
             actions = stored.get('edit_actions', ['applied'] * len(stored['patch']['edits']))
             for edit, action in zip(stored['patch']['edits'], actions):
@@ -205,15 +210,21 @@ def _print_brain(bundle, full_history=False):
 
 def _decision_text(result):
     if result['decision'] is None:
-        missing = [row['id'] for row in result['ranking'] if not row['modeled_evidence']]
-        detail = f' (no evidence for {", ".join(missing)})' if result['status'] == 'insufficient_preference_evidence' else ''
+        detail = ''
+        if result['status'] == 'insufficient_preference_evidence':
+            detail = ' (no evidence for ' + ', '.join(row['id'] for row in result['ranking'] if not row['modeled_evidence']) + ')'
+        elif result['status'] == 'tie':
+            top = result['ranking'][0]['utility']
+            tied = [row['id'] for row in result['ranking'] if abs(row['utility'] - top) <= 1e-7 + 1e-6 * abs(top)]
+            detail = f' ({", ".join(tied)} at {top:g})'
         print('Abstained: ' + result['status'].replace('_', ' ') + detail)
     else:
         selected = next(row for row in result['ranking'] if row['id'] == result['decision'])
         label = selected['label']
         suffix = f' ({label})' if label != selected['id'] else ''
         forced = ' [forced]' if result['forced'] else ''
-        print(f'Decision: {selected["id"]}{suffix}{forced}')
+        alone = ', the only option not vetoed' if result['status'] == 'only_feasible_option' else ''
+        print(f'Decision: {selected["id"]}{suffix}{forced}{alone}')
     if result['ranking']:
         print('Ranking: ' + ', '.join(f'{row["id"]} ({row["utility"]:g})' for row in result['ranking']))
         why = []
@@ -255,9 +266,37 @@ def _runtime_command(*args):
     return shlex.join(command)
 
 
-def _prompt(path, bundle):
+def _neuron_list(value):
+    """'40-43,47' -> [40, 41, 42, 43, 47]."""
+    neurons = set()
+    for part in value.split(','):
+        match = re.fullmatch(r'\s*(\d+)\s*(?:-\s*(\d+)\s*)?', part)
+        if not match:
+            raise argparse.ArgumentTypeError('use neuron numbers and ranges such as 40-43,47')
+        low, high = int(match[1]), int(match[2] or match[1])
+        if not 0 <= low <= high <= 47:
+            raise argparse.ArgumentTypeError('neurons are numbered 0-47')
+        neurons.update(range(low, high + 1))
+    return sorted(neurons)
+
+
+def _prompt(path, bundle, neurons=None):
     path = path.resolve()
     layout = bundle.layout
+    available = _neurons(bundle)[3]
+    if len(available) > 1:
+        half = len(available) // 2
+        split = (f'brain.py prompt FILE --neurons {_span(available[:half]).replace(", ", ",")} for one, '
+                 f'{_span(available[half:]).replace(", ", ",")} for the next')
+    else:
+        split = 'brain.py prompt FILE --neurons N, with the free neurons inspect lists'
+    if neurons:
+        taken = [j for j in neurons if j not in available]
+        if taken:
+            raise ValueError(f'Neurons {_span(taken)} are not free in this brain; inspect lists the free ones')
+        free = f'one of your free neurons {_span(neurons)} (other agents use other neurons) as j'
+    else:
+        free = 'a free neuron j'
     example = {'question': 'Which option?', 'contexts': [layout['contexts'][0]], 'options': [
         {'id': 'A', 'attributes': {layout['attributes'][0]: 1}},
         {'id': 'B', 'attributes': {layout['attributes'][1]: 1}},
@@ -292,8 +331,8 @@ option; otherwise the brain abstains. Hard rules need a binary input {json.dumps
 - In a brain made by init, neuron i < 32 is ReLU(attribute_i + context {json.dumps(general)} - 1):
   write w2 row i for a rule in that context. To apply it in every context, also
   set w1[32, i] and b1[i] to 0.
-- For a rule in one context only, wire a free neuron j: w1[ATTRIBUTE_ROW, j] = 1,
-  w1[CONTEXT_ROW, j] = 1, b1[j] = -1, then w2 row j.
+- For a rule in one context only, wire {free}:
+  w1[ATTRIBUTE_ROW, j] = 1, w1[CONTEXT_ROW, j] = 1, b1[j] = -1, then w2 row j.
 - To fix or remove a rule, assign the wrong entries their correct values (0 to unwire).
 The outputs of all firing neurons add up, and decide prints each option's
 utility as that sum. A rule meant to outweigh existing ones needs a utility
@@ -309,10 +348,13 @@ make several assignments one verified edit:
 List every active context: rules wired through the first context apply only
 when it is listed, so check a context rule with {json.dumps([general, 'CONTEXT'])}.
 
+To audit instead: every neuron is in one of inspect's groups, and inspect --history
+shows the exact entries each edit changed.
+
 Report the exact edits, evidence, and decisions. For parallel work, edit a copy
 (set ... --output COPY.brain), then combine copies with brain.py diff and merge.
-Copies that change the same neuron cannot be merged, so parallel agents should
-wire different free neurons.''')
+Copies that change the same neuron cannot be merged, so give each parallel agent
+its own neurons: {split}.''')
 
 
 def build_parser():
@@ -362,7 +404,23 @@ def build_parser():
     pack.add_argument('--name', type=_nonempty, default='brain')
     prompt = commands.add_parser('prompt', help='Print a self-contained handoff task for another agent')
     prompt.add_argument('path', type=_path)
+    prompt.add_argument('--neurons', type=_neuron_list,
+                        help='Free neurons this agent may wire, such as 40-47, so parallel copies merge')
     return parser
+
+
+def _plain_negative_values(argv):
+    """argparse reads --values -1e19 as an option, so write such numbers out in full; nothing else changes."""
+    result, in_values = [], False
+    for arg in argv:
+        if in_values and isinstance(arg, str) and re.fullmatch(r'-(?:\d+\.?\d*|\.\d+)[eE][+-]?\d+', arg):
+            number = float(arg)
+            if np.isfinite(number):
+                arg = np.format_float_positional(number, trim='-')  # the same float, without the exponent
+        elif isinstance(arg, str) and arg.startswith('--'):
+            in_values = arg == '--values'
+        result.append(arg)
+    return result
 
 
 def main(argv=None):
@@ -370,7 +428,7 @@ def main(argv=None):
         if hasattr(stream, 'reconfigure'):
             stream.reconfigure(errors='backslashreplace')  # e.g. cp1252 consoles and non-ASCII names
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(_plain_negative_values(sys.argv[1:] if argv is None else argv))
     try:
         if args.command == 'init':
             layout = _read_json(args.layout) if args.layout else None
@@ -396,6 +454,9 @@ def main(argv=None):
                                        for edit, action in zip(stored['patch']['edits'], actions)]
             if args.json:
                 _print_json(summary)
+            elif args.tensor:
+                index = ''.join(f'[{i}]' for i in args.index or [])
+                print(f'{args.tensor}{index} = ' + json.dumps(summary['selection']['values'], allow_nan=False))
             else:
                 print(f'{bundle.name}: 2,499 parameters, {summary["nonzero_parameters"]} nonzero entries')
                 print('Contributors: ' + (', '.join(bundle.contributing_harnesses) or 'none yet'))
@@ -403,9 +464,6 @@ def main(argv=None):
                 print('Schema: ' + bundle.schema_sha256[:12])
                 print('Revision: ' + bundle.revision_sha256[:12])
                 _print_brain(bundle, full_history=args.history)
-                if args.tensor:
-                    index = ''.join(f'[{i}]' for i in args.index or [])
-                    print(f'{args.tensor}{index} = ' + json.dumps(summary['selection']['values'], allow_nan=False))
         elif args.command == 'set':
             if not len(args.tensor) == len(args.index) == len(args.values):
                 raise ValueError('Give --tensor, --index, and --values once for each assignment')
@@ -425,11 +483,19 @@ def main(argv=None):
             requested_force = request.get('force', False)
             if not isinstance(requested_force, bool):
                 raise ValueError('force must be boolean')
-            result = DecisionModel.from_bundle(args.path).decide(
+            model = DecisionModel.from_bundle(args.path)
+            result = model.decide(
                 request['question'], request['contexts'], request['options'], args.force or requested_force,
                 explain=True,
             )
-            _print_json(result) if args.json else _decision_text(result)
+            if args.json:
+                _print_json(result)
+            else:
+                _decision_text(result)
+                first = model.layout['contexts'][0]
+                off = [row['neuron'] for row in _neurons(model)[0] if first in row['only_with']]
+                if first not in request['contexts'] and off:
+                    print(f'Note: {json.dumps(first)} is not listed, so neurons {_span(off)}, which need it, are off')
         elif args.command == 'serve':
             from harness import run
             from model import DecisionModel
@@ -458,7 +524,12 @@ def main(argv=None):
             save_bundle(args.output, bundle)
             _saved(args.output, bundle)
         elif args.command == 'prompt':
-            _prompt(args.path, load_bundle(args.path))
+            _prompt(args.path, load_bundle(args.path), args.neurons)
+    except BrokenPipeError:
+        # A reader such as head closed the pipe early: stop quietly, and keep Python's
+        # final flush from failing again on the closed pipe.
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        return 0
     except (OSError, ValueError, TypeError, KeyError, AttributeError, ImportError, SyntaxError, OverflowError, RecursionError) as exc:
         print(f'Error: {exc}', file=sys.stderr)
         return 2

@@ -11,6 +11,12 @@ from network import (digest_validated_weights, forward, layout_digest, load_weig
                      neuron_outputs, validate_layout, validate_weights)
 
 
+def _some(names, limit=10):
+    """Name the first few items of a long list in an error, then count the rest."""
+    shown = ', '.join(map(repr, names[:limit]))
+    return shown + (f' and {len(names) - limit} more' if len(names) > limit else '')
+
+
 def validate_question(question):
     if not isinstance(question, str) or not question.strip():
         raise ValueError('Question must be a nonempty string')
@@ -93,7 +99,7 @@ class DecisionModel:
                 raise ValueError('Option labels must be strings')
             extra = set(option) - {'id', 'label', 'attributes'}
             if extra:
-                raise ValueError('Unknown option fields: ' + ', '.join(sorted(map(str, extra)))
+                raise ValueError('Unknown option fields: ' + _some(sorted(map(str, extra)))
                                  + '; put option features under "attributes"')
         tensors = validate_weights(self.weights)
         fingerprint = digest_validated_weights(tensors)
@@ -106,7 +112,7 @@ class DecisionModel:
                 raise ValueError('Option attributes must be an object')
             unknown = [name for name in attrs if name not in self._attribute_index]
             if unknown:
-                raise ValueError('Unknown attributes: ' + str(unknown))
+                raise ValueError('Unknown attributes: ' + _some(unknown))
             x = np.zeros(48, dtype=np.float32)
             for attr, value in attrs.items():
                 if isinstance(value, (bool, np.bool_)) or not isinstance(value, Real) or not 0 <= value <= 1:

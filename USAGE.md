@@ -12,7 +12,7 @@ uv run --locked brain.py decide personal/me.brain examples/personal.json
 
 A new brain abstains. `inspect` reads every neuron that drives decisions back as the rule it computes, such as `32 ReLU(offline + context:traveling - 1) -> [10, 0, 1]`, then lists the free neurons, the attributes and contexts by `w1` row, the binary (hard-rule) inputs, and the history. `decide` prints each option's utility as the sum of the neurons behind it. Add `--json` to `inspect` or `decide` for machine-readable output, or `--tensor w1 --index 32` to read any tensor slice.
 
-A request lists every active context and gives each option's attributes, with values in [0,1]. A new brain wires each attribute through `general`, so include it next to a specific context, such as `["general", "traveling"]`:
+A request lists every active context and gives each option's attributes, with values in [0,1]. List `general` in every request: a new brain wires each attribute through it, so base preferences apply only when it is listed. Add specific contexts next to it, such as `["general", "traveling"]`:
 
 ```json
 {"question": "Which option?", "contexts": ["general"],
@@ -48,15 +48,32 @@ This prints a task with absolute paths, the current revision, how the weights ar
 
 ## Parallel copies
 
-Each agent edits its own copy of the same base, then:
+Give each agent its own copy of the same base and its own free neurons, so their rules never land in the same neuron:
 
 ```bash
-uv run --locked brain.py diff personal/base.brain personal/codex.brain --harness codex --reason "My cost statement" --output personal/codex.patch.json
-uv run --locked brain.py diff personal/base.brain personal/claude.brain --harness claude --reason "My offline statement" --output personal/claude.patch.json
+cp personal/me.brain personal/base.brain
+cp personal/base.brain personal/codex.brain
+cp personal/base.brain personal/claude.brain
+uv run --locked brain.py prompt personal/codex.brain --neurons 40-43
+uv run --locked brain.py prompt personal/claude.brain --neurons 44-47
+```
+
+Each agent edits its own copy, for example:
+
+```bash
+uv run --locked brain.py set personal/codex.brain --tensor w1 --index 0 40 --values 1 --tensor w1 --index 33 40 --values 1 --tensor b1 --index 40 --values -1 --tensor w2 --index 40 --values 2 0 1 --reason "When traveling, cost matters even more" --harness codex
+uv run --locked brain.py set personal/claude.brain --tensor w1 --index 1 44 --values 1 --tensor w1 --index 33 44 --values 1 --tensor b1 --index 44 --values -1 --tensor w2 --index 44 --values -2 0 1 --reason "When traveling, I avoid high cost" --harness claude
+```
+
+When both are done:
+
+```bash
+uv run --locked brain.py diff personal/base.brain personal/codex.brain --harness codex --reason "When traveling, cost matters even more" --output personal/codex.patch.json
+uv run --locked brain.py diff personal/base.brain personal/claude.brain --harness claude --reason "When traveling, I avoid high cost" --output personal/claude.patch.json
 uv run --locked brain.py merge personal/base.brain personal/codex.patch.json personal/claude.patch.json --output personal/combined.brain
 ```
 
-Edits to different hidden neurons combine. Identical edits are kept once with both sources. Conflicting values fail, and so do two copies that change the same neuron differently, because merging a neuron entry by entry could build a rule neither agent wrote; nothing is written. Give parallel agents different free neurons. `diff` refuses a copy that was not made from the base, so one agent's diff can never silently undo another agent's edits.
+Edits to different hidden neurons combine. Identical edits are kept once with both sources. Conflicting values fail, and so do two copies that change the same neuron differently, because merging a neuron entry by entry could build a rule neither agent wrote; nothing is written. `diff` refuses a copy that was not made from the base, so one agent's diff can never silently undo another agent's edits.
 
 ## Serve decisions
 

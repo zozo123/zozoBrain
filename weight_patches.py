@@ -252,7 +252,7 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
     """Apply ordered, compatible edits in memory; return tensors and provenance.
 
     A new patch may name this run's base or the current state at its start. This
-    supports both disjoint parallel edits and an explicit chain of revisions.
+    supports both parallel edits to different hidden neurons and an explicit chain of revisions.
     A prior manifest preserves and verifies history across separate invocations.
     """
     expected_schema=_expected_schema(schema_sha256)
@@ -264,6 +264,7 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
     records=[]
     skipped=[]
     claimed={}
+    changed=set()
     if previous_manifest is not None:
         previous=validate_manifest(previous_manifest,current,schema_sha256=expected_schema)
         original_digest=previous['original_weights_sha256']
@@ -304,14 +305,21 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
                 raise ValueError(f'Conflicting edit in patch {patch_id!r}: hidden neuron {neuron} '
                                  f'was already changed differently by patch {owner!r} in this merge')
         actions=[]
+        applied=set()
         for edit in patch['edits']:
             tensor=current[TENSOR_NAMES.index(edit['tensor'])]
             index=tuple(edit['index'])
             before=_number(edit['before'],'Edit before')
             after=_number(edit['after'],'Edit after')
             if _same(tensor[index],before):
+                # A parallel copy never saw this merge's earlier patches, so it must not
+                # re-apply an entry one of them changed, for example one a revision reverted.
+                if parallel and (edit['tensor'],index) in changed:
+                    raise ValueError(f'Conflicting edit in patch {patch_id!r}: {edit["tensor"]}{index} '
+                                     f'was changed by an earlier patch in this merge')
                 tensor[index]=after
                 actions.append('applied')
+                applied.add((edit['tensor'],index))
             elif _same(tensor[index],after):
                 actions.append('already_present')
             else:
@@ -319,6 +327,7 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
                                  f'{edit["tensor"]}{index} expects {float(before)}, '
                                  f'currently {float(tensor[index])}')
         validate_weights(current)
+        changed.update(applied)
         records.append({'patch':patch,'input_weights_sha256':start_digest,
                         'output_weights_sha256':weights_digest(current),'edit_actions':actions})
         seen[patch_id]=identity

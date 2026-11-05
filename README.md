@@ -82,7 +82,7 @@ Neuron `j` computes `ReLU(inputs · w1[:, j] + b1[j])`, and row `w2[j]` holds it
 | `set FILE --tensor T --index ... --values ...` | Assign rows or scalars in place as one verified edit; repeat the three flags for several |
 | `decide FILE REQUEST.json` | Decide or abstain, with each utility's neurons |
 | `serve FILE` | JSON Lines decisions for programs |
-| `prompt FILE` | Print an agent handoff |
+| `prompt FILE [--neurons 40-47]` | Print an agent handoff, optionally with its own free neurons |
 | `diff BASE COPY` / `merge BASE PATCH...` | Combine parallel copies; conflicts fail |
 
 [Full CLI guide](USAGE.md) · [File formats](FORMATS.md) · [Speed](PERFORMANCE.md)

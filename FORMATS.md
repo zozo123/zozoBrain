@@ -32,8 +32,19 @@ Loading checks member names and declared sizes (16 KiB per tensor, 16 MiB of met
 }
 ```
 
-Each edit assigns one entry. Merging checks the schema, the declared base, and every `before` value. Agreeing overlaps are recorded as `already_present`; disagreements fail. A duplicate patch (same id and content) is skipped, and a reused id with different content fails. Duplicate JSON keys are rejected. The harness and evidence fields are the caller's claims, not proof.
+Each edit assigns one entry. Merging checks the schema, the declared base, and every `before` value. Agreeing overlaps are recorded as `already_present`; disagreements fail. Patches made in parallel from the same base may change one hidden neuron (`w1[:, j]`, `b1[j]`, `w2[j]`) only with identical edits, because combining a neuron entry by entry could build a rule neither author wrote. A duplicate patch (same id and content) is skipped, and a reused id with different content fails. Duplicate JSON keys are rejected. The harness and evidence fields are the caller's claims, not proof.
 
 ## Stack manifest v1
 
 `zozobrain.weight-stack.v1` records the original and final tensor digests, the schema digest, every patch in order with its input and output digests and per-edit `edit_actions`, and skipped duplicate ids. Inside a `.brain` it is the history. For NPZ snapshots, `weight_patches.py stack --resume-manifest` continues it across sessions.
+
+## Compatibility
+
+From 1.0, these are stable within 1.x:
+
+- the formats `zozobrain.brain.v1`, `zozobrain.weight-patch.v1`, and `zozobrain.weight-stack.v1`. Every 1.x reads every v1 file, and readers reject any other format name;
+- the 2,499-parameter network: 48 inputs, 48 ReLU neurons, and `[utility, veto, evidence]`;
+- the JSON of `serve`, `inspect --json`, and `decide --json`: fields may be added, never renamed or removed;
+- the `brain.py` commands and flags in [USAGE.md](USAGE.md).
+
+Human-readable output can change between releases, so scripts should parse `--json`. Breaking any of these needs a new format name and a 2.0.

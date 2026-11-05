@@ -280,6 +280,30 @@ class BrainCliTests(unittest.TestCase):
             self.assertEqual(rules, sorted(set(rules), key=rules.index))
             self.assertTrue(all(rule.count('context:') == 1 for rule in rules))
 
+    def test_merge_never_reapplies_an_entry_a_revision_changed(self):
+        for harness in ('codex', 'claude'):
+            self.wire(32, 2, 33, [0, 1, 0], harness=harness, output_path=self.folder / f'{harness}.brain')
+        revised = self.folder / 'revised.brain'
+        self.call('set', self.folder / 'codex.brain', '--tensor', 'w1', '--index', 33, 32, '--values', 0,
+                  '--tensor', 'w1', '--index', 34, 32, '--values', 1, '--reason', 'Explicit', '--harness', 'copilot',
+                  '--output', revised)
+        patches = {}
+        for name, base, copy in (('codex', self.path, 'codex'), ('claude', self.path, 'claude'),
+                                 ('revised', self.folder / 'codex.brain', 'revised')):
+            patches[name] = self.folder / f'{name}.patch.json'
+            self.call('diff', base, self.folder / f'{copy}.brain', '--harness', name, '--reason', 'Explicit',
+                      '--output', patches[name])
+        merged = self.folder / 'in-order.brain'
+        self.call('merge', self.path, patches['codex'], patches['claude'], patches['revised'], '--output', merged)
+        rule = [row['rule'] for row in self.inspect(merged)['neurons'] if row['neuron'] == 32]
+        self.assertEqual(rule, ['ReLU(offline + context:context_3 - 1)'])
+        late = self.folder / 'late.brain'
+        result = self.call('merge', self.path, patches['codex'], patches['revised'], patches['claude'],
+                           '--output', late, check=False)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('was changed by an earlier patch in this merge', result.stderr)
+        self.assertFalse(late.exists())
+
     def test_inspect_shows_exact_float32_weights_and_json_history(self):
         self.call('set', self.path, '--tensor', 'b1', '--index', 0, '--values', '-0.9999999',
                   '--tensor', 'w2', '--index', 0, '--values', 3, 0, 1, '--reason', 'Explicit')
@@ -302,6 +326,56 @@ class BrainCliTests(unittest.TestCase):
         self.input.write_text(json.dumps(home), encoding='utf-8')
         fires_at_home = 'B (neuron 40)' in self.call('decide', self.path, self.input).stdout
         self.assertEqual('(only with traveling)' in line, not fires_at_home, line)
+
+    @unittest.skipIf(sys.platform == 'win32', 'pipe-close behavior differs on Windows')
+    def test_a_reader_closing_the_pipe_early_is_not_an_error(self):
+        from brain_bundle import create_blank, edit_bundle, save_bundle
+        bundle = create_blank('long')
+        for i in range(400):
+            bundle = edit_bundle(bundle, tensor='w2', index=[i % 48, 0], values=[float(i + 1)],
+                                 evidence=f'step {i} ' + 'x' * 120)
+        long_brain = self.folder / 'long.brain'
+        save_bundle(long_brain, bundle)
+        process = subprocess.Popen([sys.executable, str(CLI), 'inspect', str(long_brain), '--history'],
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process.stdout.readline()
+        process.stdout.close()
+        stderr = process.stderr.read()
+        process.stderr.close()
+        self.assertEqual(process.wait(), 0)
+        self.assertEqual(stderr, b'')
+
+    def test_decide_says_when_rules_are_off_or_only_one_option_is_left(self):
+        self.set_row(0, [3, 0, 1])
+        self.set_row(1, [-3, 0, 1])
+        self.input.write_text(json.dumps(dict(self.request, contexts=['traveling'])), encoding='utf-8')
+        self.assertIn('Note: "general" is not listed, so neurons 0-1, which need it, are off',
+                      self.call('decide', self.path, self.input).stdout)
+        self.call('set', self.path, '--tensor', 'w1', '--index', 32, 3, '--values', 0, '--tensor', 'b1', '--index', 3,
+                  '--values', 0, '--tensor', 'w2', '--index', 3, '--values', 0, 1, 0, '--reason', 'Explicit')
+        self.request['options'][0]['attributes']['explicitly_disallowed'] = 1
+        self.input.write_text(json.dumps(self.request), encoding='utf-8')
+        self.assertIn('Decision: B, the only option not vetoed',
+                      self.call('decide', self.path, self.input).stdout)
+        self.assertEqual(self.call('inspect', self.path, '--tensor', 'w2', '--index', 3).stdout, 'w2[3] = [0.0, 1.0, 0.0]\n')
+
+    def test_ties_name_the_tied_options(self):
+        self.set_row(0, [3, 0, 1])
+        self.request['options'][1]['attributes'] = {'low_cost': 1}
+        self.input.write_text(json.dumps(self.request), encoding='utf-8')
+        self.assertIn('Abstained: tie (A, B at 3)', self.call('decide', self.path, self.input).stdout)
+        self.assertIn('Neurons that drive decisions, 1 (rule', self.call('inspect', self.path).stdout)
+
+    def test_handoff_assigns_free_neurons_for_parallel_agents(self):
+        prompt = self.call('prompt', self.path, '--neurons', '40-43,47').stdout
+        self.assertIn('wire one of your free neurons 40-43, 47 (other agents use other neurons) as j', prompt)
+        self.assertIn('brain.py prompt FILE --neurons 32-39 for one, 40-47 for the next', prompt)
+        self.wire(33, 2, 33, [1, 0, 1])
+        self.assertIn('--neurons 32,34-39 for one, 40-47 for the next', self.call('prompt', self.path).stdout)
+        for value, message in (('0-3', 'Neurons 0-3 are not free'), ('48', 'numbered 0-47'), ('x', 'ranges such as')):
+            result = self.call('prompt', self.path, '--neurons', value, check=False)
+            self.assertEqual(result.returncode, 2, value)
+            self.assertIn(message, result.stderr)
 
     def test_handoff_quotes_layout_names_as_data(self):
         layout = self.inspect()['layout']
@@ -352,6 +426,13 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn('w2[0, 0]: 0 -> 3\n', first)
         self.assertIn('w2[0, 0]: 0 -> 3 (already present)', second)
 
+    def test_set_accepts_negative_values_in_scientific_notation(self):
+        self.call('set', self.path, '--tensor', 'w2', '--index', 40, '--values', '-1e19', '-2.5E-3', '1e-30',
+                  '--reason', '-1e19 stays text', '--harness', 'codex')
+        info = self.inspect(self.path, '--tensor', 'w2', '--index', 40)
+        self.assertEqual(info['selection']['values'], [float(np.float32(v)) for v in (-1e19, -2.5e-3, 1e-30)])
+        self.assertEqual(info['history'][-1]['evidence'], '-1e19 stays text')
+
     def test_inspect_shortens_only_runs_it_can_rebuild(self):
         from brain import _names
         self.assertEqual(_names(['a_08', 'a_9', 'a_10', 'x'], 0), '0:a_08, 1:a_9, 2:a_10, 3:x')
@@ -361,7 +442,7 @@ class BrainCliTests(unittest.TestCase):
         self.set_row(0, [3, 0, 1])
         human = self.call('inspect', self.path).stdout
         self.assertIn('History: 1 verified contributions:', human)
-        self.assertIn('1 codex: 2 edits, evidence "Explicit preference in this mechanical test"', human)
+        self.assertIn('1 codex: 2 edits to neuron 0, evidence "Explicit preference in this mechanical test"', human)
         info = self.inspect()
         self.assertEqual(info['history'][0]['harness'], 'codex')
         self.assertEqual(info['w2'][0], [3, 0, 1])
