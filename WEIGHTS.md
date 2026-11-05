@@ -26,13 +26,11 @@ Each option needs positive evidence to be ranked. That is why both cost rows car
 A context is the same input for every option, so a weight from a context straight to the outputs would shift every option equally. A rule about a context therefore needs a hidden neuron that combines it with an attribute; [deep.py](deep.py) shows why.
 
 ```bash
-uv run --locked brain.py set personal/me.brain --tensor w2 --index 3 --values 0 1 0 --reason "Hard rule I stated" --harness claude
-uv run --locked brain.py set personal/me.brain --tensor w1 --index 32 3 --values 0 --reason "Rule applies in every context"
-uv run --locked brain.py set personal/me.brain --tensor b1 --index 3 --values 0 --reason "Rule applies in every context"
+uv run --locked brain.py set personal/me.brain --tensor w2 --index 3 --values 0 1 0 --tensor w1 --index 32 3 --values 0 --tensor b1 --index 3 --values 0 --reason "Hard rule I stated, in every context" --harness claude
 uv run --locked brain.py set personal/me.brain --tensor w1 --index 2 32 --values 1 --tensor w1 --index 33 32 --values 1 --tensor b1 --index 32 --values -1 --tensor w2 --index 32 --values 10 0 1 --reason "When traveling I prefer offline options"
 ```
 
-The last command makes four assignments one verified edit; repeat `--tensor`, `--index`, `--values` for each.
+Each command makes several assignments one verified edit; repeat `--tensor`, `--index`, `--values` for each. Writing a rule in one edit means no step of the history leaves it half wired.
 
 Binary inputs are fixed by the layout (`binary_attributes`). Choose them at `init --layout`.
 

@@ -375,7 +375,7 @@ class BrainCliTests(unittest.TestCase):
         self.set_row(0, [-9999999, 0, 1])
         self.set_row(1, [-10000009, 0, 1])
         self.input.write_text(json.dumps(self.request), encoding='utf-8')
-        self.assertIn('Abstained: tie (A, B at -1e+07)', self.call('decide', self.path, self.input).stdout)
+        self.assertIn('Abstained: tie (A, B at -9.999999e+06)', self.call('decide', self.path, self.input).stdout)
 
     def test_unknown_request_fields_are_errors(self):
         self.input.write_text(json.dumps(dict(self.request, forse=True)), encoding='utf-8')

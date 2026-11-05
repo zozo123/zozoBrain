@@ -4,11 +4,8 @@ import json
 from pathlib import Path
 import sys
 
+from network import parse_json
 from model import DecisionModel, check_request_fields
-
-
-def reject_nonfinite(value):
-    raise ValueError(f'Nonfinite JSON number is not allowed: {value}')
 
 
 def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None, layout=None, model=None):
@@ -24,7 +21,7 @@ def run(source=sys.stdin, sink=sys.stdout, weights=None, manifest=None, layout=N
         try:
             if isinstance(line, bytes):
                 line = line.decode('utf-8')
-            request = json.loads(line, parse_constant=reject_nonfinite)
+            request = parse_json(line)
             if not isinstance(request, dict):
                 raise ValueError('Request must be an object')
             request_id = request.get('id')

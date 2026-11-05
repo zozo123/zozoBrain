@@ -1,0 +1,22 @@
+{
+  "format": "zozobrain.weight-patch.v1",
+  "id": "npz-1",
+  "source": {
+    "harness": "owner",
+    "evidence": "Stronger concise preference"
+  },
+  "schema_sha256": "b18683f1fc39237f1481b2de1052d100e6cb18b5505d33f23422badc568c060c",
+  "base_weights_sha256": "e7f2f571dcca54c97fa0245f0b7d0490ba3ee16a864f4040099777c74fedda5e",
+  "edits": [
+    {
+      "tensor": "w2",
+      "index": [
+        0,
+        0
+      ],
+      "before": 3.0,
+      "after": 4.0,
+      "reason": "Stronger concise preference"
+    }
+  ]
+}

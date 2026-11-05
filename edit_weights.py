@@ -28,7 +28,7 @@ def main():
             index = tuple(args.index)
             if len(index) != tensor.ndim or any(i < 0 or i >= bound for i, bound in zip(index, tensor.shape)):
                 raise ValueError(f'Index must address {args.tensor} with shape {tensor.shape}')
-            if not np.isfinite(args.value) or abs(args.value) > np.finfo(np.float32).max:
+            if not np.isfinite(args.value) or abs(args.value) > float(np.finfo(np.float32).max):
                 raise ValueError('Value must be finite and representable as float32')
             previous = float(tensor[index])
             tensor[index] = args.value

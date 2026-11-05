@@ -2,13 +2,14 @@
 import json
 from pathlib import Path
 import tempfile
+import tracemalloc
 import unittest
 
 import numpy as np
 
 from model import DecisionModel
-from network import save_weights, weights_digest
-from weight_patches import stack
+from network import save_weights, validate_weights, weights_digest
+from weight_patches import diff, stack, validate_manifest
 
 
 ROOT = Path(__file__).resolve().parent
@@ -78,6 +79,21 @@ class PerformanceContractTests(unittest.TestCase):
             with self.subTest(probe=row["id"]):
                 actual = model.decide(row["question"], row["contexts"], row["options"])
                 self.assertEqual(actual, row["output"])
+
+    def test_verifying_a_1000_edit_history_stays_small(self):
+        current = tuple(tensor.copy() for tensor in validate_weights(DecisionModel().weights))
+        base, patches = current, []
+        for i in range(1000):
+            edited = tuple(tensor.copy() for tensor in current)
+            edited[2][i % 48, 0] = float(i + 1)
+            patches.append(diff(current, edited, harness='perf', evidence=f'step {i}', patch_id=f'p{i}'))
+            current = edited
+        final, manifest = stack(base, patches)
+        tracemalloc.start()
+        validate_manifest(manifest, final)
+        peak = tracemalloc.get_traced_memory()[1]
+        tracemalloc.stop()
+        self.assertLess(peak, 4 * 1024 * 1024)  # 1.6 MiB measured; 13.5 MiB before v0.3.0
 
     def test_scalar_tie_check_preserves_prior_numpy_tolerance(self):
         pairs = [

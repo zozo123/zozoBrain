@@ -15,9 +15,9 @@ A standard ZIP with exactly five members: `brain.json`, `w1.npy`, `b1.npy`, `w2.
 
 `brain.json` has exactly `format` (`zozobrain.brain.v1`), `name`, `layout` (`attributes`, `contexts`, `binary_attributes`), `weights_sha256`, `schema_sha256`, and `manifest` (the stack manifest below). A revision hash covers all of it.
 
-Loading checks member names and declared sizes (16 KiB per tensor, 16 MiB of metadata, 32 MiB per file) and decompresses no more than those sizes. It also checks NPY headers before allocating, requires finite values, and verifies the fingerprints. Finally it replays the whole history against the tensors. Nothing is extracted to disk and nothing is executed. Names must be single printable lines. Saving writes a temporary file and renames it, under a lock, with a revision check. The `.brain.lock` sidecar is local bookkeeping and does not need to travel with the brain.
+Loading checks member names and declared sizes (16 KiB per tensor, 16 MiB of metadata, 32 MiB per file) and decompresses no more than those sizes. It also checks NPY headers before allocating, requires finite values, and verifies the fingerprints. Finally it replays the whole history against the tensors. Nothing is extracted to disk, nothing is executed, and no path named inside a file is ever opened: the history must be a JSON object, and patch and manifest files must each hold one. Names must be single printable lines. Saving writes a temporary file and renames it, under a lock, with a revision check. The `.brain.lock` sidecar is local bookkeeping and does not need to travel with the brain.
 
-`weights_sha256` hashes each tensor's name and little-endian bytes in the order `w1, b1, w2, b2`. `schema_sha256` binds the attribute and context names and order, the binary inputs, the dtype, and the shapes. Brains with different layouts cannot exchange patches.
+`weights_sha256` is the SHA-256 of, for `w1`, `b1`, `w2`, `b2` in that order, the tensor name in ASCII, one NUL byte, and the tensor's C-order little-endian float32 bytes. `schema_sha256` binds the attribute and context names and order, the binary inputs, the dtype, and the shapes. Brains with different layouts cannot exchange patches.
 
 ## Weight patch v1
 

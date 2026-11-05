@@ -71,7 +71,7 @@ Send one request object per line:
 {"id": "q1", "question": "Which option?", "contexts": ["general"], "options": [{"id": "A", "attributes": {"low_cost": 1}}, {"id": "B", "attributes": {"high_cost": 1}}]}
 ```
 
-Each line gets one flushed response with `id`, `ok`, and either `result` or `error`. The `result` has `decision` (or null), `status`, `ranking`, `vetoed`, `forced`, `weights_sha256`, `schema_sha256`, and `contributing_harnesses`. Ids may be strings, integers, or null; `force` is a boolean. Malformed, non-finite, or undecodable lines get `ok: false`, and the stream continues.
+Each line gets one flushed response with `id`, `ok`, and either `result` or `error`. The `result` has `decision` (or null), `status`, `ranking`, `vetoed`, `forced`, `weights_sha256`, `schema_sha256`, and `contributing_harnesses`. Ids may be strings, integers, or null; `force` is a boolean. Malformed, non-finite, or undecodable lines, repeated keys, and unknown fields get `ok: false`, and the stream continues.
 
 From Python:
 

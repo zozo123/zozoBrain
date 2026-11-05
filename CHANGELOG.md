@@ -2,6 +2,19 @@
 
 zozoBrain uses [semantic versioning](https://semver.org). From 1.0, the file formats, the JSON outputs, and the `brain.py` commands are stable within 1.x ([compatibility](FORMATS.md#compatibility)).
 
+## 1.0.2 (2026-11-05)
+
+Security and hardening fixes from a whole-codebase audit. Every file 1.0 reads still loads, and committed 1.0 fixtures now guard that in CI.
+
+- **Security:** a `.brain` whose history was a string had that string opened as a file path (a device, a pipe, or another file). The history must now be a JSON object, patch and manifest files must each hold one, and no path named inside a file is ever opened.
+- Repeated JSON keys are errors in every reader: `serve`, `model.py`, patch and manifest files, as well as `decide`. Before, `serve` took the last value, so a repeated attribute could switch off a hard rule.
+- `decide` prints request ids and labels that contain control characters as quoted data, so a label can no longer forge a line or hide output.
+- NPZ snapshots are header-checked before any allocation, like `.brain` files. A crafted 1.6 KB file used to crash `pack`.
+- A `set` that changes nothing fails with "nothing recorded" instead of silently dropping its evidence.
+- `weights.py --check` compares fingerprints. `model.py` reads requests as UTF-8. `init_personal.py` prints errors instead of tracebacks. A file named `~draft.brain` is just a file.
+- `decide` prints utilities with enough digits to tell different values apart.
+- New tests cover 1.0 fixtures, the default layout, write safety, `serve` flushing, and the load guards, and bound history-verification memory. The main CI suite runs with warnings as errors.
+
 ## 1.0.1 (2026-11-05)
 
 Fixes from a review of 1.0.0:

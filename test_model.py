@@ -64,8 +64,9 @@ class Tests(unittest.TestCase):
 
     def test_float32_roundoff_is_treated_as_a_tie(self):
         tensors = list(authored_weights())
-        tensors[2][0, 0] = 0.1 + 0.2
-        tensors[2][1, 0] = 0.3
+        tensors[2][0, 0] = np.float32(0.3)
+        tensors[2][1, 0] = np.nextafter(np.float32(0.3), np.float32(1))  # one float32 step apart
+        self.assertNotEqual(np.float32(tensors[2][0, 0]), np.float32(tensors[2][1, 0]))
         result = DecisionModel(tensors).decide('Which?', ['communication'], [
             {'id': 'a', 'attributes': {'concise': 1}},
             {'id': 'b', 'attributes': {'verified': 1}},

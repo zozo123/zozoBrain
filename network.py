@@ -1,17 +1,71 @@
 """Shared tensor validation and inference. No training or optimization."""
 import hashlib
+import io
 import json
 from pathlib import Path
 import tempfile
 import tokenize
 from types import ModuleType
 import unicodedata
+import zipfile
 from zipfile import BadZipFile
 from zlib import error as ZlibError
 
 import numpy as np
 
 TENSOR_SHAPES = {'w1': (48, 48), 'b1': (48,), 'w2': (48, 3), 'b2': (3,)}
+
+
+def unique_object(pairs):
+    """JSON object hook: a repeated key is an error, never a silent last-one-wins."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f'Duplicate JSON field: {json.dumps(key)}')
+        result[key] = value
+    return result
+
+
+def _reject_constant(value):
+    raise ValueError(f'Nonfinite JSON number is not allowed: {value}')
+
+
+def parse_json(text):
+    """Parse untrusted JSON: repeated keys and NaN or Infinity are errors."""
+    return json.loads(text, object_pairs_hook=unique_object, parse_constant=_reject_constant)
+
+
+def read_json_object(path, label='File'):
+    """Read a UTF-8 JSON file that must hold one object. Its content is never taken as another path."""
+    value = parse_json(Path(path).read_text(encoding='utf-8'))
+    if not isinstance(value, dict):
+        raise ValueError(f'{label} {path} must contain a JSON object')
+    return value
+
+
+def read_npy(raw, name, exact=True):
+    """Parse one NPY member, checking its header before allocating anything from it.
+
+    exact: require C-order little-endian float32 (the .brain format); otherwise any real
+    numeric dtype up to 8 bytes, which validate_weights then converts to float32.
+    """
+    stream = io.BytesIO(raw)
+    try:
+        major, _ = np.lib.format.read_magic(stream)
+        if major not in ((1,) if exact else (1, 2)):
+            raise ValueError
+        reader = np.lib.format.read_array_header_1_0 if major == 1 else np.lib.format.read_array_header_2_0
+        shape, fortran, dtype = reader(stream, max_header_size=1024)
+    except Exception as exc:  # crafted headers can raise tokenizer or syntax errors
+        raise ValueError(f'{name} has an invalid NPY header') from exc
+    expected = TENSOR_SHAPES[name]
+    allowed = dtype == np.dtype('<f4') if exact else dtype.kind in 'fiu' and dtype.itemsize <= 8
+    if shape != expected or fortran or not allowed:
+        kind = 'C-order little-endian float32' if exact else 'C-order real numeric values'
+        raise ValueError(f'{name} requires {kind} with shape {expected}')
+    if len(raw) - stream.tell() != int(np.prod(expected)) * dtype.itemsize:
+        raise ValueError(f'{name} has an invalid tensor byte count')
+    return np.frombuffer(raw, dtype=dtype, offset=stream.tell()).reshape(expected).copy()
 
 
 def check_label(value, label, limit=128):
@@ -85,16 +139,24 @@ def validate_weights(weights):
 
 
 def load_weights(path):
-    """Load exactly four numeric tensors; never deserialize Python objects."""
+    """Load exactly four numeric tensors from an NPZ; never trust its headers or deserialize objects."""
     try:
-        with Path(path).open('rb') as source:
-            archive = np.load(source, allow_pickle=False)
-            if not isinstance(archive, np.lib.npyio.NpzFile):
-                raise ValueError('Expected an NPZ archive')
-            with archive:
-                if len(archive.files) != 4 or set(archive.files) != set(TENSOR_SHAPES):
-                    raise ValueError('Weight archive must contain exactly w1, b1, w2, b2')
-                return validate_weights(tuple(archive[name] for name in TENSOR_SHAPES))
+        with Path(path).open('rb') as source, zipfile.ZipFile(source) as archive:
+            members = archive.infolist()
+            if sorted(member.filename for member in members) != sorted(f'{name}.npy' for name in TENSOR_SHAPES):
+                raise ValueError('Weight archive must contain exactly w1, b1, w2, b2')
+            tensors = []
+            for name in TENSOR_SHAPES:
+                member = archive.getinfo(f'{name}.npy')
+                # The largest valid member is a 48 x 48 float64 array plus its header.
+                if member.file_size > 32 * 1024 or member.flag_bits & 1:
+                    raise ValueError(f'Invalid or oversized weight member: {member.filename}')
+                with archive.open(member) as handle:
+                    raw = handle.read(member.file_size + 1)
+                if len(raw) != member.file_size:
+                    raise ValueError(f'Invalid weight member size: {member.filename}')
+                tensors.append(read_npy(raw, name, exact=False))
+            return validate_weights(tuple(tensors))
     except (OSError, TypeError, ValueError, EOFError, BadZipFile, ZlibError, RuntimeError, tokenize.TokenError) as exc:
         raise ValueError(f'Cannot load weights from {path}: {exc}') from exc
 

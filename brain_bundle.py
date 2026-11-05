@@ -15,7 +15,8 @@ from zlib import error as ZlibError
 
 import numpy as np
 
-from network import TENSOR_SHAPES, check_label, layout_digest, validate_layout, validate_weights, weights_digest
+from network import (TENSOR_SHAPES, check_label, layout_digest, parse_json, read_npy, unique_object, validate_layout,
+                     validate_weights, weights_digest)
 from weight_patches import STACK_FORMAT, diff, stack, validate_manifest
 
 FORMAT = 'zozobrain.brain.v1'
@@ -90,17 +91,7 @@ def create_blank(name='my-brain', layout=None):
     return pack_bundle((w1, b1, w2, b2), layout, name=name)
 
 
-def _unique_object(pairs):
-    result = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f'Duplicate JSON field: {key}')
-        result[key] = value
-    return result
-
-
-def _reject_constant(value):
-    raise ValueError(f'Nonfinite JSON number is not allowed: {value}')
+_unique_object = unique_object  # kept for callers of earlier versions
 
 
 def _read_member(archive, name):
@@ -115,21 +106,7 @@ def _read_member(archive, name):
 
 
 def _read_tensor(raw, name):
-    # Validate the standard NPY header before any allocation based on its shape.
-    stream = io.BytesIO(raw)
-    if np.lib.format.read_magic(stream) != (1, 0):
-        raise ValueError(f'{name} requires NPY format 1.0')
-    try:
-        shape, fortran, dtype = np.lib.format.read_array_header_1_0(stream, max_header_size=1024)
-    except Exception as exc:  # crafted headers can raise tokenizer or syntax errors
-        raise ValueError(f'{name} has an invalid NPY header') from exc
-    expected = TENSOR_SHAPES[name]
-    if shape != expected or fortran or dtype != np.dtype('<f4'):
-        raise ValueError(f'{name} requires C-order little-endian float32 with shape {expected}')
-    size = int(np.prod(expected)) * 4
-    if len(raw) - stream.tell() != size:
-        raise ValueError(f'{name} has an invalid tensor byte count')
-    return np.frombuffer(raw, dtype='<f4', offset=stream.tell()).reshape(expected).copy()
+    return read_npy(raw, name, exact=True)
 
 
 def load_bundle(path):
@@ -147,14 +124,15 @@ def load_bundle(path):
                     raise ValueError(f'Invalid or oversized brain member: {member.filename}')
                 if member.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
                     raise ValueError('Brain archives support only stored or DEFLATE members')
-            metadata = json.loads(_read_member(archive, 'brain.json').decode('utf-8'),
-                                  object_pairs_hook=_unique_object, parse_constant=_reject_constant)
+            metadata = parse_json(_read_member(archive, 'brain.json').decode('utf-8'))
             if not isinstance(metadata, dict) or set(metadata) != {
                 'format', 'name', 'layout', 'weights_sha256', 'schema_sha256', 'manifest'
             }:
                 raise ValueError('Invalid brain metadata fields')
             if metadata['format'] != FORMAT:
                 raise ValueError(f'Unsupported brain format; expected {FORMAT}')
+            if not isinstance(metadata['manifest'], dict):
+                raise ValueError('The brain history (manifest) must be a JSON object')
             tensors = tuple(_read_tensor(_read_member(archive, name + '.npy'), name)
                             for name in TENSOR_SHAPES)
         bundle = pack_bundle(tensors, metadata['layout'], metadata['manifest'], metadata['name'])
@@ -274,7 +252,7 @@ def _assign(tensors, tensor, index, values, touched):
         values = [float(value) for value in values]
     except (OverflowError, TypeError, ValueError) as exc:
         raise ValueError('Values must be finite float32 numbers') from exc
-    if any(not np.isfinite(value) or abs(value) > np.finfo(np.float32).max for value in values):
+    if any(not np.isfinite(value) or abs(value) > float(np.finfo(np.float32).max) for value in values):
         raise ValueError('Values must be finite float32 numbers')
     if np.any(touched[tensor][tuple(index)]):
         raise ValueError(f'{tensor}{list(index)} overlaps an earlier assignment in this edit; give each entry once')

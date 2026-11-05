@@ -124,8 +124,9 @@ def main(argv=None):
         tensors = authored_weights()
         if args.check:
             existing = load_weights(args.output)
-            if not all(np.array_equal(a, b) for a, b in zip(tensors, existing)):
+            if weights_digest(existing) != weights_digest(tensors):
                 raise ValueError("Artifact differs from directly authored tensors")
+            tensors = existing  # report the artifact's own counts and fingerprint
         else:
             save_weights(args.output, tensors)
     except (OSError, ValueError) as exc:

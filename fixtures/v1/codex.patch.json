@@ -1,0 +1,61 @@
+{
+  "format": "zozobrain.weight-patch.v1",
+  "id": "codex-s3",
+  "source": {
+    "harness": "codex",
+    "evidence": "S3 \"When traveling, I prefer offline options.\""
+  },
+  "schema_sha256": "3689c320a1e60cf9a494eac00b3c2b12ca801a7871ac7bbf1b44eb056a41994d",
+  "base_weights_sha256": "54f641cae91f0cf4bbeaf8b20ef1acaebc9d06495ba2464260d050e6eaef1df1",
+  "edits": [
+    {
+      "tensor": "w1",
+      "index": [
+        2,
+        32
+      ],
+      "before": 0.0,
+      "after": 1.0,
+      "reason": "S3 \"When traveling, I prefer offline options.\""
+    },
+    {
+      "tensor": "w1",
+      "index": [
+        33,
+        32
+      ],
+      "before": 0.0,
+      "after": 1.0,
+      "reason": "S3 \"When traveling, I prefer offline options.\""
+    },
+    {
+      "tensor": "b1",
+      "index": [
+        32
+      ],
+      "before": 0.0,
+      "after": -1.0,
+      "reason": "S3 \"When traveling, I prefer offline options.\""
+    },
+    {
+      "tensor": "w2",
+      "index": [
+        32,
+        0
+      ],
+      "before": 0.0,
+      "after": 7.0,
+      "reason": "S3 \"When traveling, I prefer offline options.\""
+    },
+    {
+      "tensor": "w2",
+      "index": [
+        32,
+        2
+      ],
+      "before": 0.0,
+      "after": 1.0,
+      "reason": "S3 \"When traveling, I prefer offline options.\""
+    }
+  ]
+}

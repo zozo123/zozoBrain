@@ -8,7 +8,7 @@ import re
 import numpy as np
 
 from network import (digest_validated_weights, forward, layout_digest, load_weight_source, load_weights,
-                     neuron_outputs, validate_layout, validate_weights)
+                     neuron_outputs, read_json_object, validate_layout, validate_weights)
 
 
 def _some(names, limit=10):
@@ -60,7 +60,7 @@ class DecisionModel:
         if manifest is not None:
             from weight_patches import validate_manifest
             if isinstance(manifest, (str, Path)):
-                manifest = json.loads(Path(manifest).read_text(encoding='utf-8'))
+                manifest = read_json_object(manifest, 'Manifest')
             provenance = validate_manifest(manifest, self.weights, schema_sha256=self.schema_sha256)
             self._attach_verified_provenance(provenance)
 
@@ -97,14 +97,14 @@ class DecisionModel:
             raise ValueError('Contexts must be unique')
         if not isinstance(options, (list, tuple)) or len(options) < 2:
             raise ValueError('At least two options required in a list')
-        ids = []
+        ids = set()
         for option in options:
             if not isinstance(option, dict):
                 raise ValueError('Each option must be an object')
             option_id = option.get('id')
             if not isinstance(option_id, str) or not option_id.strip() or option_id in ids:
                 raise ValueError('Option ids must be unique nonempty strings')
-            ids.append(option_id)
+            ids.add(option_id)
             if 'label' in option and not isinstance(option['label'], str):
                 raise ValueError('Option labels must be strings')
             extra = set(option) - {'id', 'label', 'attributes'}
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     parser.add_argument('--force', action='store_true', help='Resolve unknowns/ties by score then input order; never override veto')
     args = parser.parse_args()
     try:
-        payload = json.loads(args.decision_file.read_text())
+        payload = read_json_object(args.decision_file, 'Decision file')
         check_request_fields(payload)
         force = payload.get('force', False)  # the same request means the same thing here, in decide, and in serve
         if not isinstance(force, bool):

@@ -90,4 +90,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('name')
     args = parser.parse_args()
-    print(create(args.name))
+    try:
+        print(create(args.name))
+    except (OSError, ValueError) as exc:
+        parser.exit(2, f'error: {exc}\n')

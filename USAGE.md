@@ -19,7 +19,9 @@ A request lists every active context and gives each option's attributes, with va
  "options": [{"id": "A", "attributes": {"low_cost": 1}}, {"id": "B", "attributes": {"high_cost": 1}}]}
 ```
 
-The question is display text; only contexts and attributes are scored. Unknown names or fields are errors.
+The question is display text; only contexts and attributes are scored. Unknown names or fields, and repeated keys, are errors.
+
+Every command exits 0 on success. On an error it prints `Error: ...` to stderr, writes nothing, and exits 2; `serve` instead answers a bad line with `ok: false` and keeps going.
 
 ## Edit
 

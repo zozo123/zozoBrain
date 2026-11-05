@@ -11,10 +11,10 @@ import sys
 import numpy as np
 
 from brain_bundle import (
-    _unique_object, apply_patches, create_blank, diff_bundles, edit_bundle, load_bundle,
+    apply_patches, create_blank, diff_bundles, edit_bundle, load_bundle,
     pack_bundle, save_bundle,
 )
-from network import TENSOR_SHAPES
+from network import TENSOR_SHAPES, read_json_object
 
 
 def _nonempty(value):
@@ -24,16 +24,14 @@ def _nonempty(value):
 
 
 def _path(value):
-    return Path(value).expanduser()
-
-
-def _reject_constant(value):
-    raise ValueError(f'Nonfinite JSON number is not allowed: {value}')
+    # Expand only a home prefix: a file named ~draft.brain is just a file.
+    if value == '~' or value.startswith(('~/', '~' + os.sep)):
+        return Path(value).expanduser()
+    return Path(value)
 
 
 def _read_json(path):
-    return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=_unique_object,
-                      parse_constant=_reject_constant)
+    return read_json_object(path)
 
 
 def _print_json(value):
@@ -230,39 +228,54 @@ def _off_without_first_context(model, request):
     return [int(j) for j in driving if with_first[j] and not now[j]]
 
 
+def _plain(text):
+    """Request strings print as they are unless they hold control or format characters; then as quoted data."""
+    text = str(text)
+    return text if text.isprintable() else json.dumps(text)
+
+
+def _value(number, sign=False):
+    """Enough digits to tell float32 values apart: 3.0000002 never prints as 3."""
+    number = float(number)
+    text = str(np.float32(number)) if abs(number) <= float(np.finfo(np.float32).max) else f'{number:g}'
+    text = text[:-2] if text.endswith('.0') else text
+    return f'+{text}' if sign and not text.startswith('-') else text
+
+
 def _decision_text(result):
     if result['decision'] is None:
         detail = ''
         if result['status'] == 'insufficient_preference_evidence':
-            detail = ' (no evidence for ' + ', '.join(row['id'] for row in result['ranking'] if not row['modeled_evidence']) + ')'
+            detail = ' (no evidence for ' + ', '.join(_plain(row['id']) for row in result['ranking']
+                                                      if not row['modeled_evidence']) + ')'
         elif result['status'] == 'tie':
             top = result['ranking'][0]['utility']
-            tied = [row['id'] for row in result['ranking']
+            tied = [_plain(row['id']) for row in result['ranking']
                     if abs(top - row['utility']) <= 1e-7 + 1e-6 * abs(row['utility'])]
-            detail = f' ({", ".join(tied)} at {top:g})'
+            detail = f' ({", ".join(tied)} at {_value(top)})'
         print('Abstained: ' + result['status'].replace('_', ' ') + detail)
     else:
         selected = next(row for row in result['ranking'] if row['id'] == result['decision'])
         label = selected['label']
-        suffix = f' ({label})' if label != selected['id'] else ''
+        suffix = f' ({_plain(label)})' if label != selected['id'] else ''
         forced = ' [forced]' if result['forced'] else ''
         alone = ', the only option not vetoed' if result['status'] == 'only_feasible_option' else ''
-        print(f'Decision: {selected["id"]}{suffix}{forced}{alone}')
+        print(f'Decision: {_plain(selected["id"])}{suffix}{forced}{alone}')
     if result['ranking']:
-        print('Ranking: ' + ', '.join(f'{row["id"]} ({row["utility"]:g})' for row in result['ranking']))
+        print('Ranking: ' + ', '.join(f'{_plain(row["id"])} ({_value(row["utility"])})' for row in result['ranking']))
         why = []
         for row in result['ranking']:
-            terms = [f'neuron {n["neuron"]} ({n["output"][0]:+g})' for n in row['neurons'] if n['output'][0]]
+            terms = [f'neuron {n["neuron"]} ({_value(n["output"][0], sign=True)})' for n in row['neurons'] if n['output'][0]]
             if result['b2'][0]:
-                terms.append(f'b2 ({result["b2"][0]:+g})')
-            why.append(f'{row["id"]} = ' + (' + '.join(terms) or 'no neuron'))
+                terms.append(f'b2 ({_value(result["b2"][0], sign=True)})')
+            why.append(f'{_plain(row["id"])} = ' + (' + '.join(terms) or 'no neuron'))
         print('Utility: ' + '; '.join(why))
     if result['vetoed']:
         causes = []
         for row in result['vetoed']:
             sources = [f'neuron {n["neuron"]}' for n in row['neurons'] if n['output'][1] > 0]
             sources += ['b2'] if result['b2'][1] > 0 else []
-            causes.append(f'{row["id"]} ({", ".join(sources)})' if sources else row['id'])
+            causes.append(f'{_plain(row["id"])} ({", ".join(sources)})' if sources else _plain(row['id']))
         print('Vetoed: ' + ', '.join(causes))
     if result.get('contributing_harnesses'):
         print('Contributors: ' + ', '.join(result['contributing_harnesses']))
@@ -496,6 +509,8 @@ def main(argv=None):
             assignments = list(zip(args.tensor, args.index, args.values))
             original = load_bundle(args.path)
             edited = edit_bundle(original, assignments=assignments, harness=args.harness, evidence=args.reason)
+            if edited.manifest == original.manifest:
+                raise ValueError('No tensor entry changed; nothing recorded')
             output = args.output or args.path
             _save_edit(args.path, output, original, edited)
             _saved(output, edited)

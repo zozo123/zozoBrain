@@ -29,6 +29,8 @@ jobs:
       - run: uv sync --locked
       - run: uv run --locked weights.py --check
       - run: uv run --locked python -m unittest -v
+        env:
+          PYTHONWARNINGS: error  # reaches the CLI subprocesses too: a leaked warning fails CI
       - run: uv run --locked evaluate.py --check
       - run: uv run --locked python -m unittest -v
         working-directory: baselines/gradient

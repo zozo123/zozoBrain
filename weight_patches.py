@@ -16,7 +16,7 @@ import tempfile
 
 import numpy as np
 
-from network import TENSOR_SHAPES, check_label, layout_digest, load_weight_source, load_weights, save_weights, validate_weights, weights_digest
+from network import TENSOR_SHAPES, check_label, layout_digest, load_weight_source, load_weights, read_json_object, save_weights, validate_weights, weights_digest
 
 
 PATCH_FORMAT='zozobrain.weight-patch.v1'
@@ -136,9 +136,12 @@ def diff(base_path,edited_path,*,harness,evidence,patch_id,schema_sha256=None):
 
 
 def _read_patch(value):
+    """A parsed object, or an explicit file path given as a Path; a string from file content is never opened."""
     if isinstance(value,dict):
         return copy.deepcopy(value)
-    return json.loads(Path(value).read_text(encoding='utf-8'))
+    if isinstance(value,os.PathLike):
+        return read_json_object(value,'Patch or manifest file')
+    raise ValueError('A patch or manifest must be a JSON object')
 
 
 def _same(left,right):
