@@ -9,7 +9,7 @@ Fixes from a review of 1.0.0:
 - `decide` notes only rules that the missing first context switched off. It no longer reports rules that fired through another context, or rules that no option could fire.
 - Commands stop quietly when a reader closes the pipe, even with short output.
 - A `prompt --neurons` handoff tells the agent to edit only its own file, in place, and no longer suggests other agents' neurons.
-- Unknown top-level request fields, such as a misspelled `"forse"`, are errors in `decide`, `serve` and `model.py`, as USAGE.md says.
+- Unknown top-level request fields, such as a misspelled `"forse"`, are errors in `decide`, `serve` and `model.py`, as USAGE.md says, and `model.py` now honors `"force": true` like the others.
 - Ties name every option the model counts as tied, including with negative utilities.
 - The 1.x promise covers every file 1.0 reads and every flag in `--help`. USAGE.md documents `inspect --history` and the merge re-apply rule, and the documented benchmark runs in CI.
 

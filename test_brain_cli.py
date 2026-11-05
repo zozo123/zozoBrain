@@ -387,6 +387,14 @@ class BrainCliTests(unittest.TestCase):
         self.assertEqual((response['id'], response['ok']), ('x', False))
         self.assertIn("Unknown request fields: 'forse'", response['error'])
 
+    def test_model_cli_honors_force_in_the_request_like_decide(self):
+        request = {'question': 'q', 'contexts': ['general'], 'force': True,
+                   'options': [{'id': 'A', 'attributes': {'concise': 1}}, {'id': 'B', 'attributes': {'concise': 1}}]}
+        self.input.write_text(json.dumps(request), encoding='utf-8')
+        result = subprocess.run([sys.executable, str(ROOT / 'model.py'), str(self.input)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((json.loads(result.stdout)['decision'], json.loads(result.stdout)['forced']), ('A', True))
+
     @unittest.skipIf(sys.platform == 'win32', 'pipe-close behavior differs on Windows')
     def test_a_short_output_to_a_closed_pipe_is_not_an_error(self):
         process = subprocess.Popen([sys.executable, str(CLI), 'inspect', str(self.path)],

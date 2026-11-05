@@ -179,7 +179,10 @@ if __name__ == '__main__':
     try:
         payload = json.loads(args.decision_file.read_text())
         check_request_fields(payload)
-        result = DecisionModel(args.weights, args.manifest).decide(payload['question'], payload['contexts'], payload['options'], args.force)
+        force = payload.get('force', False)  # the same request means the same thing here, in decide, and in serve
+        if not isinstance(force, bool):
+            raise ValueError('force must be boolean')
+        result = DecisionModel(args.weights, args.manifest).decide(payload['question'], payload['contexts'], payload['options'], args.force or force)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.exit(2, f'error: {exc}\n')
     print(json.dumps(result, indent=2, allow_nan=False))
