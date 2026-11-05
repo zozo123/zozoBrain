@@ -249,10 +249,10 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn('Wired, no output yet: 40 ReLU(offline)', self.call('inspect', self.path).stdout)
 
     def wire(self, neuron, attribute, context, output, harness='codex', path=None, output_path=None):
-        args = ['set', path or self.path, '--tensor', 'w1', '--index', attribute, neuron, '--values', 1,
-                '--tensor', 'w1', '--index', context, neuron, '--values', 1, '--tensor', 'b1', '--index', neuron,
-                '--values', -1, '--tensor', 'w2', '--index', neuron, '--values', *output,
-                '--reason', 'Explicit', '--harness', harness]
+        scope = ['--tensor', 'w1', '--index', context, neuron, '--values', 1] if context is not None else []
+        args = ['set', path or self.path, '--tensor', 'w1', '--index', attribute, neuron, '--values', 1, *scope,
+                '--tensor', 'b1', '--index', neuron, '--values', -1, '--tensor', 'w2', '--index', neuron,
+                '--values', *output, '--reason', 'Explicit', '--harness', harness]
         return self.call(*args, *(['--output', output_path] if output_path else []))
 
     def test_merge_treats_each_hidden_neuron_as_one_rule(self):
@@ -266,10 +266,13 @@ class BrainCliTests(unittest.TestCase):
                 self.call('diff', self.path, copy, '--harness', harness, '--reason', 'Explicit', '--output', patches[-1])
             merged = round_folder / 'merged.brain'
             return self.call('merge', self.path, *patches, '--output', merged, check=False), merged
-        refused, merged = merge(('codex', 32, 1, 33), ('claude', 32, 2, 34))
-        self.assertEqual(refused.returncode, 2)
-        self.assertIn('hidden neuron 32 was already changed by patch', refused.stderr)
-        self.assertFalse(merged.exists())
+        # Different rules in one neuron, and one rule that is a subset of the other, fail in either order.
+        for wirings in ((('codex', 32, 1, 33), ('claude', 32, 2, 34)), (('codex', 32, 2, 33), ('claude', 32, 2, None)),
+                        (('claude', 32, 2, None), ('codex', 32, 2, 33))):
+            refused, merged = merge(*wirings)
+            self.assertEqual(refused.returncode, 2, wirings)
+            self.assertIn('hidden neuron 32 was already changed differently by patch', refused.stderr)
+            self.assertFalse(merged.exists())
         for wirings in ((('codex', 32, 1, 33), ('claude', 33, 2, 34)), (('codex', 32, 1, 33), ('claude', 32, 1, 33))):
             combined, merged = merge(*wirings)
             self.assertEqual(combined.returncode, 0, combined.stderr)

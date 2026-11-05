@@ -284,29 +284,34 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
             raise ValueError(f'Patch {patch_id!r} was authored against an unrelated weight state')
         parallel=patch['base_weights_sha256']==run_base_digest
         declared=run_base if parallel else tuple(array.copy() for array in current)
-        actions=[]
-        changed=set()
+        rules={}
         for edit in patch['edits']:
-            tensor=current[TENSOR_NAMES.index(edit['tensor'])]
             index=tuple(edit['index'])
             before=_number(edit['before'],'Edit before')
             declared_value=declared[TENSOR_NAMES.index(edit['tensor'])][index]
             if not _same(declared_value,before):
                 raise ValueError(f'Patch {patch_id!r} before value does not match its declared base: '
                                  f'{edit["tensor"]}{index}')
+            neuron=_neuron(edit)
+            if neuron is not None:
+                rules.setdefault(neuron,set()).add((edit['tensor'],index,float(_number(edit['after'],'Edit after'))))
+        # A neuron's weights are one rule. Entries from two parallel copies would combine
+        # into a rule neither wrote, so a copy may change a neuron that an earlier patch
+        # in this merge changed only with exactly the same edits.
+        for neuron,rule in rules.items():
+            owner,owned=claimed.setdefault(neuron,(patch_id,rule))
+            if parallel and owner!=patch_id and owned!=rule:
+                raise ValueError(f'Conflicting edit in patch {patch_id!r}: hidden neuron {neuron} '
+                                 f'was already changed differently by patch {owner!r} in this merge')
+        actions=[]
+        for edit in patch['edits']:
+            tensor=current[TENSOR_NAMES.index(edit['tensor'])]
+            index=tuple(edit['index'])
+            before=_number(edit['before'],'Edit before')
             after=_number(edit['after'],'Edit after')
             if _same(tensor[index],before):
-                # A neuron's weights are one rule. Entries from two parallel copies would
-                # combine into a rule neither wrote, so a copy may not change a neuron
-                # that an earlier copy in this merge changed.
-                neuron=_neuron(edit)
-                if parallel and claimed.get(neuron,patch_id)!=patch_id:
-                    raise ValueError(f'Conflicting edit in patch {patch_id!r}: hidden neuron {neuron} '
-                                     f'was already changed by patch {claimed[neuron]!r} in this merge')
                 tensor[index]=after
                 actions.append('applied')
-                if neuron is not None:
-                    changed.add(neuron)
             elif _same(tensor[index],after):
                 actions.append('already_present')
             else:
@@ -314,7 +319,6 @@ def stack(base_path,patches,previous_manifest=None,*,schema_sha256=None):
                                  f'{edit["tensor"]}{index} expects {float(before)}, '
                                  f'currently {float(tensor[index])}')
         validate_weights(current)
-        claimed.update(dict.fromkeys(changed,patch_id))
         records.append({'patch':patch,'input_weights_sha256':start_digest,
                         'output_weights_sha256':weights_digest(current),'edit_actions':actions})
         seen[patch_id]=identity
