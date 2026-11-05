@@ -2,17 +2,18 @@
 
 zozoBrain uses [semantic versioning](https://semver.org). From 1.0, the file formats, the JSON outputs, and the `brain.py` commands are stable within 1.x ([compatibility](FORMATS.md#compatibility)).
 
-## 1.0.0
+## 1.0.0 (2026-11-05)
 
 - Stable: `zozobrain.brain.v1`, `zozobrain.weight-patch.v1`, `zozobrain.weight-stack.v1`, the JSON of `serve`, `inspect --json` and `decide --json`, and the `brain.py` commands and flags.
 - `prompt --neurons 40-47` gives a parallel agent its own free neurons, so parallel copies merge. The handoff splits the brain's free neurons for you and explains auditing.
 - `merge` never lets a parallel copy re-apply an entry that an earlier patch in the same merge changed, such as one a revision reverted. Such merges used to depend on patch order.
 - `decide` names tied options, says when `general` is missing and which rules are off, and says when the decision is the only option not vetoed.
-- `inspect` counts the rules that drive decisions, names the neurons each history entry touched, and prints only the slice with `--tensor`. Huge weights no longer leak numpy warnings.
+- `inspect` counts the rules that drive decisions, tags each as `(only with ...)`, `(any context)` or `(never fires)`, names the neurons each history entry touched, and prints only the slice with `--tensor`. Huge weights no longer leak numpy warnings.
 - `set --values` accepts negative numbers in scientific notation, such as `-1e19`.
 - Commands stop quietly when a reader closes the pipe early, as in `inspect --history | head`.
 - Errors name at most 10 unknown attributes or fields.
 - Every documented shell command runs in CI, in order, in a fresh copy.
+- Tested end to end from a fresh clone: Codex and Copilot wired rules in parallel into their own neurons, the merge was the same in either order, and Claude Code's audit found nothing to change.
 
 ## 0.4.0 (2026-11-05)
 

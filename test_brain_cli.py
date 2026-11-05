@@ -199,7 +199,7 @@ class BrainCliTests(unittest.TestCase):
         self.assertEqual(info['history'][-1]['edits'], 5)
         self.assertEqual(len(info['history']), 3)
         self.assertIn({'neuron': 32, 'rule': 'ReLU(offline + context:traveling - 1)', 'output': [10, 0, 1],
-                       'only_with': ['traveling'], 'can_fire': True}, info['neurons'])
+                       'only_with': ['traveling'], 'can_fire': True, 'any_context': False}, info['neurons'])
         human = self.call('inspect', self.path, '--history').stdout
         self.assertIn('32 ReLU(offline + context:traveling - 1) -> [10, 0, 1] (only with traveling)', human)
         self.assertIn('Attributes read by rules: low_cost, high_cost, offline', human)
@@ -355,6 +355,7 @@ class BrainCliTests(unittest.TestCase):
                   '--values', 0, '--tensor', 'w2', '--index', 3, '--values', 0, 1, 0, '--reason', 'Explicit')
         self.request['options'][0]['attributes']['explicitly_disallowed'] = 1
         self.input.write_text(json.dumps(self.request), encoding='utf-8')
+        self.assertIn('3 ReLU(explicitly_disallowed) -> [0, 1, 0] (any context)', self.call('inspect', self.path).stdout)
         self.assertIn('Decision: B, the only option not vetoed',
                       self.call('decide', self.path, self.input).stdout)
         self.assertEqual(self.call('inspect', self.path, '--tensor', 'w2', '--index', 3).stdout, 'w2[3] = [0.0, 1.0, 0.0]\n')

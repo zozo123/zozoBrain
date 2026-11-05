@@ -32,7 +32,7 @@ Loading checks member names and declared sizes (16 KiB per tensor, 16 MiB of met
 }
 ```
 
-Each edit assigns one entry. Merging checks the schema, the declared base, and every `before` value. Agreeing overlaps are recorded as `already_present`; disagreements fail. Patches made in parallel from the same base may change one hidden neuron (`w1[:, j]`, `b1[j]`, `w2[j]`) only with identical edits, because combining a neuron entry by entry could build a rule neither author wrote. A duplicate patch (same id and content) is skipped, and a reused id with different content fails. Duplicate JSON keys are rejected. The harness and evidence fields are the caller's claims, not proof.
+Each edit assigns one entry. Merging checks the schema, the declared base, and every `before` value. Agreeing overlaps are recorded as `already_present`; disagreements fail. Patches made in parallel from the same base may change one hidden neuron (`w1[:, j]`, `b1[j]`, `w2[j]`) only with identical edits, because combining a neuron entry by entry could build a rule neither author wrote. A parallel patch may not re-apply an entry that an earlier patch in the same merge changed, so list parallel copies before revisions built on them. Every order that merges gives the same weights; a refused merge writes nothing. A duplicate patch (same id and content) is skipped, and a reused id with different content fails. Duplicate JSON keys are rejected. The harness and evidence fields are the caller's claims, not proof.
 
 ## Stack manifest v1
 

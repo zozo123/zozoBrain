@@ -158,7 +158,8 @@ def _neurons(bundle):
             silent.append({'neuron': j, 'rule': f'ReLU({text or 0})'})
             continue
         rules.append({'neuron': j, 'rule': f'ReLU({text or 0})', 'output': w2[j].tolist(),
-                      'only_with': only_with, 'can_fire': can_fire})
+                      'only_with': only_with, 'can_fire': can_fire,
+                      'any_context': can_fire and alone > 0 and not np.any(column[32:])})
     return rules, silent, wired, free
 
 
@@ -167,7 +168,8 @@ def _print_brain(bundle, full_history=False):
     print(f'Neurons that drive decisions, {len(rules)} (rule -> [utility, veto, evidence]):' + ('' if rules else ' none yet'))
     for row in rules:
         scope = (' (never fires)' if not row['can_fire']
-                 else f' (only with {", ".join(row["only_with"])})' if row['only_with'] else '')
+                 else f' (only with {", ".join(row["only_with"])})' if row['only_with']
+                 else ' (any context)' if row['any_context'] else '')
         print(f'  {row["neuron"]} {row["rule"]} -> [' + ', '.join(map(_number, row['output'])) + ']' + scope)
     w1, w2 = bundle.weights[0], bundle.weights[2]
     driving = [j for j in range(48) if np.any(w2[j])]

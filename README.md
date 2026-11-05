@@ -65,7 +65,7 @@ uv run --locked brain.py prompt personal/me.brain
 
 Paste the output into Codex, Claude Code, Copilot, or any agent with a shell, and add what you want encoded. The agent reads every neuron as a rule, edits weights in place with `set`, and checks decisions with a request file. For the next agent, run `prompt` again. [Agents and parallel edits](HARNESS.md)
 
-**Tested end to end with real agents.** Given only the handoff and one sentence, Codex (gpt-6.1-sol) and GitHub Copilot (GPT-5.6, 5 of 6 runs) each wired the hidden neuron `ReLU(offline + traveling - 1)`. Claude Code (Opus 5.5) audited a brain against three statements, found two planted wiring bugs from the weights alone, and fixed them with four entries. Every result was checked independently in all 16 contexts. [Run log](HARNESS.md#tested-with-real-agents)
+**Tested end to end with real agents.** Working in parallel, Codex (gpt-6.1-sol) and GitHub Copilot (GPT-5.6) each wired one context rule into their own hidden neurons. `merge` combined their copies the same way in either order, and Claude Code (Opus 5.5) then audited the result against every statement. Earlier runs caught two agents choosing the same neuron, which `merge` refused, and two planted wiring bugs that Claude Code found from the weights alone. Every result was checked independently in all 16 contexts. [Run log](HARNESS.md#tested-with-real-agents)
 
 ## How it works
 
