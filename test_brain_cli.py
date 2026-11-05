@@ -1,5 +1,6 @@
 """The one-file CLI must preserve direct edits, provenance, and portable use."""
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -228,6 +229,48 @@ class BrainCliTests(unittest.TestCase):
         self.assertIn('A = neuron 40 (+2.5) + b2 (+2); B = neuron 40 (+0.5) + b2 (+2)', self.call('decide', self.path, self.input).stdout)
         self.call('set', self.path, '--tensor', 'b2', '--index', 1, '--values', 1, '--reason', 'Explicit')
         self.assertIn('Vetoed: A (b2), B (b2)', self.call('decide', self.path, self.input).stdout)
+
+    def test_one_edit_gives_each_entry_once_and_silent_wiring_is_not_a_rule(self):
+        before = self.path.read_bytes()
+        for overlap in (['--tensor', 'w1', '--index', 2, 32, '--values', 1, '--tensor', 'w1', '--index', 2, 32, '--values', 0],
+                        ['--tensor', 'w2', '--index', 32, '--values', 7, 0, 1, '--tensor', 'w2', '--index', 32, 0, '--values', 5]):
+            result = self.call('set', self.path, *overlap, '--reason', 'Explicit', check=False)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn('overlaps an earlier assignment', result.stderr)
+        self.assertEqual(self.path.read_bytes(), before)
+        self.call('set', self.path, '--tensor', 'w1', '--index', 2, 40, '--values', 1, '--reason', 'Explicit')
+        info = self.inspect()
+        self.assertEqual(info['silent_neurons'], [{'neuron': 40, 'rule': 'ReLU(offline)'}])
+        self.assertEqual(info['neurons'], [])
+        self.assertIn('Wired, no output yet: 40 ReLU(offline)', self.call('inspect', self.path).stdout)
+
+    def test_huge_finite_totals_still_explain_in_json(self):
+        self.call('set', self.path, '--tensor', 'b1', '--index', 41, '--values', '1e19',
+                  '--tensor', 'w2', '--index', 41, '--values', '-10000000000000000000', 0, 1,
+                  '--tensor', 'b1', '--index', 42, '--values', '2e19', '--tensor', 'w2', '--index', 42, '--values', '2e19', 0, 1,
+                  '--reason', 'Explicit')
+        result = json.loads(self.call('decide', self.path, self.input, '--json').stdout)
+        shares = [value for row in result['ranking'] for neuron in row['neurons'] for value in neuron['output']]
+        self.assertTrue(shares and all(math.isfinite(value) for value in shares))
+        self.assertIn('neuron 42 (+4e+38)', self.call('decide', self.path, self.input).stdout)
+
+    def test_history_marks_edits_a_merge_found_already_present(self):
+        patches = []
+        for harness in ('codex', 'claude'):
+            copy = self.folder / f'{harness}.brain'
+            self.set_row(0, [3, 0, 1], output=copy, harness=harness)
+            patches.append(self.folder / f'{harness}.patch.json')
+            self.call('diff', self.path, copy, '--harness', harness, '--reason', 'Same statement', '--output', patches[-1])
+        merged = self.folder / 'merged.brain'
+        self.call('merge', self.path, *patches, '--output', merged)
+        first, second = self.call('inspect', merged, '--history').stdout.split('History:')[1].split('2 claude')
+        self.assertIn('w2[0, 0]: 0 -> 3\n', first)
+        self.assertIn('w2[0, 0]: 0 -> 3 (already present)', second)
+
+    def test_inspect_shortens_only_runs_it_can_rebuild(self):
+        from brain import _names
+        self.assertEqual(_names(['a_08', 'a_9', 'a_10', 'x'], 0), '0:a_08, 1:a_9, 2:a_10, 3:x')
+        self.assertEqual(_names(['a_\u0661', 'a_2', 'a_3', 'a_4'], 32), '32:a_\u0661, 33:a_2 ... 35:a_4')
 
     def test_inspect_shows_history_and_output_rows(self):
         self.set_row(0, [3, 0, 1])

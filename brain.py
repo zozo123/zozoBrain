@@ -40,7 +40,7 @@ def _print_json(value):
 
 
 def _summary(path, bundle):
-    rules, _, free = _neurons(bundle)
+    rules, silent, _, free = _neurons(bundle)
     return {
         'path': str(path), 'name': bundle.name,
         'total_parameters': sum(tensor.size for tensor in bundle.weights),
@@ -53,6 +53,7 @@ def _summary(path, bundle):
         'layout': bundle.layout,
         'tensors': {name: list(shape) for name, shape in TENSOR_SHAPES.items()},
         'neurons': rules,
+        'silent_neurons': silent,
         'free_neurons': free,
         'w2_columns': ['utility', 'veto', 'evidence'],
         'w2': bundle.weights[2].tolist(),
@@ -105,7 +106,7 @@ def _names(names, first):
     """Number names by w1 row; shorten runs of generic names: 4:attribute_5 ... 31:attribute_32."""
     runs = []
     for row, name in enumerate(names, first):
-        match = re.fullmatch(r'(.*_)(\d+)', name)
+        match = re.fullmatch(r'(.*_)([1-9][0-9]*)', name)  # plain ASCII numbers only, so the run can be rebuilt
         previous = runs[-1][-1] if runs else None
         if match and previous and previous[2] == match[1] and previous[3] + 1 == int(match[2]):
             runs[-1].append((row, name, match[1], int(match[2])))
@@ -123,7 +124,7 @@ def _neurons(bundle):
     """Read each hidden neuron back from w1, b1, and w2 as the rule it computes."""
     w1, b1, w2, _ = bundle.weights
     names = bundle.layout['attributes'] + [f'context:{name}' for name in bundle.layout['contexts']]
-    rules, wired, free = [], [], []
+    rules, silent, wired, free = [], [], [], []
     for j in range(48):
         column, bias = w1[:, j], float(b1[j])
         if not np.any(w2[j]):
@@ -144,13 +145,16 @@ def _neurons(bundle):
         alone = float(np.maximum(column[:32], 0).sum()) + bias
         can_fire = alone + float(np.maximum(column[32:], 0).sum()) > 0
         only_with = [] if alone > 0 else [bundle.layout['contexts'][i] for i in np.flatnonzero(column[32:] > 0)]
+        if not np.any(w2[j]):
+            silent.append({'neuron': j, 'rule': f'ReLU({text or 0})'})
+            continue
         rules.append({'neuron': j, 'rule': f'ReLU({text or 0})', 'output': w2[j].tolist(),
                       'only_with': only_with, 'can_fire': can_fire})
-    return rules, wired, free
+    return rules, silent, wired, free
 
 
 def _print_brain(bundle, full_history=False):
-    rules, wired, free = _neurons(bundle)
+    rules, silent, wired, free = _neurons(bundle)
     print('Neurons that drive decisions (rule -> [utility, veto, evidence]):' + ('' if rules else ' none yet'))
     for row in rules:
         scope = (' (never fires)' if not row['can_fire']
@@ -161,6 +165,8 @@ def _print_brain(bundle, full_history=False):
     read = [name for i, name in enumerate(bundle.layout['attributes']) if np.any(w1[i, driving])]
     print('Attributes read by rules: ' + (', '.join(read) or 'none'))
     general = bundle.layout['contexts'][0]
+    if silent:
+        print('Wired, no output yet: ' + ', '.join(f'{row["neuron"]} {row["rule"]}' for row in silent))
     if wired:
         print(f'Silent (init wiring, neuron i = ReLU(attribute i + {general} - 1)): {_span(wired)}')
     if free:
@@ -183,9 +189,11 @@ def _print_brain(bundle, full_history=False):
         plural = '' if record['edits'] == 1 else 's'
         print(f'  {number} {record["harness"]}: {record["edits"]} edit{plural}, evidence {json.dumps(evidence)}')
         if full_history:
-            for edit in stored['patch']['edits']:
+            actions = stored.get('edit_actions', ['applied'] * len(stored['patch']['edits']))
+            for edit, action in zip(stored['patch']['edits'], actions):
                 index = ', '.join(map(str, edit['index']))
-                print(f'      {edit["tensor"]}[{index}]: {_number(edit["before"])} -> {_number(edit["after"])}')
+                note = ' (already present)' if action == 'already_present' else ''
+                print(f'      {edit["tensor"]}[{index}]: {_number(edit["before"])} -> {_number(edit["after"])}{note}')
 
 
 def _decision_text(result):

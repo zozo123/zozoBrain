@@ -135,10 +135,14 @@ def digest_validated_weights(tensors):
 
 
 def neuron_outputs(x, weights):
-    """Each hidden neuron's share of [utility, veto, evidence] for one input; rows sum to forward(x) - b2."""
+    """Each hidden neuron's share of [utility, veto, evidence] for one input.
+
+    The products are float64: a float32 share can overflow even when forward's total stays finite.
+    """
     w1, b1, w2, _ = weights
     with np.errstate(over='ignore', invalid='ignore'):
-        return np.maximum(0, x @ w1 + b1)[:, None] * w2
+        hidden = np.maximum(0, x @ w1 + b1)
+    return hidden.astype(np.float64)[:, None] * w2.astype(np.float64)
 
 
 def forward(x, weights):

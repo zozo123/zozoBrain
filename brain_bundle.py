@@ -258,7 +258,7 @@ def apply_patches(bundle, patches):
     return pack_bundle(tensors, bundle.layout, manifest, bundle.name)
 
 
-def _assign(tensors, tensor, index, values):
+def _assign(tensors, tensor, index, values, touched):
     if tensor not in TENSOR_SHAPES:
         raise ValueError('Tensor must be one of: ' + ', '.join(TENSOR_SHAPES))
     shape = TENSOR_SHAPES[tensor]
@@ -276,6 +276,9 @@ def _assign(tensors, tensor, index, values):
         raise ValueError('Values must be finite float32 numbers') from exc
     if any(not np.isfinite(value) or abs(value) > np.finfo(np.float32).max for value in values):
         raise ValueError('Values must be finite float32 numbers')
+    if np.any(touched[tensor][tuple(index)]):
+        raise ValueError(f'{tensor}{list(index)} overlaps an earlier assignment in this edit; give each entry once')
+    touched[tensor][tuple(index)] = True
     target = tensors[list(TENSOR_SHAPES).index(tensor)]
     selected_shape = target[tuple(index)].shape
     count = int(np.prod(selected_shape)) if selected_shape else 1
@@ -296,8 +299,9 @@ def edit_bundle(bundle, *, tensor=None, index=None, values=None, assignments=Non
     ):
         raise ValueError('Assignments must be a nonempty list of (tensor, index, values)')
     tensors = list(validate_weights(bundle.weights))
+    touched = {name: np.zeros(shape, dtype=bool) for name, shape in TENSOR_SHAPES.items()}
     for tensor, index, values in assignments:
-        _assign(tensors, tensor, index, values)
+        _assign(tensors, tensor, index, values, touched)
     edited = BrainBundle(bundle.name, bundle.layout, tuple(tensors), bundle.manifest)
     patch = diff_bundles(bundle, edited, harness=harness, evidence=evidence, patch_id=patch_id)
     if not patch['edits']:
