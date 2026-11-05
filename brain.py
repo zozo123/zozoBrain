@@ -401,7 +401,7 @@ def build_parser():
     commands = parser.add_subparsers(dest='command', required=True)
     init = commands.add_parser('init', help='Create one blank, portable brain file')
     init.add_argument('path', type=_path)
-    init.add_argument('--name', type=_nonempty)
+    init.add_argument('--name', type=_nonempty, help='Brain name shown by inspect and prompt; default: the file name')
     init.add_argument('--layout', type=_path, help='Data-only JSON with 32 attributes, 16 contexts, and binary_attributes')
     inspect = commands.add_parser('inspect', help='Show state, schema, and optional tensor values')
     inspect.add_argument('path', type=_path)
@@ -430,7 +430,7 @@ def build_parser():
     diff.add_argument('edited', type=_path)
     diff.add_argument('--harness', type=_nonempty, required=True)
     diff.add_argument('--reason', type=_nonempty, required=True)
-    diff.add_argument('--id', type=_nonempty, dest='patch_id')
+    diff.add_argument('--id', type=_nonempty, dest='patch_id', help='Patch id; default: the harness and a random suffix')
     diff.add_argument('--output', type=_path, required=True)
     merge = commands.add_parser('merge', help='Apply compatible JSON patches to one base brain')
     merge.add_argument('base', type=_path)
@@ -440,7 +440,7 @@ def build_parser():
     pack.add_argument('--weights', type=_path, required=True)
     pack.add_argument('--manifest', type=_path)
     pack.add_argument('--output', type=_path, required=True)
-    pack.add_argument('--name', type=_nonempty, default='brain')
+    pack.add_argument('--name', type=_nonempty, default='brain', help='Brain name; default: brain')
     prompt = commands.add_parser('prompt', help='Print a self-contained handoff task for another agent')
     prompt.add_argument('path', type=_path)
     prompt.add_argument('--neurons', type=_neuron_list,
@@ -567,7 +567,8 @@ def main(argv=None):
             _saved(args.output, bundle)
         elif args.command == 'prompt':
             _prompt(args.path, load_bundle(args.path), args.neurons)
-        sys.stdout.flush()  # a reader that already closed the pipe raises here, inside the handler
+        if sys.stdout is not None:  # None when the command started with stdout closed
+            sys.stdout.flush()  # a reader that already closed the pipe raises here, inside the handler
     except BrokenPipeError:
         # A reader such as head closed the pipe early: stop quietly, and keep Python's
         # final flush from failing again on the closed pipe.

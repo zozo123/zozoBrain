@@ -42,7 +42,7 @@ Each edit assigns one entry. Merging checks the schema, the declared base, and e
 
 From 1.0, these are stable within 1.x:
 
-- the formats `zozobrain.brain.v1`, `zozobrain.weight-patch.v1`, and `zozobrain.weight-stack.v1`. Every 1.x reads every file that 1.0 reads, and readers reject any other format name;
+- the formats `zozobrain.brain.v1`, `zozobrain.weight-patch.v1`, and `zozobrain.weight-stack.v1`. Every 1.x reads every brain, patch, and stack file that 1.0 reads, and readers reject any other format name;
 - the 2,499-parameter network: 48 inputs, 48 ReLU neurons, and `[utility, veto, evidence]`;
 - the JSON of `serve`, `inspect --json`, and `decide --json`: fields may be added, never renamed or removed;
 - every `brain.py` command and flag listed by `brain.py --help` and `brain.py COMMAND --help`, as described in [USAGE.md](USAGE.md).

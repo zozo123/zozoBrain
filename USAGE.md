@@ -87,6 +87,8 @@ It reads one JSON request per line on stdin and writes one JSON response per lin
 
 ## Custom layouts and existing NPZ snapshots
 
+`init --name NAME` and `pack --name NAME` set the brain name (default: the file name for `init`, `brain` for `pack`), and `diff --id ID` sets the patch id (default: the harness and a random suffix).
+
 `init --layout layout.json` takes `attributes` (32 unique names), `contexts` (16), and `binary_attributes` (a subset of the attributes). Choose names before collecting history, because changing the layout makes old patches incompatible.
 
 `pack --weights snapshot.npz [--manifest stack.json] --output me.brain` converts a source-based snapshot using the trusted local `weights.py` layout. `init_personal.py NAME` creates a private, movable profile folder with its own runtime, editable `weights.py`, and README. The older `model.py`, `harness.py`, `edit_weights.py`, and `weight_patches.py` commands still work. See [WEIGHTS.md](WEIGHTS.md) and [FORMATS.md](FORMATS.md).

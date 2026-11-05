@@ -13,6 +13,8 @@ Security and hardening fixes from a whole-codebase audit. Every file 1.0 reads s
 - A `set` that changes nothing fails with "nothing recorded" instead of silently dropping its evidence.
 - `weights.py --check` compares fingerprints. `model.py` reads requests as UTF-8. `init_personal.py` prints errors instead of tracebacks. A file named `~draft.brain` is just a file.
 - `decide` prints utilities with enough digits to tell different values apart.
+- Commands started with stdout closed exit 0 again; 1.0.1 reported an error after saving.
+- The 1.x promise is precise: every 1.x reads every brain, patch, and stack file that 1.0 reads. Request files that 1.0 accepted with unknown top-level fields are refused since 1.0.1. `init --name`, `pack --name`, and `diff --id` are documented.
 - New tests cover 1.0 fixtures, the default layout, write safety, `serve` flushing, and the load guards, and bound history-verification memory. The main CI suite runs with warnings as errors.
 
 ## 1.0.1 (2026-11-05)

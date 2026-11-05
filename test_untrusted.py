@@ -183,6 +183,14 @@ class UntrustedInputTests(unittest.TestCase):
         process.stdout.close()
         self.assertEqual(json.loads(answers[0])['result']['decision'], 'A')
 
+    @unittest.skipIf(sys.platform == 'win32', 'needs a POSIX shell to close stdout')
+    def test_a_command_started_with_stdout_closed_succeeds(self):
+        brain = self.folder / 'closed.brain'
+        result = subprocess.run(['sh', '-c', 'exec "$0" "$@" >&-', sys.executable, str(CLI), 'init', str(brain)],
+                                capture_output=False, stderr=subprocess.PIPE, text=True)
+        self.assertEqual((result.returncode, result.stderr), (0, ''))
+        self.assertTrue(brain.exists())
+
     def test_legacy_tools_fail_cleanly_and_read_utf8(self):
         result = subprocess.run([sys.executable, str(ROOT / 'init_personal.py'), 'not a valid name!'],
                                 capture_output=True, text=True, cwd=self.folder)
@@ -198,6 +206,12 @@ class UntrustedInputTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         labels = [row['label'] for row in json.loads(result.stdout)['ranking']]
         self.assertIn('Café ✓', labels)
+        for content in ('"hello"', '[]'):
+            request.write_text(content, encoding='utf-8')
+            result = subprocess.run([sys.executable, str(ROOT / 'model.py'), str(request)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 2, content)
+            self.assertIn('must contain a JSON object', result.stderr)
+            self.assertNotIn('Traceback', result.stderr)
 
     def test_weights_check_compares_fingerprints_not_just_values(self):
         snapshot = self.folder / 'snapshot.npz'
