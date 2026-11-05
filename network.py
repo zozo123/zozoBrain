@@ -134,6 +134,13 @@ def digest_validated_weights(tensors):
     return digest.hexdigest()
 
 
+def neuron_outputs(x, weights):
+    """Each hidden neuron's share of [utility, veto, evidence] for one input; rows sum to forward(x) - b2."""
+    w1, b1, w2, _ = weights
+    with np.errstate(over='ignore', invalid='ignore'):
+        return np.maximum(0, x @ w1 + b1)[:, None] * w2
+
+
 def forward(x, weights):
     w1, b1, w2, b2 = weights
     try:

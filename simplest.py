@@ -5,9 +5,8 @@ FEATURES = ['low_cost', 'high_cost', 'offline', 'disallowed']  # inputs, one per
 OUTPUTS = ['utility', 'veto', 'evidence']                       # outputs, one per column of W
 
 
-def decide(W, options):
-    """One matrix product per option; drop vetoed options; pick the best or abstain."""
-    scores = {name: np.isin(FEATURES, features).astype(float) @ W for name, features in options.items()}
+def pick(scores):
+    """Drop vetoed options; pick the best utility or abstain."""
     allowed = {name: score for name, score in scores.items() if score[1] <= 0}
     if not allowed or any(score[2] <= 0 for score in allowed.values()):
         return 'abstain'  # some option has no stated preference behind it
@@ -15,6 +14,11 @@ def decide(W, options):
     if len(ranked) > 1 and allowed[ranked[0]][0] == allowed[ranked[1]][0]:
         return 'abstain'  # tie
     return ranked[0]
+
+
+def decide(W, options):
+    """One matrix product per option, then pick."""
+    return pick({name: np.isin(FEATURES, features).astype(float) @ W for name, features in options.items()})
 
 
 def main():

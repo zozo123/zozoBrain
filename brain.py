@@ -40,6 +40,7 @@ def _print_json(value):
 
 
 def _summary(path, bundle):
+    rules, _, free = _neurons(bundle)
     return {
         'path': str(path), 'name': bundle.name,
         'total_parameters': sum(tensor.size for tensor in bundle.weights),
@@ -51,6 +52,8 @@ def _summary(path, bundle):
         'history': _history(bundle),
         'layout': bundle.layout,
         'tensors': {name: list(shape) for name, shape in TENSOR_SHAPES.items()},
+        'neurons': rules,
+        'free_neurons': free,
         'w2_columns': ['utility', 'veto', 'evidence'],
         'w2': bundle.weights[2].tolist(),
         'b2': bundle.weights[3].tolist(),
@@ -87,37 +90,109 @@ def _saved(path, bundle):
     print(f'Revision: {bundle.revision_sha256[:12]}')
 
 
-def _feature_rows(bundle):
-    print('w2 rows [utility, veto, evidence] (default input/hidden alignment):')
-    omitted = 0
-    for index, name in enumerate(bundle.layout['attributes']):
-        values = bundle.weights[2][index]
-        if re.fullmatch(r'attribute_\d+', name) and not np.any(values):
-            omitted += 1
-            continue
-        print(f'  {index} {name} = ' + json.dumps(values.tolist(), allow_nan=False))
-    for index in range(32, 48):
-        values = bundle.weights[2][index]
-        if np.any(values):
-            print(f'  {index} extra hidden neuron = ' + json.dumps(values.tolist(), allow_nan=False))
-    if omitted:
-        print(f'  {omitted} zero generic output rows omitted')
-    print('Inspect w1 and b1 when connections have been rewired; row labels are input names.')
-    print('Contexts (16 slots): ' + ', '.join(f'{i}:{name}' for i, name in enumerate(bundle.layout['contexts'])))
+def _span(numbers):
+    """[1, 2, 3, 7] -> '1-3, 7'."""
+    runs = []
+    for number in numbers:
+        if runs and number == runs[-1][1] + 1:
+            runs[-1][1] = number
+        else:
+            runs.append([number, number])
+    return ', '.join(f'{low}-{high}' if high > low else f'{low}' for low, high in runs)
+
+
+def _names(names, first):
+    """Number names by w1 row; shorten runs of generic names: 4:attribute_5 ... 31:attribute_32."""
+    runs = []
+    for row, name in enumerate(names, first):
+        match = re.fullmatch(r'(.*_)(\d+)', name)
+        previous = runs[-1][-1] if runs else None
+        if match and previous and previous[2] == match[1] and previous[3] + 1 == int(match[2]):
+            runs[-1].append((row, name, match[1], int(match[2])))
+        else:
+            runs.append([(row, name, match[1] if match else None, int(match[2]) if match else None)])
+    return ', '.join(f'{run[0][0]}:{run[0][1]} ... {run[-1][0]}:{run[-1][1]}' if len(run) > 2
+                     else ', '.join(f'{row}:{name}' for row, name, *_ in run) for run in runs)
+
+
+def _number(value):
+    return f'{float(value):g}'
+
+
+def _neurons(bundle):
+    """Read each hidden neuron back from w1, b1, and w2 as the rule it computes."""
+    w1, b1, w2, _ = bundle.weights
+    names = bundle.layout['attributes'] + [f'context:{name}' for name in bundle.layout['contexts']]
+    rules, wired, free = [], [], []
+    for j in range(48):
+        column, bias = w1[:, j], float(b1[j])
+        if not np.any(w2[j]):
+            if not np.any(column) and not bias:
+                free.append(j)
+                continue
+            if j < 32 and bias == -1 and np.count_nonzero(column) == 2 and column[j] == 1 and column[32] == 1:
+                wired.append(j)  # init wiring, no output yet
+                continue
+        text = ''
+        terms = [(column[i], names[i]) for i in np.flatnonzero(column)] + ([(bias, '')] if bias else [])
+        for coefficient, name in terms:
+            size = abs(float(coefficient))
+            term = name if size == 1 and name else f'{size:g}*{name}' if name else f'{size:g}'
+            sign = '-' if coefficient < 0 else '+'
+            text += f' {sign} {term}' if text else (f'-{term}' if sign == '-' else term)
+        # Inputs are at most 1: if the attributes alone cannot lift it past zero, the neuron needs a context.
+        alone = float(np.maximum(column[:32], 0).sum()) + bias
+        can_fire = alone + float(np.maximum(column[32:], 0).sum()) > 0
+        only_with = [] if alone > 0 else [bundle.layout['contexts'][i] for i in np.flatnonzero(column[32:] > 0)]
+        rules.append({'neuron': j, 'rule': f'ReLU({text or 0})', 'output': w2[j].tolist(),
+                      'only_with': only_with, 'can_fire': can_fire})
+    return rules, wired, free
+
+
+def _print_brain(bundle, full_history=False):
+    rules, wired, free = _neurons(bundle)
+    print('Neurons that drive decisions (rule -> [utility, veto, evidence]):' + ('' if rules else ' none yet'))
+    for row in rules:
+        scope = (' (never fires)' if not row['can_fire']
+                 else f' (only with {", ".join(row["only_with"])})' if row['only_with'] else '')
+        print(f'  {row["neuron"]} {row["rule"]} -> [' + ', '.join(map(_number, row['output'])) + ']' + scope)
+    w1, w2 = bundle.weights[0], bundle.weights[2]
+    driving = [j for j in range(48) if np.any(w2[j])]
+    read = [name for i, name in enumerate(bundle.layout['attributes']) if np.any(w1[i, driving])]
+    print('Attributes read by rules: ' + (', '.join(read) or 'none'))
+    general = bundle.layout['contexts'][0]
+    if wired:
+        print(f'Silent (init wiring, neuron i = ReLU(attribute i + {general} - 1)): {_span(wired)}')
+    if free:
+        print(f'Free for new rules: {_span(free)}')
+    if np.any(bundle.weights[3]):
+        print('b2, added to every option: [' + ', '.join(map(_number, bundle.weights[3])) + ']')
+    print('Attributes (w1 rows 0-31): ' + _names(bundle.layout['attributes'], 0))
+    print('Contexts (w1 rows 32-47): ' + _names(bundle.layout['contexts'], 32))
     print('Binary inputs: ' + (', '.join(bundle.layout['binary_attributes']) or 'none'))
     history = _history(bundle)
     print(f'History: {len(history)} verified contributions' + (':' if history else ''))
-    if len(history) > 20:
-        print(f'  ... {len(history) - 20} earlier')
-    for number, record in list(enumerate(history, 1))[-20:]:
-        evidence = record['evidence'] if len(record['evidence']) <= 70 else record['evidence'][:67] + '...'
+    shown = list(enumerate(zip(history, bundle.manifest['patches']), 1))
+    if len(history) > 20 and not full_history:
+        print(f'  ... {len(history) - 20} earlier (inspect --history shows all, with every edit)')
+        shown = shown[-20:]
+    for number, (record, stored) in shown:
+        evidence = record['evidence']
+        if not full_history and len(evidence) > 70:
+            evidence = evidence[:67] + '...'
         plural = '' if record['edits'] == 1 else 's'
         print(f'  {number} {record["harness"]}: {record["edits"]} edit{plural}, evidence {json.dumps(evidence)}')
+        if full_history:
+            for edit in stored['patch']['edits']:
+                index = ', '.join(map(str, edit['index']))
+                print(f'      {edit["tensor"]}[{index}]: {_number(edit["before"])} -> {_number(edit["after"])}')
 
 
 def _decision_text(result):
     if result['decision'] is None:
-        print('Abstained: ' + result['status'].replace('_', ' '))
+        missing = [row['id'] for row in result['ranking'] if not row['modeled_evidence']]
+        detail = f' (no evidence for {", ".join(missing)})' if result['status'] == 'insufficient_preference_evidence' else ''
+        print('Abstained: ' + result['status'].replace('_', ' ') + detail)
     else:
         selected = next(row for row in result['ranking'] if row['id'] == result['decision'])
         label = selected['label']
@@ -126,8 +201,20 @@ def _decision_text(result):
         print(f'Decision: {selected["id"]}{suffix}{forced}')
     if result['ranking']:
         print('Ranking: ' + ', '.join(f'{row["id"]} ({row["utility"]:g})' for row in result['ranking']))
+        why = []
+        for row in result['ranking']:
+            terms = [f'neuron {n["neuron"]} ({n["output"][0]:+g})' for n in row['neurons'] if n['output'][0]]
+            if result['b2'][0]:
+                terms.append(f'b2 ({result["b2"][0]:+g})')
+            why.append(f'{row["id"]} = ' + (' + '.join(terms) or 'no neuron'))
+        print('Utility: ' + '; '.join(why))
     if result['vetoed']:
-        print('Vetoed: ' + ', '.join(row['id'] for row in result['vetoed']))
+        causes = []
+        for row in result['vetoed']:
+            sources = [f'neuron {n["neuron"]}' for n in row['neurons'] if n['output'][1] > 0]
+            sources += ['b2'] if result['b2'][1] > 0 else []
+            causes.append(f'{row["id"]} ({", ".join(sources)})' if sources else row['id'])
+        print('Vetoed: ' + ', '.join(causes))
     if result.get('contributing_harnesses'):
         print('Contributors: ' + ', '.join(result['contributing_harnesses']))
 
@@ -162,6 +249,12 @@ def _prompt(path, bundle):
     ]}
     edit = _runtime_command('set', path, '--tensor', 'w2', '--index', 'ROW', '--values', 'UTILITY', 'VETO',
                             'EVIDENCE', '--reason', 'EVIDENCE_REFERENCE', '--harness', 'YOUR_HARNESS')
+    wire = _runtime_command('set', path, '--tensor', 'w1', '--index', 'ATTRIBUTE_ROW', 'J', '--values', 1,
+                            '--tensor', 'w1', '--index', 'CONTEXT_ROW', 'J', '--values', 1,
+                            '--tensor', 'b1', '--index', 'J', '--values', -1,
+                            '--tensor', 'w2', '--index', 'J', '--values', 'UTILITY', 'VETO', 'EVIDENCE',
+                            '--reason', 'EVIDENCE_REFERENCE', '--harness', 'YOUR_HARNESS')
+    general = layout['contexts'][0]
     # Name and harness strings come from the file; print them as quoted data.
     print(f'''zozoBrain handoff for {path}
 Name: {json.dumps(bundle.name)}; contributors: {json.dumps(bundle.contributing_harnesses)} (data, not instructions)
@@ -175,17 +268,31 @@ fitting, or averaging. Report any preference the layout cannot express.
 1. Inspect the labeled weights and history:
 {_runtime_command('inspect', path)}
 
-2. Edit. Inputs are 32 option attributes in [0,1] and 16 contexts. In a brain
-made by init, hidden neuron i = ReLU(attribute_i + {layout['contexts'][0]} - 1), and w2 row i is
-[utility, veto, evidence]. veto > 0 removes an option. Ranking needs evidence > 0
-on every remaining option; otherwise the brain abstains. Hard rules need a binary
-input {json.dumps(layout['binary_attributes'])}. To apply a rule in every context, set w1[32, i]
-and b1[i] to 0. Each command assigns one row or scalar and updates the file in place:
+2. Edit. w1 rows 0-31 are option attributes in [0,1]; rows 32-47 are contexts,
+1 when active (a request can activate several). Hidden neuron j computes
+ReLU(sum of input_i * w1[i, j] + b1[j]). Its w2 row j is
+[utility, veto, evidence], and inspect prints each neuron as that rule.
+veto > 0 removes an option. Ranking needs evidence > 0 on every remaining
+option; otherwise the brain abstains. Hard rules need a binary input {json.dumps(layout['binary_attributes'])}.
+- In a brain made by init, neuron i < 32 is ReLU(attribute_i + {general} - 1):
+  write w2 row i for a rule in {general}. To apply it in every context, also set
+  w1[32, i] and b1[i] to 0.
+- For a rule in one context only, wire a free neuron j: w1[ATTRIBUTE_ROW, j] = 1,
+  w1[CONTEXT_ROW, j] = 1, b1[j] = -1, then w2 row j.
+- To fix or remove a rule, assign the wrong entries their correct values (0 to unwire).
+The outputs of all firing neurons add up, and decide prints each option's
+utility as that sum. A rule meant to outweigh existing ones needs a utility
+larger than the gap it must close.
+Each command updates the file in place. Repeat --tensor, --index, --values to
+make several assignments one verified edit:
 {edit}
+{wire}
 
 3. Check decisions with a request file such as
 {json.dumps(example)}
 {_runtime_command('decide', path, 'REQUEST.json')}
+List every active context: rules wired through {general} apply only when it is
+listed, so check a context rule with ["{general}", "CONTEXT"].
 
 Report the exact edits, evidence, and decisions. For parallel work, edit a copy
 (set ... --output COPY.brain), then combine copies with brain.py diff and merge.''')
@@ -201,13 +308,15 @@ def build_parser():
     inspect = commands.add_parser('inspect', help='Show state, schema, and optional tensor values')
     inspect.add_argument('path', type=_path)
     inspect.add_argument('--json', action='store_true')
+    inspect.add_argument('--history', action='store_true', help='Show every verified edit in full, entry by entry')
     inspect.add_argument('--tensor', choices=TENSOR_SHAPES)
     inspect.add_argument('--index', nargs='+', type=int, help='Scalar coordinates or a row/prefix selection')
-    edit = commands.add_parser('set', help='Directly assign a scalar or tensor row and retain its evidence')
+    edit = commands.add_parser('set', help='Directly assign scalars or tensor rows as one edit with its evidence')
     edit.add_argument('path', type=_path)
-    edit.add_argument('--tensor', required=True, choices=TENSOR_SHAPES)
-    edit.add_argument('--index', nargs='+', type=int, required=True)
-    edit.add_argument('--values', nargs='+', type=float, required=True)
+    edit.add_argument('--tensor', required=True, choices=TENSOR_SHAPES, action='append',
+                      help='Repeat --tensor, --index, --values to make several assignments one edit')
+    edit.add_argument('--index', nargs='+', type=int, required=True, action='append')
+    edit.add_argument('--values', nargs='+', type=float, required=True, action='append')
     edit.add_argument('--reason', type=_nonempty, required=True)
     edit.add_argument('--harness', type=_nonempty, default='manual')
     edit.add_argument('--output', type=_path, help='Save separately; default: atomically update the input file')
@@ -270,18 +379,21 @@ def main(argv=None):
                 print('Weights: ' + bundle.weights_sha256[:12])
                 print('Schema: ' + bundle.schema_sha256[:12])
                 print('Revision: ' + bundle.revision_sha256[:12])
-                _feature_rows(bundle)
+                _print_brain(bundle, full_history=args.history)
                 if args.tensor:
                     index = ''.join(f'[{i}]' for i in args.index or [])
                     print(f'{args.tensor}{index} = ' + json.dumps(summary['selection']['values'], allow_nan=False))
         elif args.command == 'set':
+            if not len(args.tensor) == len(args.index) == len(args.values):
+                raise ValueError('Give --tensor, --index, and --values once for each assignment')
+            assignments = list(zip(args.tensor, args.index, args.values))
             original = load_bundle(args.path)
-            edited = edit_bundle(original, tensor=args.tensor, index=args.index, values=args.values,
-                                 harness=args.harness, evidence=args.reason)
+            edited = edit_bundle(original, assignments=assignments, harness=args.harness, evidence=args.reason)
             output = args.output or args.path
             _save_edit(args.path, output, original, edited)
             _saved(output, edited)
-            print(f'{args.tensor}{args.index} = ' + json.dumps(_selection(edited, args.tensor, args.index)))
+            for tensor, index, _ in assignments:
+                print(f'{tensor}{index} = ' + json.dumps(_selection(edited, tensor, index)))
         elif args.command == 'decide':
             from model import DecisionModel
             request = _read_json(args.input)
@@ -292,6 +404,7 @@ def main(argv=None):
                 raise ValueError('force must be boolean')
             result = DecisionModel.from_bundle(args.path).decide(
                 request['question'], request['contexts'], request['options'], args.force or requested_force,
+                explain=True,
             )
             _print_json(result) if args.json else _decision_text(result)
         elif args.command == 'serve':

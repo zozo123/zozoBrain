@@ -69,10 +69,11 @@ class BrainCliTests(unittest.TestCase):
     def test_human_inspection_shows_named_numeric_rows_and_short_fingerprints(self):
         self.set_row(0, [3, 0, 1])
         human = self.call('inspect', self.path).stdout
-        self.assertIn('0 low_cost = [3.0, 0.0, 1.0]', human)
-        self.assertIn('Contexts (16 slots): 0:general', human)
-        self.assertIn('zero generic output rows omitted', human)
-        self.assertIn('default input/hidden alignment', human)
+        self.assertIn('0 ReLU(low_cost + context:general - 1) -> [3, 0, 1]', human)
+        self.assertIn('Silent (init wiring, neuron i = ReLU(attribute i + general - 1)): 1-31', human)
+        self.assertIn('Free for new rules: 32-47', human)
+        self.assertIn('Attributes (w1 rows 0-31): 0:low_cost, 1:high_cost', human)
+        self.assertIn('Contexts (w1 rows 32-47): 32:general, 33:traveling, 34:context_3 ... 47:context_16', human)
         self.assertNotIn(self.inspect()['weights_sha256'], human)
 
     def test_direct_scalar_and_row_edits_accumulate_in_the_same_file(self):
@@ -177,8 +178,56 @@ class BrainCliTests(unittest.TestCase):
         prompt = self.call('prompt', self.path).stdout
         self.assertNotIn('--output', prompt.split('2. Edit.')[1].split('3. Check')[0])
         self.assertIn('[utility, veto, evidence]', prompt)
+        self.assertIn('wire a free neuron j', prompt)
+        self.assertIn('--tensor b1 --index J --values -1', prompt)
         self.assertIn('"low_cost": 1', prompt)
         self.assertIn('Name: "Me"', prompt)
+
+    def test_one_set_wires_a_context_rule_into_a_free_neuron(self):
+        self.set_row(0, [3, 0, 1])
+        self.set_row(1, [-3, 0, 1])
+        self.request['options'][1]['attributes'] = {'high_cost': 1, 'offline': 1}
+        traveling = dict(self.request, contexts=['general', 'traveling'])
+        self.call('set', self.path, '--tensor', 'w1', '--index', 2, 32, '--values', 1,
+                  '--tensor', 'w1', '--index', 33, 32, '--values', 1, '--tensor', 'b1', '--index', 32, '--values', -1,
+                  '--tensor', 'w2', '--index', 32, '--values', 10, 0, 1,
+                  '--reason', 'When traveling I prefer offline options', '--harness', 'claude')
+        info = self.inspect()
+        self.assertEqual(info['history'][-1]['edits'], 5)
+        self.assertEqual(len(info['history']), 3)
+        self.assertIn({'neuron': 32, 'rule': 'ReLU(offline + context:traveling - 1)', 'output': [10, 0, 1],
+                       'only_with': ['traveling'], 'can_fire': True}, info['neurons'])
+        human = self.call('inspect', self.path, '--history').stdout
+        self.assertIn('32 ReLU(offline + context:traveling - 1) -> [10, 0, 1] (only with traveling)', human)
+        self.assertIn('Attributes read by rules: low_cost, high_cost, offline', human)
+        self.assertIn('evidence "When traveling I prefer offline options"\n      w1[2, 32]: 0 -> 1', human)
+        self.assertIn('      w2[32, 2]: 0 -> 1', human)
+        self.assertEqual(info['free_neurons'], list(range(33, 48)))
+        decisions = []
+        for request in (self.request, traveling):
+            self.input.write_text(json.dumps(request), encoding='utf-8')
+            decisions.append(json.loads(self.call('decide', self.path, self.input, '--json').stdout)['decision'])
+        self.assertEqual(decisions, ['A', 'B'])
+        mismatched = self.call('set', self.path, '--tensor', 'w1', '--tensor', 'b1', '--index', 1, 2,
+                               '--values', 1, '--reason', 'Explicit', check=False)
+        self.assertEqual(mismatched.returncode, 2)
+        self.assertIn('once for each assignment', mismatched.stderr)
+        self.assertEqual(len(self.inspect()['history']), 3)
+
+    def test_inspect_reads_negative_and_scaled_weights_as_a_rule(self):
+        self.call('set', self.path, '--tensor', 'w1', '--index', 0, 40, '--values', 2,
+                  '--tensor', 'w1', '--index', 33, 40, '--values', -1, '--tensor', 'b1', '--index', 40, '--values', 0.5,
+                  '--tensor', 'w2', '--index', 40, '--values', 1, 0, 1, '--reason', 'Explicit')
+        self.call('set', self.path, '--tensor', 'w1', '--index', 1, 41, '--values', 0.5, '--tensor', 'b1', '--index', 41,
+                  '--values', -1, '--tensor', 'w2', '--index', 41, '--values', 0, 1, 0, '--reason', 'Explicit')
+        self.call('set', self.path, '--tensor', 'b2', '--index', 0, '--values', 2, '--reason', 'Explicit')
+        human = self.call('inspect', self.path).stdout
+        self.assertIn('40 ReLU(2*low_cost - context:traveling + 0.5) -> [1, 0, 1]\n', human)
+        self.assertIn('41 ReLU(0.5*high_cost - 1) -> [0, 1, 0] (never fires)', human)
+        self.assertIn('b2, added to every option: [2, 0, 0]', human)
+        self.assertIn('A = neuron 40 (+2.5) + b2 (+2); B = neuron 40 (+0.5) + b2 (+2)', self.call('decide', self.path, self.input).stdout)
+        self.call('set', self.path, '--tensor', 'b2', '--index', 1, '--values', 1, '--reason', 'Explicit')
+        self.assertIn('Vetoed: A (b2), B (b2)', self.call('decide', self.path, self.input).stdout)
 
     def test_inspect_shows_history_and_output_rows(self):
         self.set_row(0, [3, 0, 1])

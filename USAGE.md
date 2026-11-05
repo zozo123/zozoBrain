@@ -10,9 +10,9 @@ uv run --locked brain.py inspect personal/me.brain
 uv run --locked brain.py decide personal/me.brain examples/personal.json
 ```
 
-A new brain abstains. `inspect` lists each attribute's `w2` row as `[utility, veto, evidence]`, the contexts, the binary (hard-rule) inputs, and the history. Add `--json` to `inspect` or `decide` for machine-readable output, or `--tensor w1 --index 32` to read any tensor slice.
+A new brain abstains. `inspect` reads every neuron that drives decisions back as the rule it computes, such as `32 ReLU(offline + context:traveling - 1) -> [10, 0, 1]`, then lists the free neurons, the attributes and contexts by `w1` row, the binary (hard-rule) inputs, and the history. `decide` prints each option's utility as the sum of the neurons behind it. Add `--json` to `inspect` or `decide` for machine-readable output, or `--tensor w1 --index 32` to read any tensor slice.
 
-A request names contexts and gives each option's attributes, with values in [0,1]:
+A request lists every active context and gives each option's attributes, with values in [0,1]. A new brain wires each attribute through `general`, so include it next to a specific context, such as `["general", "traveling"]`:
 
 ```json
 {"question": "Which option?", "contexts": ["general"],
@@ -28,7 +28,13 @@ uv run --locked brain.py set personal/me.brain --tensor w2 --index 0 --values 3 
 uv run --locked brain.py set personal/me.brain --tensor w2 --index 0 0 --values 6 --reason "Stronger, per my correction"
 ```
 
-One index assigns a row, two assign a scalar. Each `set` updates the file atomically and appends a verified history record. A concurrent stale write is rejected rather than lost. `--output copy.brain` writes a separate copy and leaves the input unchanged.
+One index assigns a row, two assign a scalar. Repeat `--tensor`, `--index`, `--values` to make several assignments one verified edit, for example a rule for one context in free neuron 32:
+
+```bash
+uv run --locked brain.py set personal/me.brain --tensor w1 --index 2 32 --values 1 --tensor w1 --index 33 32 --values 1 --tensor b1 --index 32 --values -1 --tensor w2 --index 32 --values 10 0 1 --reason "When traveling I prefer offline options"
+```
+
+Each `set` updates the file atomically and appends a verified history record. A concurrent stale write is rejected rather than lost. `--output copy.brain` writes a separate copy and leaves the input unchanged.
 
 Decision rules: a positive veto removes an option. The highest utility wins only if every remaining option has positive evidence. Otherwise the brain abstains, and ties abstain too. A single option left after vetoes is chosen. `--force` breaks ties and gaps but never overrides a veto.
 

@@ -26,8 +26,10 @@ class ReadmeTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, f'{line}\n{result.stderr}')
                 outputs.append(result.stdout)
         self.assertIn('Abstained', outputs[1])
-        self.assertIn('Decision: A (Lower-cost option)', outputs[-1])
-        self.assertIn('Contributors: codex, claude', outputs[-1])
+        self.assertIn('Decision: A (Lower-cost option)', outputs[4])
+        self.assertIn('Contributors: codex, claude', outputs[4])
+        self.assertIn('Decision: B (Offline option)', outputs[-1])
+        self.assertIn('B = neuron 1 (-3) + neuron 32 (+10)', outputs[-1])
 
 
 if __name__ == '__main__':

@@ -76,7 +76,7 @@ def create_blank(name='my-brain', layout=None):
     layout = validate_layout(layout) if layout is not None else {
         'attributes': ['low_cost', 'high_cost', 'offline', 'explicitly_disallowed']
                       + [f'attribute_{i}' for i in range(5, 33)],
-        'contexts': ['general'] + [f'context_{i}' for i in range(2, 17)],
+        'contexts': ['general', 'traveling'] + [f'context_{i}' for i in range(3, 17)],
         'binary_attributes': ['explicitly_disallowed'],
     }
     w1 = np.zeros((48, 48), dtype=np.float32)
@@ -258,7 +258,7 @@ def apply_patches(bundle, patches):
     return pack_bundle(tensors, bundle.layout, manifest, bundle.name)
 
 
-def edit_bundle(bundle, *, tensor, index, values, harness='manual', evidence, patch_id=None):
+def _assign(tensors, tensor, index, values):
     if tensor not in TENSOR_SHAPES:
         raise ValueError('Tensor must be one of: ' + ', '.join(TENSOR_SHAPES))
     shape = TENSOR_SHAPES[tensor]
@@ -276,13 +276,28 @@ def edit_bundle(bundle, *, tensor, index, values, harness='manual', evidence, pa
         raise ValueError('Values must be finite float32 numbers') from exc
     if any(not np.isfinite(value) or abs(value) > np.finfo(np.float32).max for value in values):
         raise ValueError('Values must be finite float32 numbers')
-    tensors = list(validate_weights(bundle.weights))
     target = tensors[list(TENSOR_SHAPES).index(tensor)]
     selected_shape = target[tuple(index)].shape
     count = int(np.prod(selected_shape)) if selected_shape else 1
     if len(values) != count:
         raise ValueError(f'Selected {tensor}{tuple(index)} needs exactly {count} values')
     target[tuple(index)] = np.asarray(values, dtype=np.float32).reshape(selected_shape)
+
+
+def edit_bundle(bundle, *, tensor=None, index=None, values=None, assignments=None, harness='manual', evidence,
+                patch_id=None):
+    """Assign one entry or row, or several (tensor, index, values) assignments, as one verified edit."""
+    if assignments is None:
+        assignments = [(tensor, index, values)]
+    elif tensor is not None or index is not None or values is not None:
+        raise ValueError('Give either one tensor, index, and values or a list of assignments')
+    if not isinstance(assignments, (tuple, list)) or not assignments or any(
+        not isinstance(assignment, (tuple, list)) or len(assignment) != 3 for assignment in assignments
+    ):
+        raise ValueError('Assignments must be a nonempty list of (tensor, index, values)')
+    tensors = list(validate_weights(bundle.weights))
+    for tensor, index, values in assignments:
+        _assign(tensors, tensor, index, values)
     edited = BrainBundle(bundle.name, bundle.layout, tuple(tensors), bundle.manifest)
     patch = diff_bundles(bundle, edited, harness=harness, evidence=evidence, patch_id=patch_id)
     if not patch['edits']:

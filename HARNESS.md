@@ -10,7 +10,7 @@ uv run --locked brain.py prompt personal/me.brain
 ```
 
 1. Paste the printed handoff into the first agent, followed by your statements and an evidence reference for each.
-2. The agent inspects the labeled rows, assigns entries in place with `brain.py set ... --harness NAME`, and checks decisions.
+2. The agent reads each neuron as a rule with `inspect`, assigns entries in place with `brain.py set ... --harness NAME`, and checks decisions.
 3. Run `prompt` again and paste it into the next agent. The file carries every earlier edit and its evidence.
 
 `brain.py inspect personal/me.brain` shows who changed what:
@@ -28,7 +28,17 @@ For agents working at the same time, give each a copy and combine them with `dif
 
 ## Tested with real agents
 
-November 4, 2026, from a fresh clone of `main`. Each agent got only the `prompt` handoff and the owner's statements:
+**November 5, 2026: the hidden layer.** Each agent got only the `prompt` handoff and the statements below, on its own copy of a brain that already prefers lower cost (`w2[0] = [3, 0, 1]`, `w2[1] = [-3, 0, 1]`). Every result was checked independently: decisions in all 16 contexts and a diff of every changed entry.
+
+| Task | Agent | Result | Time |
+|---|---|---|---|
+| Encode "When I am traveling, I prefer offline options, even if they cost more" | Codex CLI (gpt-6.1-sol) | Wired free neuron 32 in one edit: `w1[2, 32] = 1`, `w1[33, 32] = 1`, `b1[32] = -1`, `w2[32] = [7, 0, 1]`. Exactly 5 entries changed; all checks pass | 2.7 min |
+| The same statement, 6 runs | GitHub Copilot CLI (GPT-5.6 Luna) | The same neuron every time. Three first tries set utility 3 or 4, too small to close the 6-point cost gap; two of those runs caught it in their own check and raised it to 7. 5 of 6 pass | 25–58 s |
+| Audit a brain against three statements; two wiring bugs planted | Claude Code (Opus 5.5) | Found both from the weights: the veto fired only with `general`, and the traveling neuron read `high_cost`. Fixed 4 entries in 2 edits; the veto now holds in all 16 contexts | 6.6 min |
+
+What the run changed: `decide` prints each utility as the sum of its neurons, and the handoff says outputs add up and to check with every active context. `inspect` marks rules that fire only with a context, lists the attributes rules read, and with `--history` shows every entry each edit changed. Abstentions name the option without evidence. The traveling example now has a third option, so a neuron wired to the wrong attribute shows up as a tie.
+
+**November 4, 2026: output rows**, from a fresh clone of `main`. Each agent got only the `prompt` handoff and the owner's statements:
 
 | Statement | Agent | Edits it made | Time |
 |---|---|---|---|

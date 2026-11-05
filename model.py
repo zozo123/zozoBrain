@@ -7,7 +7,8 @@ import re
 
 import numpy as np
 
-from network import digest_validated_weights, forward, layout_digest, load_weight_source, load_weights, validate_layout, validate_weights
+from network import (digest_validated_weights, forward, layout_digest, load_weight_source, load_weights,
+                     neuron_outputs, validate_layout, validate_weights)
 
 
 def validate_question(question):
@@ -65,10 +66,13 @@ class DecisionModel:
         model._attach_verified_provenance(bundle.manifest)
         return model
 
-    def decide(self, question, contexts, options, force=False):
+    def decide(self, question, contexts, options, force=False, explain=False):
+        """Rank options; explain=True adds each option's per-neuron outputs."""
         validate_question(question)
         if not isinstance(force, bool):
             raise ValueError('force must be boolean')
+        if not isinstance(explain, bool):
+            raise ValueError('explain must be boolean')
         if not isinstance(contexts, (list, tuple)) or not contexts or any(
             not isinstance(context, str) or context not in self._context_index for context in contexts
         ):
@@ -113,11 +117,16 @@ class DecisionModel:
             for context in contexts:
                 x[32 + self._context_index[context]] = 1
             utility, veto, support = forward(x, tensors).tolist()
-            scored.append({
+            row = {
                 'id': option['id'], 'label': option.get('label', option['id']),
                 'utility': utility, 'veto': veto > 0, 'modeled_evidence': support > 0,
                 'active_attributes': [attr for attr, value in attrs.items() if value > 0],
-            })
+            }
+            if explain:
+                shares = neuron_outputs(x, tensors)
+                row['neurons'] = [{'neuron': int(j), 'output': shares[j].tolist()}
+                                  for j in np.flatnonzero(np.any(shares != 0, axis=1))]
+            scored.append(row)
         ranked = sorted((row for row in scored if not row['veto']), key=lambda row: -row['utility'])
         vetoed = [row for row in scored if row['veto']]
         status = 'decision'
@@ -137,6 +146,8 @@ class DecisionModel:
             'schema_sha256': self.schema_sha256,
             'note': 'Authored utility policy, not calibrated probability. Attributes and contexts are supplied by caller; question text is display metadata, not language understanding.',
         }
+        if explain:
+            result['b2'] = tensors[3].tolist()  # added to every option, after the neurons
         if self.contributing_harnesses is not None:
             result['contributing_harnesses'] = list(self.contributing_harnesses)
         return result

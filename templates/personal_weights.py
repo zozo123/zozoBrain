@@ -12,7 +12,7 @@ import numpy as np
 from network import forward as network_forward
 from network import load_weights, save_weights, validate_weights, weights_digest
 
-CONTEXTS = ['general'] + [f'context_{i}' for i in range(2, 17)]
+CONTEXTS = ['general', 'traveling'] + [f'context_{i}' for i in range(3, 17)]
 ATTRIBUTES = ['low_cost', 'high_cost', 'offline', 'explicitly_disallowed'] + [
     f'attribute_{i}' for i in range(5, 33)
 ]
